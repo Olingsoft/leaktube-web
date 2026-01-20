@@ -100,10 +100,10 @@ export default function WatchPage() {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+            <div className="flex min-h-screen items-center justify-center">
                 <div className="flex flex-col items-center space-y-4">
                     <Loader2 className="w-12 h-12 text-[#FF2C80] animate-spin" />
-                    <p className="text-white/40 font-black uppercase tracking-widest text-sm animate-pulse">Loading Stream...</p>
+                    <p className="text-white font-black uppercase tracking-widest text-sm animate-pulse">Loading Stream...</p>
                 </div>
             </div>
         );
@@ -111,8 +111,8 @@ export default function WatchPage() {
 
     if (!video) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-                <p className="text-white/40 font-black uppercase tracking-widest">Video Not Found</p>
+            <div className="flex min-h-screen items-center justify-center ">
+                <p className="text-white font-black uppercase tracking-widest">Video Not Found</p>
             </div>
         );
     }

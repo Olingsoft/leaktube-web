@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         hostname: 'localhost',
         port: '8000',
       },
+      {
+        protocol: 'https',
+        hostname: 'c05c4189af96.ngrok-free.app',
+      },
     ],
   },
 };
