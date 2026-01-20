@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import { Play, Loader2, Image as ImageIcon } from "lucide-react";
+import { getApiUrl } from "@/utils/api";
 
 
 
@@ -33,7 +34,7 @@ export default function Home() {
   const fetchVideos = async () => {
     setIsLoading(true);
     try {
-      let url = 'http://localhost:8000/api/videos';
+      let url = getApiUrl('/api/videos');
       if (categoryParam) {
         url += `?category=${encodeURIComponent(categoryParam)}`;
       }
@@ -57,7 +58,7 @@ export default function Home() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/categories');
+        const response = await fetch(getApiUrl('/api/categories'));
         const data = await response.json();
         if (data.success) {
           // Extract just the names

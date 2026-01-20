@@ -29,11 +29,11 @@ export default function Header() {
                     <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-tr from-[#990764] to-[#FF2C80] rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
                         <Image
-                            src="/leaktube.png"
+                            src="/logo.svg"
                             alt="LeakTube Logo"
-                            width={140}
-                            height={36}
-                            className="h-9 w-auto object-contain relative transition-transform duration-500 group-hover:scale-[1.02]"
+                            width={100}
+                            height={100}
+                            className="h-14 w-auto object-contain relative transition-transform duration-500 group-hover:scale-[1.02]"
                             priority
                         />
                     </div>

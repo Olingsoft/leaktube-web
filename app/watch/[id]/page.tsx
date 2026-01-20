@@ -16,6 +16,7 @@ import {
     ArrowDownToLine,
     Loader2
 } from "lucide-react";
+import { getApiUrl } from "@/utils/api";
 
 interface Video {
     _id: string;
@@ -83,7 +84,7 @@ export default function WatchPage() {
                 if (!params.id) return;
 
                 // Try fetching as if it is a Mongo ID
-                const response = await fetch(`http://localhost:8000/api/videos/${params.id}`);
+                const response = await fetch(getApiUrl(`/api/videos/${params.id}`));
                 const data = await response.json();
 
                 if (data.success) {

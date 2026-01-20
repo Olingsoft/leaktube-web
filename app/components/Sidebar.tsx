@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
+import { getApiUrl } from "@/utils/api";
+
 // Define the shape of a category from the API
 interface Category {
     _id: string;
@@ -31,7 +33,7 @@ export default function Sidebar() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/categories');
+                const response = await fetch(getApiUrl('/api/categories'));
                 const data = await response.json();
                 if (data.success) {
                     setCategories(data.data);
