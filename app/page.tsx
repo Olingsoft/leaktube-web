@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import { Play, Loader2, Image as ImageIcon } from "lucide-react";
-import { getApiUrl } from "@/utils/api";
+import { getApiUrl, API_BASE_URL } from "@/utils/api";
 
 
 
@@ -93,6 +93,10 @@ export default function Home() {
     if (!url) return null;
     if (url.includes('mega.nz') || url.includes('mega.io')) {
       return getEmbedUrl(url);
+    }
+    // Fix for images stored with localhost URL when accessing from other devices
+    if (url.includes('localhost:8000')) {
+      return url.replace('http://localhost:8000', API_BASE_URL);
     }
     return url;
   };

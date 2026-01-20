@@ -14,7 +14,9 @@ import {
     Flag,
     ListPlus,
     ArrowDownToLine,
-    Loader2
+    Loader2,
+    Eye,
+    MessageCircle
 } from "lucide-react";
 import { getApiUrl } from "@/utils/api";
 
@@ -146,36 +148,66 @@ export default function WatchPage() {
                             </h1>
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/5 pb-6">
-                                <div className="flex items-center space-x-3 md:space-x-4">
-                                    <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-tr from-[#FF2C80] to-[#990764] flex items-center justify-center shadow-lg transform hover:rotate-6 transition-transform">
-                                        <span className="text-white font-black text-lg md:text-xl italic">{video.title.substring(0, 1)}</span>
-                                    </div>
-                                    <div className="min-w-0">
-                                        <h3 className="text-white font-black text-sm md:text-base hover:text-[#FF2C80] cursor-pointer transition-colors truncate">LeakTube Originals</h3>
-                                        <p className="text-white/40 text-[9px] md:text-xs font-bold tracking-widest uppercase">1.2M Subscribers</p>
-                                    </div>
-                                    <button className="ml-auto md:ml-4 px-4 md:px-8 py-2 md:py-2.5 bg-white text-[#0a0a0a] rounded-xl font-black text-[10px] md:text-sm hover:scale-105 active:scale-95 transition-all shadow-xl whitespace-nowrap">
-                                        Subscribe
-                                    </button>
-                                </div>
 
-                                <div className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-2xl p-1">
-                                    <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
-                                        <ThumbsUp className="w-5 h-5 group-hover:text-[#FF2C80]" />
-                                        <span className="text-sm font-bold">{video.views?.toLocaleString() || 0}</span>
-                                    </button>
-                                    <div className="w-px h-6 bg-white/10" />
-                                    <button className="flex items-center px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
-                                        <ThumbsDown className="w-5 h-5" />
-                                    </button>
-                                    <div className="w-px h-6 bg-white/10" />
+
+                                <div className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-2xl p-1 overflow-x-auto scrollbar-none">
+                                    {/* Views */}
                                     <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
-                                        <Share2 className="w-5 h-5" />
+                                        <Eye className="w-4 h-4 text-white/70" />
+                                        <span className="text-sm font-bold">{video.views?.toLocaleString() || "0"}</span>
                                     </button>
-                                    <button className="p-2 hover:bg-white/5 rounded-xl transition-all">
-                                        <MoreVertical className="w-5 h-5" />
+                                    <div className="w-px h-6 bg-white/10" />
+
+                                    {/* Likes */}
+                                    <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
+                                        <ThumbsUp className="w-4 h-4 group-hover:text-[#FF2C80]" />
+                                        <span className="text-sm font-bold">42K</span>
+                                    </button>
+                                    <div className="w-px h-6 bg-white/10" />
+
+                                    {/* Comments */}
+                                    <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
+                                        <MessageCircle className="w-4 h-4 group-hover:text-[#FF2C80]" />
+                                        <span className="text-sm font-bold">1.2K</span>
+                                    </button>
+                                    <div className="w-px h-6 bg-white/10" />
+
+                                    {/* Share */}
+                                    <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
+                                        <Share2 className="w-4 h-4" />
+                                        <span className="hidden md:inline text-sm font-bold">Share</span>
                                     </button>
                                 </div>
+                            </div>
+                            {/* Small Screen Related Videos */}
+                            <div className="xl:hidden space-y-4 py-4 border-b border-white/5">
+                                <h4 className="text-sm font-black uppercase text-white/40 tracking-widest px-1">Related Videos</h4>
+                                {relatedVideos.map((video) => (
+                                    <Link key={video.id} href={`/watch/${video.id}`} className="flex gap-4 group">
+                                        <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0">
+                                            <Image
+                                                src={video.thumbnail}
+                                                alt={video.title}
+                                                fill
+                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                            />
+                                            <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
+                                                {video.duration}
+                                            </div>
+                                        </div>
+                                        <div className="flex-1 min-w-0 flex flex-col justify-center">
+                                            <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#FF2C80] transition-colors mb-1">
+                                                {video.title}
+                                            </h5>
+                                            <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider truncate">{video.author}</p>
+                                            <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold mt-0.5">
+                                                <span>{video.views}</span>
+                                                <span className="w-0.5 h-0.5 bg-white/10 rounded-full" />
+                                                <span>{video.timestamp}</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
 
                             {/* Description Box */}
