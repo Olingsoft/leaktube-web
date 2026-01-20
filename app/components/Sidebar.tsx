@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 // Define the shape of a category from the API
 interface Category {
@@ -19,11 +19,13 @@ interface SidebarItem {
 }
 
 const staticMenu: SidebarItem[] = [
-    { name: "Home", href: "/" },
+    { name: "All Videos", href: "/" },
 ];
 
 export default function Sidebar() {
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const currentCategory = searchParams.get("category");
     const [categories, setCategories] = useState<Category[]>([]);
 
     useEffect(() => {
@@ -68,7 +70,8 @@ export default function Sidebar() {
                             return <div key={index} className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-4 mx-4" />;
                         }
 
-                        const isActive = pathname === item.href || (item.name !== "Home" && pathname?.includes(`category=${item.name}`));
+                        const isActive = (item.name === "Home" && pathname === "/" && !currentCategory) ||
+                            (currentCategory && currentCategory === item.name);
 
                         return (
                             <Link

@@ -2,13 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import { Play, Loader2, Image as ImageIcon } from "lucide-react";
 
-const categories = ["All", "Music", "Gaming", "News", "Live", "Crypto", "Tech", "Sports", "Design", "Movies"];
+
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const categoryParam = searchParams.get("category");
   const [videos, setVideos] = useState<any[]>([]);
+  const [categories, setCategories] = useState<string[]>(["All"]);
   const [isLoading, setIsLoading] = useState(true);
 
   const getEmbedUrl = (url: string) => {
@@ -29,7 +33,12 @@ export default function Home() {
   const fetchVideos = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/videos');
+      let url = 'http://localhost:8000/api/videos';
+      if (categoryParam) {
+        url += `?category=${encodeURIComponent(categoryParam)}`;
+      }
+
+      const response = await fetch(url);
       const data = await response.json();
       if (data.success) {
         setVideos(data.data);
@@ -43,6 +52,24 @@ export default function Home() {
 
   useEffect(() => {
     fetchVideos();
+  }, [categoryParam]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/categories');
+        const data = await response.json();
+        if (data.success) {
+          // Extract just the names
+          const categoryNames = data.data.map((cat: any) => cat.name);
+          setCategories(["All", ...categoryNames]);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   const getRelativeTime = (dateString: string) => {
@@ -73,19 +100,22 @@ export default function Home() {
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex-1 lg:ml-72 p-4 md:p-8 pt-4 md:pt-8 overflow-x-hidden">
-        {/* Mobile Categories - Only visible on small screens */}
         <div className="md:hidden flex items-center space-x-2 overflow-x-auto pb-4 mb-4 scrollbar-none -mx-4 px-4">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              className={`whitespace-nowrap px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${cat === "All"
-                ? "bg-white text-[#0a0a0a] shadow-lg"
-                : "bg-white/5 text-white/60 border border-white/5"
-                }`}
-            >
-              {cat}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const isActive = (cat === "All" && !categoryParam) || (categoryParam === cat);
+            return (
+              <Link
+                key={cat}
+                href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
+                className={`whitespace-nowrap px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${isActive
+                  ? "bg-white text-[#0a0a0a] shadow-lg"
+                  : "bg-white/5 text-white/60 border border-white/5"
+                  }`}
+              >
+                {cat}
+              </Link>
+            );
+          })}
         </div>
 
         {isLoading ? (

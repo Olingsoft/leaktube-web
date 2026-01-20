@@ -131,7 +131,7 @@ export default function WatchPage() {
                 <div className="max-w-[1700px] mx-auto flex flex-col xl:flex-row gap-8">
 
                     {/* Main Video Section */}
-                    <div className="flex-1 space-y-6">
+                    <div className="flex-1 space-y-6 px-3">
                         {/* Video Player Placeholder */}
                         <div className="relative aspect-[4/3] md:aspect-video rounded-none md:rounded-[2.5rem] overflow-hidden bg-black/40 border-b md:border border-white/5 shadow-2xl group">
                             {/* embed mega player */}
