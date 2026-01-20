@@ -18,7 +18,7 @@ import {
     Eye,
     MessageCircle
 } from "lucide-react";
-import { getApiUrl } from "@/utils/api";
+import { getApiUrl, API_BASE_URL } from "@/utils/api";
 
 interface Video {
     _id: string;
@@ -31,39 +31,12 @@ interface Video {
     createdAt: string;
 }
 
-const relatedVideos = [
-    {
-        id: 101,
-        title: "How AI is Changing the World",
-        thumbnail: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=400",
-        author: "FutureVision",
-        views: "2.4M",
-        timestamp: "1w ago",
-        duration: "15:20"
-    },
-    {
-        id: 102,
-        title: "Deep Sea Mysteries Unveiled",
-        thumbnail: "https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&q=80&w=400",
-        author: "OceanBlue",
-        views: "1.1M",
-        timestamp: "3w ago",
-        duration: "20:55"
-    },
-    {
-        id: 103,
-        title: "The Mars Colony Project - Part 1",
-        thumbnail: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&q=80&w=400",
-        author: "SpaceX Fan",
-        views: "5.6M",
-        timestamp: "1mo ago",
-        duration: "32:10"
-    }
-];
+
 
 export default function WatchPage() {
     const params = useParams();
     const [video, setVideo] = useState<Video | null>(null);
+    const [relatedVideos, setRelatedVideos] = useState<Video[]>([]);
     const [loading, setLoading] = useState(true);
 
     const getEmbedUrl = (url: string) => {
@@ -80,6 +53,18 @@ export default function WatchPage() {
         return url;
     };
 
+    const getThumbnailUrl = (url: string) => {
+        if (!url) return null;
+        if (url.includes('mega.nz') || url.includes('mega.io')) {
+            return getEmbedUrl(url);
+        }
+        // Fix for images stored with localhost URL when accessing from other devices
+        if (url.includes('localhost:8000')) {
+            return url.replace('http://localhost:8000', API_BASE_URL);
+        }
+        return url;
+    };
+
     useEffect(() => {
         const fetchVideo = async () => {
             try {
@@ -91,6 +76,13 @@ export default function WatchPage() {
 
                 if (data.success) {
                     setVideo(data.data);
+
+                    // Fetch related videos
+                    const relatedResponse = await fetch(getApiUrl(`/api/videos?category=${encodeURIComponent(data.data.category)}`));
+                    const relatedData = await relatedResponse.json();
+                    if (relatedData.success) {
+                        setRelatedVideos(relatedData.data.filter((v: Video) => v._id !== params.id));
+                    }
                 } else {
                     // Handle case where params.id is NOT a mongo ID but might be a legacy Mega ID (though user said they want to pass video._id)
                     // If fetch fails, we could optionally fallback to treating params.id as a mega ID for backward compat
@@ -183,27 +175,29 @@ export default function WatchPage() {
                             <div className="xl:hidden space-y-4 py-4 border-b border-white/5">
                                 <h4 className="text-sm font-black uppercase text-white/40 tracking-widest px-1">Related Videos</h4>
                                 {relatedVideos.map((video) => (
-                                    <Link key={video.id} href={`/watch/${video.id}`} className="flex gap-4 group">
+                                    <Link key={video._id} href={`/watch/${video._id}`} className="flex gap-4 group">
                                         <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0">
-                                            <Image
-                                                src={video.thumbnail}
-                                                alt={video.title}
-                                                fill
-                                                className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                            />
+                                            <div className="relative w-full h-full">
+                                                <Image
+                                                    src={getThumbnailUrl(video.thumbnailUrl) || "/placeholder.jpg"}
+                                                    alt={video.title}
+                                                    fill
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
+                                            </div>
                                             <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
-                                                {video.duration}
+                                                {/* {video.duration} */} 05:00
                                             </div>
                                         </div>
                                         <div className="flex-1 min-w-0 flex flex-col justify-center">
                                             <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#FF2C80] transition-colors mb-1">
                                                 {video.title}
                                             </h5>
-                                            <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider truncate">{video.author}</p>
+                                            <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider truncate">LeakTube</p>
                                             <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold mt-0.5">
-                                                <span>{video.views}</span>
+                                                <span>{video.views?.toLocaleString()}</span>
                                                 <span className="w-0.5 h-0.5 bg-white/10 rounded-full" />
-                                                <span>{video.timestamp}</span>
+                                                <span>{new Date(video.createdAt).toLocaleDateString()}</span>
                                             </div>
                                         </div>
                                     </Link>
@@ -238,27 +232,27 @@ export default function WatchPage() {
                         <div className="space-y-6">
                             <h4 className="text-sm font-black uppercase text-white/40 tracking-widest pl-2">Up Next</h4>
                             {relatedVideos.map((video) => (
-                                <Link key={video.id} href={`/watch/${video.id}`} className="flex gap-4 group">
+                                <Link key={video._id} href={`/watch/${video._id}`} className="flex gap-4 group">
                                     <div className="relative w-40 aspect-video rounded-2xl overflow-hidden flex-shrink-0">
                                         <Image
-                                            src={video.thumbnail}
+                                            src={getThumbnailUrl(video.thumbnailUrl) || "/placeholder.jpg"}
                                             alt={video.title}
                                             fill
                                             className="object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
                                         <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
-                                            {video.duration}
+                                            05:00
                                         </div>
                                     </div>
                                     <div className="flex-1 space-y-1">
                                         <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#FF2C80] transition-colors">
                                             {video.title}
                                         </h5>
-                                        <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">{video.author}</p>
+                                        <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">LeakTube</p>
                                         <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold">
-                                            <span>{video.views}</span>
+                                            <span>{video.views?.toLocaleString()}</span>
                                             <span className="w-1 h-1 bg-white/10 rounded-full" />
-                                            <span>{video.timestamp}</span>
+                                            <span>{new Date(video.createdAt).toLocaleDateString()}</span>
                                         </div>
                                     </div>
                                 </Link>
