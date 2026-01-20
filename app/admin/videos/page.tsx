@@ -16,6 +16,7 @@ import {
     Plus,
     Download,
     Link as LinkIcon,
+    Image as ImageIcon,
     X,
     Play
 } from "lucide-react";
@@ -92,8 +93,14 @@ export default function ManageVideos() {
     };
 
     const getThumbnailUrl = (video: any) => {
-        if (!video.thumbnailUrl) return null;
-        return getEmbedUrl(video.thumbnailUrl);
+        const url = video.thumbnailUrl;
+        if (!url) return null;
+
+        // Handle Mega.nz for thumbnails (we use embed in iframe)
+        if (url.includes('mega.nz') || url.includes('mega.io')) {
+            return getEmbedUrl(url);
+        }
+        return url;
     };
 
     const getVideoSource = (video: any) => {
@@ -242,9 +249,8 @@ export default function ManageVideos() {
                                         <tr key={video._id} className="group hover:bg-white/[0.03] transition-all duration-300">
                                             <td className="px-8 py-6 cursor-pointer" onClick={() => setPreviewVideo(video)}>
                                                 <div className="flex items-center space-x-6">
-                                                    <div className="relative w-32 h-20 rounded-2xl overflow-hidden shadow-2xl flex-shrink-0 group-hover:scale-105 transition-all duration-500 bg-[#0f0f0f]">
-                                                        {/* Static Thumbnail / Frame */}
-                                                        {thumbUrl && (
+                                                    <div className="relative w-32 h-20 rounded-2xl overflow-hidden shadow-2xl flex-shrink-0 group-hover:scale-105 transition-all duration-500 bg-[#0f0f0f] border border-white/5">
+                                                        {thumbUrl ? (
                                                             thumbUrl.includes('mega.nz') || thumbUrl.includes('mega.io') ? (
                                                                 <iframe
                                                                     src={thumbUrl}
@@ -252,13 +258,17 @@ export default function ManageVideos() {
                                                                     style={{ transform: 'scale(1.5)' }} // Zoom in slightly to fill the box
                                                                 />
                                                             ) : (
-                                                                <Image
+                                                                <img
                                                                     src={thumbUrl}
                                                                     alt={video.title}
-                                                                    fill
-                                                                    className="object-cover transition-opacity duration-300 group-hover:opacity-0"
+                                                                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
                                                                 />
                                                             )
+                                                        ) : (
+                                                            <div className="absolute inset-0 flex flex-col items-center justify-center space-y-1 opacity-20 text-white">
+                                                                <ImageIcon className="w-6 h-6" />
+                                                                <span className="text-[8px] font-black uppercase">No Preview</span>
+                                                            </div>
                                                         )}
 
                                                         {/* Video Preview on Hover */}

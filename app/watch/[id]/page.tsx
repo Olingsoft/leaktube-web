@@ -46,6 +46,10 @@ const relatedVideos = [
 ];
 
 export default function WatchPage({ params }: { params: { id: string } }) {
+
+    const videoId = params.id;
+    const videoUrl = `https://mega.nz/embed/${videoId}`;
+    
     return (
         <div className="flex min-h-screen">
             <Sidebar />
@@ -56,23 +60,13 @@ export default function WatchPage({ params }: { params: { id: string } }) {
                     <div className="flex-1 space-y-6">
                         {/* Video Player Placeholder */}
                         <div className="relative aspect-[4/3] md:aspect-video rounded-none md:rounded-[2.5rem] overflow-hidden bg-black/40 border-b md:border border-white/5 shadow-2xl group">
-                            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#990764]/20 to-[#FF2C80]/20 backdrop-blur-lg">
-                                <button className="w-24 h-24 bg-white/10 backdrop-blur-2xl rounded-full border border-white/30 flex items-center justify-center transform hover:scale-110 transition-transform duration-300 group">
-                                    <Play className="w-10 h-10 text-white fill-white group-hover:text-[#FF2C80] group-hover:fill-[#FF2C80] transition-colors" />
-                                </button>
-                            </div>
-
-                            {/* Fake Player UI */}
-                            <div className="absolute bottom-0 left-0 right-0 p-8 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="h-1 flex-1 bg-white/20 rounded-full mx-4 relative cursor-pointer">
-                                    <div className="absolute top-0 left-0 h-full w-1/3 bg-[#FF2C80] rounded-full shadow-[0_0_10px_#FF2C80]" />
-                                </div>
-                            </div>
+                            {/* embed mega player */}
+                            <iframe width="100%" height="100%" frameBorder="0" src={videoUrl} allowFullScreen allow="autoplay;"></iframe>
                         </div>
 
                         {/* Video Info */}
                         <div className="space-y-4 px-4 md:px-0">
-                            <h1 className="text-xl md:text-3xl font-black text-white tracking-tight leading-tight">
+                            <h1 className="text-xl md:text-lg font-black text-white tracking-tight leading-tight">
                                 Premium Cinematic Experience: Journey into the Metadata
                             </h1>
 

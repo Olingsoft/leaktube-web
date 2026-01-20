@@ -24,6 +24,8 @@ export default function AddContentPage() {
         videoUrl: "",
         thumbnailUrl: ""
     });
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
     const [categories, setCategories] = useState<any[]>([]);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,17 +61,35 @@ export default function AddContentPage() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setThumbnailFile(file);
+            const previewUrl = URL.createObjectURL(file);
+            setThumbnailPreview(previewUrl);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
 
         try {
+            const dataToSend = new FormData();
+            dataToSend.append('title', formData.title);
+            dataToSend.append('category', formData.category);
+            dataToSend.append('description', formData.description);
+            dataToSend.append('videoUrl', formData.videoUrl);
+
+            if (thumbnailFile) {
+                dataToSend.append('thumbnail', thumbnailFile);
+            } else if (formData.thumbnailUrl) {
+                dataToSend.append('thumbnailUrl', formData.thumbnailUrl);
+            }
+
             const response = await fetch('http://localhost:8000/api/videos', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
+                body: dataToSend, // Fetch handles Boundary correctly with FormData
             });
 
             const data = await response.json();
@@ -87,6 +107,8 @@ export default function AddContentPage() {
                     videoUrl: "",
                     thumbnailUrl: ""
                 });
+                setThumbnailFile(null);
+                setThumbnailPreview(null);
             } else {
                 setModal({
                     show: true,
@@ -119,7 +141,7 @@ export default function AddContentPage() {
                 <p className="text-white/40 font-medium text-lg">Share direct video links with your community efficiently.</p>
             </div>
 
-            {/* Type Selector (Simplified to only Video for now if needed, but keeping UI for scale) */}
+            {/* Type Selector */}
             <div className="flex flex-wrap gap-4">
                 {[
                     { id: "video", label: "Video Link", icon: LinkIcon, active: true },
@@ -147,13 +169,8 @@ export default function AddContentPage() {
             </div>
 
             {/* Form Area */}
-            <div className="p-1 (gradient border) rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent">
+            <div className="p-1 rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent">
                 <div className="p-12 rounded-[2.4rem] bg-[#0f0f0f] border border-white/5 backdrop-blur-3xl relative overflow-hidden">
-                    {/* Decorative Background Icon */}
-                    <div className="absolute -top-10 -right-10 p-10 opacity-[0.02] rotate-12">
-                        <LinkIcon className="w-96 h-96 text-white" />
-                    </div>
-
                     <form onSubmit={handleSubmit} className="relative z-10 space-y-10">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <div className="space-y-3">
@@ -211,7 +228,7 @@ export default function AddContentPage() {
                             />
                         </div>
 
-                        <div className="space-y-6">
+                        <div className="space-y-8">
                             <div className="space-y-3">
                                 <label className="text-xs font-black text-[#FF2C80] uppercase tracking-[0.2em] ml-2 font-black">Direct Video URL</label>
                                 <div className="relative group">
@@ -229,23 +246,41 @@ export default function AddContentPage() {
                                         />
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-white/20 uppercase tracking-[0.3em] font-black ml-4">Only direct video links or supported embed links</p>
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Thumbnail URL (Optional)</label>
-                                <div className="relative group">
-                                    <div className="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 focus-within:border-white/30 focus-within:bg-white/10 transition-all">
-                                        <ImageIcon className="w-6 h-6 text-white/20 mr-6" />
-                                        <input
-                                            name="thumbnailUrl"
-                                            value={formData.thumbnailUrl}
-                                            onChange={handleInputChange}
-                                            type="url"
-                                            placeholder="https://example.com/thumb.jpg"
-                                            className="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-white/20 font-semibold"
-                                        />
+                                <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Thumbnail Image</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                                    <div className="relative group">
+                                        <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#FF2C80]/30 transition-all cursor-pointer group">
+                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#FF2C80] transition-colors" />
+                                                <p className="text-sm text-white/40 font-bold uppercase tracking-widest">
+                                                    {thumbnailFile ? thumbnailFile.name : "Select Image File"}
+                                                </p>
+                                                <p className="text-[10px] text-white/20 mt-2">JPG, PNG, WebP (Max 5MB)</p>
+                                            </div>
+                                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                        </label>
                                     </div>
+
+                                    {thumbnailPreview ? (
+                                        <div className="relative aspect-video rounded-[2rem] overflow-hidden border border-white/10 bg-black group">
+                                            <img src={thumbnailPreview} alt="Preview" className="w-full h-full object-cover" />
+                                            <button
+                                                type="button"
+                                                onClick={() => { setThumbnailFile(null); setThumbnailPreview(null); }}
+                                                className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-colors"
+                                            >
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center justify-center aspect-video rounded-[2rem] border border-white/5 bg-white/[0.02] text-white/10">
+                                            <ImageIcon className="w-12 h-12 mb-2" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Preview Area</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -253,25 +288,21 @@ export default function AddContentPage() {
                         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                             <div className="flex items-center space-x-4">
                                 <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5">
-                                    <Upload className="w-5 h-5 text-white/40" />
+                                    <CheckCircle className={`w-5 h-5 ${formData.title && formData.videoUrl ? "text-green-500" : "text-white/20"}`} />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Status</p>
-                                    <p className="text-sm font-bold text-white/60 text-green-500">Ready to Publish</p>
+                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Validation</p>
+                                    <p className="text-sm font-bold text-white/60">
+                                        {formData.title && formData.videoUrl ? "Ready to Publish" : "Please fill required fields"}
+                                    </p>
                                 </div>
                             </div>
 
                             <div className="flex items-center space-x-4 w-full sm:w-auto">
                                 <button
-                                    type="button"
-                                    className="flex-1 sm:flex-none px-10 py-6 rounded-2xl bg-white/5 text-white/60 font-black uppercase tracking-widest hover:bg-white/10 transition-all border border-white/5"
-                                >
-                                    Cancel
-                                </button>
-                                <button
                                     type="submit"
-                                    disabled={isSubmitting}
-                                    className="flex-1 sm:flex-none px-14 py-6 rounded-2xl bg-white text-black font-black uppercase tracking-[0.2em] hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(255,255,255,0.15)] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={isSubmitting || !formData.title || !formData.videoUrl}
+                                    className="flex-1 sm:flex-none px-20 py-6 rounded-2xl bg-white text-black font-black uppercase tracking-[0.2em] hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(255,255,255,0.15)] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSubmitting ? "Publishing..." : "Publish Video"}
                                 </button>
@@ -281,39 +312,25 @@ export default function AddContentPage() {
                 </div>
             </div>
 
-            {/* Modern Success/Error Modal */}
+            {/* Modal */}
             {modal.show && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
-                    <div className="relative max-w-sm w-full bg-[#0f0f0f] border border-white/10 rounded-[2.5rem] p-10 text-center shadow-[0_40px_100px_rgba(0,0,0,0.5)] animate-in zoom-in slide-in-from-bottom-10 duration-500">
-                        {/* Gradient Glow */}
-                        <div className={`absolute inset-0 blur-3xl opacity-10 rounded-[2.5rem] -z-10 ${modal.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`} />
-
+                    <div className="relative max-w-sm w-full bg-[#0f0f0f] border border-white/10 rounded-[2.5rem] p-10 text-center shadow-[0_40px_100px_rgba(0,0,0,0.5)]">
                         <div className="space-y-6">
-                            <div className={`mx-auto w-24 h-24 rounded-full flex items-center justify-center transition-transform duration-700 ${modal.type === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-                                {modal.type === 'success' ? (
-                                    <CheckCircle className="w-12 h-12 animate-bounce" />
-                                ) : (
-                                    <AlertCircle className="w-12 h-12" />
-                                )}
+                            <div className={`mx-auto w-24 h-24 rounded-full flex items-center justify-center ${modal.type === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                                {modal.type === 'success' ? <CheckCircle className="w-12 h-12" /> : <AlertCircle className="w-12 h-12" />}
                             </div>
-
                             <div className="space-y-3">
                                 <h2 className="text-3xl font-black text-white">
-                                    {modal.type === 'success' ? 'Great Job!' : 'Wait a minute'}
+                                    {modal.type === 'success' ? 'Success!' : 'Error'}
                                 </h2>
-                                <p className="text-white/40 font-medium leading-relaxed">
-                                    {modal.message}
-                                </p>
+                                <p className="text-white/40 font-medium">{modal.message}</p>
                             </div>
-
                             <button
                                 onClick={() => setModal({ ...modal, show: false })}
-                                className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-sm transition-all active:scale-95 ${modal.type === 'success'
-                                    ? 'bg-white text-black hover:bg-neutral-200'
-                                    : 'bg-red-500 text-white hover:bg-red-600'
-                                    }`}
+                                className="w-full py-5 rounded-2xl font-black uppercase tracking-widest text-sm bg-white text-black hover:bg-neutral-200 transition-all"
                             >
-                                {modal.type === 'success' ? 'Awesome' : 'Try Again'}
+                                Close
                             </button>
                         </div>
                     </div>
@@ -322,3 +339,4 @@ export default function AddContentPage() {
         </div>
     );
 }
+
