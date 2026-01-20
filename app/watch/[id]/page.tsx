@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import Sidebar from "../../components/Sidebar";
 import {
     Play,
@@ -45,11 +46,11 @@ const relatedVideos = [
     }
 ];
 
-export default function WatchPage({ params }: { params: { id: string } }) {
-
+export default function WatchPage() {
+    const params = useParams();
     const videoId = params.id;
     const videoUrl = `https://mega.nz/embed/${videoId}`;
-    
+
     return (
         <div className="flex min-h-screen">
             <Sidebar />

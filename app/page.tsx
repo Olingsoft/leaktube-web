@@ -104,9 +104,19 @@ export default function Home() {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-3 md:gap-x-6 gap-y-6 md:gap-y-10">
             {videos.map((video) => {
               const thumbUrl = getThumbnailUrl(video.thumbnailUrl);
+              const videoUrl = video.videoUrl;
+              // eg https://mega.nz/embed/etZyRYxI#_hMbsNucef-rchIVQBcKg3RIA2DEAxtYRgVO2sF1p6I!1a
 
+              // just remove https://mega.nz/embed/ 
+              // and asign  "#_hMbsNucef-rchIVQBcKg3RIA2DEAxtYRgVO2sF1p6I!1a" to videoId
+
+              let videoId = video._id;
+              if (videoUrl) {
+                const cleanedUrl = videoUrl.replace('https://mega.nz/embed/', '').replace('https://mega.nz/file/', '');
+                videoId = encodeURIComponent(cleanedUrl);
+              }
               return (
-                <Link key={video._id} href={`/watch/${video._id}`} className="group relative">
+                <Link key={video._id} href={`/watch/${videoId}`} className="group relative">
                   <div className="relative space-y-4">
                     {/* Thumbnail Layer */}
                     <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-[#151515] border border-white/5">
