@@ -107,14 +107,7 @@ export default function Home() {
               const videoUrl = video.videoUrl;
               // eg https://mega.nz/embed/etZyRYxI#_hMbsNucef-rchIVQBcKg3RIA2DEAxtYRgVO2sF1p6I!1a
 
-              // just remove https://mega.nz/embed/ 
-              // and asign  "#_hMbsNucef-rchIVQBcKg3RIA2DEAxtYRgVO2sF1p6I!1a" to videoId
-
-              let videoId = video._id;
-              if (videoUrl) {
-                const cleanedUrl = videoUrl.replace('https://mega.nz/embed/', '').replace('https://mega.nz/file/', '');
-                videoId = encodeURIComponent(cleanedUrl);
-              }
+              const videoId = video._id;
               return (
                 <Link key={video._id} href={`/watch/${videoId}`} className="group relative">
                   <div className="relative space-y-4">

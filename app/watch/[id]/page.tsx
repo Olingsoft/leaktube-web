@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -13,8 +13,20 @@ import {
     MoreVertical,
     Flag,
     ListPlus,
-    ArrowDownToLine
+    ArrowDownToLine,
+    Loader2
 } from "lucide-react";
+
+interface Video {
+    _id: string;
+    title: string;
+    description: string;
+    videoUrl: string;
+    category: string;
+    thumbnailUrl: string;
+    views: number;
+    createdAt: string;
+}
 
 const relatedVideos = [
     {
@@ -48,8 +60,69 @@ const relatedVideos = [
 
 export default function WatchPage() {
     const params = useParams();
-    const videoId = params.id;
-    const videoUrl = `https://mega.nz/embed/${videoId}`;
+    const [video, setVideo] = useState<Video | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    const getEmbedUrl = (url: string) => {
+        if (!url) return "";
+        if (url.includes('mega.nz')) {
+            const cleanedUrl = url.replace('https://mega.nz/embed/', '').replace('https://mega.nz/file/', '');
+            return `https://mega.nz/embed/${cleanedUrl}`; // Ensure # is preserved if it wasn't stripped, or just use as is if browser handles it.
+            // Actually, the previous logic was: remove prefix, then encodeURIComponent if needed, or just append. 
+            // IF we assume the API returns the FULL URL, we just need to ensure the IFRAME src is correct.
+            // If the backend returns `https://mega.nz/file/ID#KEY`, we want `https://mega.nz/embed/ID#KEY`.
+            // Simple replace is safest.
+            return url.replace('mega.nz/file/', 'mega.nz/embed/');
+        }
+        return url;
+    };
+
+    useEffect(() => {
+        const fetchVideo = async () => {
+            try {
+                if (!params.id) return;
+
+                // Try fetching as if it is a Mongo ID
+                const response = await fetch(`http://localhost:8000/api/videos/${params.id}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    setVideo(data.data);
+                } else {
+                    // Handle case where params.id is NOT a mongo ID but might be a legacy Mega ID (though user said they want to pass video._id)
+                    // If fetch fails, we could optionally fallback to treating params.id as a mega ID for backward compat
+                    console.error("Video not found via API");
+                }
+            } catch (error) {
+                console.error("Error fetching video:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchVideo();
+    }, [params.id]);
+
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+                <div className="flex flex-col items-center space-y-4">
+                    <Loader2 className="w-12 h-12 text-[#FF2C80] animate-spin" />
+                    <p className="text-white/40 font-black uppercase tracking-widest text-sm animate-pulse">Loading Stream...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!video) {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+                <p className="text-white/40 font-black uppercase tracking-widest">Video Not Found</p>
+            </div>
+        );
+    }
+
+    const videoEmbedUrl = getEmbedUrl(video.videoUrl);
 
     return (
         <div className="flex min-h-screen">
@@ -62,19 +135,19 @@ export default function WatchPage() {
                         {/* Video Player Placeholder */}
                         <div className="relative aspect-[4/3] md:aspect-video rounded-none md:rounded-[2.5rem] overflow-hidden bg-black/40 border-b md:border border-white/5 shadow-2xl group">
                             {/* embed mega player */}
-                            <iframe width="100%" height="100%" frameBorder="0" src={videoUrl} allowFullScreen allow="autoplay;"></iframe>
+                            <iframe width="100%" height="100%" frameBorder="0" src={videoEmbedUrl} allowFullScreen allow="autoplay;"></iframe>
                         </div>
 
                         {/* Video Info */}
                         <div className="space-y-4 px-4 md:px-0">
                             <h1 className="text-xl md:text-lg font-black text-white tracking-tight leading-tight">
-                                Premium Cinematic Experience: Journey into the Metadata
+                                {video.title}
                             </h1>
 
                             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-white/5 pb-6">
                                 <div className="flex items-center space-x-3 md:space-x-4">
                                     <div className="w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-tr from-[#FF2C80] to-[#990764] flex items-center justify-center shadow-lg transform hover:rotate-6 transition-transform">
-                                        <span className="text-white font-black text-lg md:text-xl italic">L</span>
+                                        <span className="text-white font-black text-lg md:text-xl italic">{video.title.substring(0, 1)}</span>
                                     </div>
                                     <div className="min-w-0">
                                         <h3 className="text-white font-black text-sm md:text-base hover:text-[#FF2C80] cursor-pointer transition-colors truncate">LeakTube Originals</h3>
@@ -88,7 +161,7 @@ export default function WatchPage() {
                                 <div className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-2xl p-1">
                                     <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
                                         <ThumbsUp className="w-5 h-5 group-hover:text-[#FF2C80]" />
-                                        <span className="text-sm font-bold">124K</span>
+                                        <span className="text-sm font-bold">{video.views?.toLocaleString() || 0}</span>
                                     </button>
                                     <div className="w-px h-6 bg-white/10" />
                                     <button className="flex items-center px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
@@ -107,13 +180,11 @@ export default function WatchPage() {
                             {/* Description Box */}
                             <div className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-3xl space-y-3">
                                 <div className="flex items-center space-x-3 text-[10px] md:text-sm font-bold">
-                                    <span className="text-white">458,230 views</span>
-                                    <span className="text-white/40 truncate">Streamed live on Jan 19, 2026</span>
+                                    <span className="text-white">{video.views?.toLocaleString() || 0} views</span>
+                                    <span className="text-white/40 truncate">Streamed on {new Date(video.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <p className="text-white/60 text-[11px] md:text-sm leading-relaxed max-w-4xl">
-                                    Experience the ultimate deep dive into the next generation of digital streaming.
-                                    Our premium LeakTube originals bring you closer to the creators and stories that matter.
-                                    Don't forget to like, subscribe and join our LeakTube+ membership for exclusive perks!
+                                    {video.description}
                                 </p>
                             </div>
                         </div>
