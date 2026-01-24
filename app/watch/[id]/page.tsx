@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -33,7 +33,7 @@ interface Video {
 
 
 
-export default function WatchPage() {
+function WatchPageContent() {
     const params = useParams();
     const [video, setVideo] = useState<Video | null>(null);
     const [relatedVideos, setRelatedVideos] = useState<Video[]>([]);
@@ -342,5 +342,17 @@ export default function WatchPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function WatchPage() {
+    return (
+        <Suspense fallback={
+            <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+                <Loader2 className="w-10 h-10 text-[#1B3C53] animate-spin" />
+            </div>
+        }>
+            <WatchPageContent />
+        </Suspense>
     );
 }

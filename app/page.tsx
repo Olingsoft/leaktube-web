@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
@@ -8,8 +8,7 @@ import { Play, Loader2, Image as ImageIcon, Search } from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 
 
-
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
   const [videos, setVideos] = useState<any[]>([]);
@@ -260,6 +259,18 @@ export default function Home() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
+        <Loader2 className="w-10 h-10 text-[#1B3C53] animate-spin" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
 
