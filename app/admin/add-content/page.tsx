@@ -131,12 +131,12 @@ export default function AddContentPage() {
     return (
         <div className="max-w-4xl mx-auto space-y-10 pb-20">
             <div className="space-y-4">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#FF2C80]/10 border border-[#FF2C80]/20 text-[#FF2C80]">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#1B3C53]/10 border border-[#1B3C53]/20 text-[#1B3C53]">
                     <Zap className="w-3 h-3" />
                     <span className="text-[10px] font-black uppercase tracking-widest">Admin Dashboard</span>
                 </div>
                 <h1 className="text-5xl font-black text-white tracking-tight">
-                    Add New <span className="text-[#FF2C80]">Content</span>
+                    Add New <span className="text-[#1B3C53]">Content</span>
                 </h1>
                 <p className="text-white/40 font-medium text-lg">Share direct video links with your community efficiently.</p>
             </div>
@@ -157,7 +157,7 @@ export default function AddContentPage() {
                             type="button"
                             onClick={() => type.id === "video" && setSelectedType(type.id)}
                             className={`flex items-center space-x-3 px-8 py-5 rounded-2xl border transition-all duration-300 ${isActive
-                                ? "bg-[#FF2C80] border-[#FF2C80] text-white shadow-[0_20px_40px_rgba(255,44,128,0.3)] scale-105"
+                                ? "bg-[#1B3C53] border-[#1B3C53] text-white shadow-[0_20px_40px_rgba(27,60,83,0.3)] scale-105"
                                 : "bg-white/5 border-white/5 text-white/20 opacity-50 cursor-not-allowed"
                                 }`}
                         >
@@ -185,7 +185,7 @@ export default function AddContentPage() {
                                     required
                                     type="text"
                                     placeholder="Enter a catchy title..."
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#FF2C80]/50 focus:bg-white/10 transition-all font-semibold text-lg"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold text-lg"
                                 />
                             </div>
                             <div className="space-y-3">
@@ -197,7 +197,7 @@ export default function AddContentPage() {
                                     name="category"
                                     value={formData.category}
                                     onChange={handleInputChange}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#FF2C80]/50 focus:bg-white/10 transition-all font-semibold appearance-none text-lg cursor-pointer disabled:opacity-50"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold appearance-none text-lg cursor-pointer disabled:opacity-50"
                                     disabled={isLoadingCategories}
                                 >
                                     {isLoadingCategories ? (
@@ -224,17 +224,17 @@ export default function AddContentPage() {
                                 required
                                 rows={4}
                                 placeholder="Tell us more about this video..."
-                                className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#FF2C80]/50 focus:bg-white/10 transition-all font-semibold resize-none text-lg"
+                                className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold resize-none text-lg"
                             />
                         </div>
 
                         <div className="space-y-8">
                             <div className="space-y-3">
-                                <label className="text-xs font-black text-[#FF2C80] uppercase tracking-[0.2em] ml-2 font-black">Direct Video URL</label>
+                                <label className="text-xs font-black text-[#1B3C53] uppercase tracking-[0.2em] ml-2 font-black">Direct Video URL</label>
                                 <div className="relative group">
-                                    <div className="absolute inset-0 bg-[#FF2C80]/10 rounded-[2rem] blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-                                    <div className="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 focus-within:border-[#FF2C80]/50 focus-within:bg-white/10 transition-all">
-                                        <LinkIcon className="w-6 h-6 text-[#FF2C80] mr-6" />
+                                    <div className="absolute inset-0 bg-[#1B3C53]/10 rounded-[2rem] blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
+                                    <div className="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 focus-within:border-[#1B3C53]/50 focus-within:bg-white/10 transition-all">
+                                        <LinkIcon className="w-6 h-6 text-[#1B3C53] mr-6" />
                                         <input
                                             name="videoUrl"
                                             value={formData.videoUrl}
@@ -252,9 +252,9 @@ export default function AddContentPage() {
                                 <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Thumbnail Image</label>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                                     <div className="relative group">
-                                        <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#FF2C80]/30 transition-all cursor-pointer group">
+                                        <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#1B3C53]/30 transition-all cursor-pointer group">
                                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#FF2C80] transition-colors" />
+                                                <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#1B3C53] transition-colors" />
                                                 <p className="text-sm text-white/40 font-bold uppercase tracking-widest">
                                                     {thumbnailFile ? thumbnailFile.name : "Select Image File"}
                                                 </p>

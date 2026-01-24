@@ -43,10 +43,10 @@ export default function AdminLayout({
             <aside className="fixed left-0 top-0 bottom-0 w-72 hidden lg:flex flex-col bg-[#0f0f0f] border-r border-white/5 z-50">
                 <div className="p-8">
                     <div className="flex items-center space-x-3 mb-10">
-                        <div className="w-10 h-10 bg-gradient-to-br from-[#FF2C80] to-[#8E2DE2] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(255,44,128,0.3)]">
+                        <div className="w-10 h-10 bg-gradient-to-br from-[#1B3C53] to-[#1B3C53] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(27,60,83,0.3)]">
                             <span className="font-black text-xl">L</span>
                         </div>
-                        <span className="font-extrabold text-xl tracking-tight">Admin<span className="text-[#FF2C80]">Panel</span></span>
+                        <span className="font-extrabold text-xl tracking-tight">Admin<span className="text-[#1B3C53]">Panel</span></span>
                     </div>
 
                     <nav className="space-y-2">
@@ -63,10 +63,10 @@ export default function AdminLayout({
                                         : "text-white/40 hover:text-white hover:bg-white/5"
                                         }`}
                                 >
-                                    <Icon className={`w-5 h-5 ${isActive ? "text-[#FF2C80]" : "group-hover:text-[#FF2C80]"}`} />
+                                    <Icon className={`w-5 h-5 ${isActive ? "text-[#1B3C53]" : "group-hover:text-[#1B3C53]"}`} />
                                     <span className="font-semibold text-sm">{item.name}</span>
                                     {isActive && (
-                                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#FF2C80] shadow-[0_0_10px_#FF2C80]" />
+                                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#1B3C53] shadow-[0_0_10px_#1B3C53]" />
                                     )}
                                 </Link>
                             );
@@ -94,7 +94,7 @@ export default function AdminLayout({
             {/* Mobile Header */}
             <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0f0f0f]/80 backdrop-blur-xl border-b border-white/5 flex items-center justify-between px-6 z-50">
                 <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-[#FF2C80] to-[#8E2DE2] rounded-lg flex items-center justify-center">
+                    <div className="w-8 h-8 bg-gradient-to-br from-[#1B3C53] to-[#1B3C53] rounded-lg flex items-center justify-center">
                         <span className="font-black text-sm text-white">L</span>
                     </div>
                     <span className="font-bold text-lg tracking-tight">Admin</span>
@@ -136,7 +136,7 @@ export default function AdminLayout({
                                             : "text-white/40"
                                             }`}
                                     >
-                                        <Icon className={`w-5 h-5 ${isActive ? "text-[#FF2C80]" : ""}`} />
+                                        <Icon className={`w-5 h-5 ${isActive ? "text-[#1B3C53]" : ""}`} />
                                         <span className="font-semibold text-sm">{item.name}</span>
                                     </Link>
                                 );
@@ -158,7 +158,7 @@ export default function AdminLayout({
                     <div className="flex items-center space-x-6">
                         <button className="relative p-2.5 bg-white/5 hover:bg-white/10 rounded-xl transition-colors group">
                             <Bell className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
-                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#FF2C80] rounded-full border-2 border-[#0a0a0a]" />
+                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-[#1B3C53] rounded-full border-2 border-[#0a0a0a]" />
                         </button>
                         <div className="h-8 w-px bg-white/10" />
                         <div className="flex items-center space-x-3">
@@ -169,7 +169,7 @@ export default function AdminLayout({
                                     Online
                                 </p>
                             </div>
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF2C80] to-[#8E2DE2] p-[1px]">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#1B3C53] to-[#1B3C53] p-[1px]">
                                 <div className="w-full h-full rounded-full bg-[#0a0a0a] flex items-center justify-center p-1">
                                     <div className="w-full h-full rounded-full bg-white/10 flex items-center justify-center overflow-hidden">
                                         <Users className="w-5 h-5 text-white/40" />

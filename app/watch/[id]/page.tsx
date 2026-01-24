@@ -65,6 +65,20 @@ export default function WatchPage() {
         return url;
     };
 
+    const calculateViews = (id: string, baseViews: number = 0) => {
+        if (!id) return "0";
+        const seed = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const randomBoost = (seed % 43000) + 7500;
+        return (baseViews + randomBoost).toLocaleString();
+    };
+
+    const calculateLikes = (id: string, baseViews: number = 0) => {
+        if (!id) return "0";
+        const seed = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const randomBoost = (seed % 8000) + 850;
+        return (baseViews + randomBoost).toLocaleString();
+    };
+
     useEffect(() => {
         const fetchVideo = async () => {
             try {
@@ -100,10 +114,48 @@ export default function WatchPage() {
 
     if (loading) {
         return (
-            <div className="flex min-h-screen items-center justify-center">
-                <div className="flex flex-col items-center space-y-4">
-                    <Loader2 className="w-12 h-12 text-[#FF2C80] animate-spin" />
-                    <p className="text-white font-black uppercase tracking-widest text-sm animate-pulse">Loading Stream...</p>
+            <div className="flex min-h-screen">
+                <Sidebar />
+                <div className="flex-1 lg:ml-72 md:p-8 pt-0 md:pt-8 pb-20 overflow-x-hidden">
+                    <div className="max-w-[1700px] mx-auto flex flex-col xl:flex-row gap-8">
+                        {/* Main Section Skeleton */}
+                        <div className="flex-1 space-y-6 px-3">
+                            {/* Video Player Skeleton */}
+                            <div className="aspect-[4/3] md:aspect-video rounded-none md:rounded-[2.5rem] bg-white/5 animate-pulse" />
+
+                            {/* Info Skeleton */}
+                            <div className="space-y-4 px-4 md:px-0">
+                                <div className="h-8 w-3/4 bg-white/5 rounded-lg animate-pulse" />
+                                <div className="flex justify-between items-center border-b border-white/5 pb-6">
+                                    <div className="h-10 w-full md:w-2/3 bg-white/5 rounded-2xl animate-pulse" />
+                                </div>
+                                {/* Description Skeleton */}
+                                <div className="p-6 bg-white/5 rounded-3xl space-y-3 animate-pulse">
+                                    <div className="h-4 w-1/4 bg-white/10 rounded" />
+                                    <div className="space-y-2">
+                                        <div className="h-4 w-full bg-white/10 rounded" />
+                                        <div className="h-4 w-5/6 bg-white/10 rounded" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Sidebar Skeleton */}
+                        <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0 hidden xl:block">
+                            <div className="h-64 bg-white/5 rounded-[2.5rem] animate-pulse" />
+                            <div className="space-y-4">
+                                {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="flex gap-4">
+                                        <div className="w-40 aspect-video bg-white/5 rounded-2xl animate-pulse" />
+                                        <div className="flex-1 space-y-2">
+                                            <div className="h-4 w-3/4 bg-white/5 rounded animate-pulse" />
+                                            <div className="h-3 w-1/2 bg-white/5 rounded animate-pulse" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -126,11 +178,30 @@ export default function WatchPage() {
                 <div className="max-w-[1700px] mx-auto flex flex-col xl:flex-row gap-8">
 
                     {/* Main Video Section */}
-                    <div className="flex-1 space-y-6 px-3">
-                        {/* Video Player Placeholder */}
-                        <div className="relative aspect-[4/3] md:aspect-video rounded-none md:rounded-[2.5rem] overflow-hidden bg-black/40 border-b md:border border-white/5 shadow-2xl group">
-                            {/* embed mega player */}
-                            <iframe width="100%" height="100%" frameBorder="0" src={videoEmbedUrl} allowFullScreen allow="autoplay;"></iframe>
+                    <div className="flex-1 space-y-6 px-3 ">
+                        {/* Video Player Section with Premium Border */}
+                        <div className="relative group/player transition-all duration-700">
+                            {/* Outer Glow Effect */}
+                            <div className="absolute -inset-[1px] bg-gradient-to-tr from-[#1B3C53] via-white/20 to-[#D02752]/50 rounded-[2rem] md:rounded-[3.1rem] blur-sm opacity-50 group-hover/player:opacity-100 transition-opacity duration-700" />
+
+                            {/* Border Wrapper */}
+                            <div className="relative p-[1px] bg-gradient-to-tr  from-white/10 via-white/5 to-white/10 rounded-[2rem] md:rounded-[3.1rem] shadow-2xl overflow-hidden backdrop-blur-3xl">
+                                <div className="relative aspect-[4/3] md:aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a] shadow-inner">
+                                    {/* embed mega player */}
+                                    <iframe
+                                        width="100%"
+                                        height="110%"
+                                        frameBorder="0"
+                                        src={videoEmbedUrl}
+                                        allowFullScreen
+                                        allow="autoplay;"
+                                        className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
+                                    ></iframe>
+
+                                    {/* Inner Reflection Overlay */}
+                                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Video Info */}
@@ -146,21 +217,21 @@ export default function WatchPage() {
                                     {/* Views */}
                                     <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
                                         <Eye className="w-4 h-4 text-white/70" />
-                                        <span className="text-sm font-bold">{video.views?.toLocaleString() || "0"}</span>
+                                        <span className="text-sm font-bold">{calculateViews(video._id, video.views || 0)}</span>
                                     </button>
                                     <div className="w-px h-6 bg-white/10" />
 
                                     {/* Likes */}
                                     <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
-                                        <ThumbsUp className="w-4 h-4 group-hover:text-[#FF2C80]" />
-                                        <span className="text-sm font-bold">42K</span>
+                                        <ThumbsUp className="w-4 h-4 group-hover:text-[#1B3C53]" />
+                                        <span className="text-sm font-bold">{calculateLikes(video._id, video.views || 0)}</span>
                                     </button>
                                     <div className="w-px h-6 bg-white/10" />
 
                                     {/* Comments */}
                                     <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
-                                        <MessageCircle className="w-4 h-4 group-hover:text-[#FF2C80]" />
-                                        <span className="text-sm font-bold">1.2K</span>
+                                        <MessageCircle className="w-4 h-4 group-hover:text-[#1B3C53]" />
+                                        {/* <span className="text-sm font-bold">1.2K</span> */}
                                     </button>
                                     <div className="w-px h-6 bg-white/10" />
 
@@ -190,12 +261,12 @@ export default function WatchPage() {
                                             </div>
                                         </div>
                                         <div className="flex-1 min-w-0 flex flex-col justify-center">
-                                            <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#FF2C80] transition-colors mb-1">
+                                            <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#1B3C53] transition-colors mb-1">
                                                 {video.title}
                                             </h5>
                                             <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider truncate">LeakTube</p>
                                             <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold mt-0.5">
-                                                <span>{video.views?.toLocaleString()}</span>
+                                                <span>{calculateViews(video._id, video.views)}</span>
                                                 <span className="w-0.5 h-0.5 bg-white/10 rounded-full" />
                                                 <span>{new Date(video.createdAt).toLocaleDateString()}</span>
                                             </div>
@@ -207,7 +278,7 @@ export default function WatchPage() {
                             {/* Description Box */}
                             <div className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-3xl space-y-3">
                                 <div className="flex items-center space-x-3 text-[10px] md:text-sm font-bold">
-                                    <span className="text-white">{video.views?.toLocaleString() || 0} views</span>
+                                    <span className="text-white">{calculateViews(video._id, video.views || 0)} views</span>
                                     <span className="text-white/40 truncate">Streamed on {new Date(video.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <p className="text-white/60 text-[11px] md:text-sm leading-relaxed max-w-4xl">
@@ -221,10 +292,10 @@ export default function WatchPage() {
                     <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0">
 
                         {/* Sidebar Ad 1 */}
-                        <div className="p-8 bg-gradient-to-br from-[#FF2C80]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group">
+                        <div className="p-8 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group">
                             <div className="absolute top-4 left-4 text-[8px] font-black uppercase text-white/20 tracking-[0.2em]">Ad Placement</div>
                             <p className="text-white/60 text-xs font-bold leading-tight mb-4 mt-2">Get 3 months of LeakTube+ for the price of one.</p>
-                            <button className="w-full py-2.5 bg-gradient-to-r from-[#FF2C80] to-[#990764] rounded-xl text-[10px] font-black uppercase text-white shadow-xl hover:shadow-[0_0_20px_#FF2C80/40] transition-all">
+                            <button className="w-full py-2.5 bg-gradient-to-r from-[#1B3C53] to-[#1B3C53] rounded-xl text-[10px] font-black uppercase text-white shadow-xl hover:shadow-[0_0_20px_rgba(27,60,83,0.4)] transition-all">
                                 Claim Offer
                             </button>
                         </div>
@@ -245,12 +316,12 @@ export default function WatchPage() {
                                         </div>
                                     </div>
                                     <div className="flex-1 space-y-1">
-                                        <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#FF2C80] transition-colors">
+                                        <h5 className="text-white font-bold text-xs ring-1 ring-transparent line-clamp-2 group-hover:text-[#1B3C53] transition-colors">
                                             {video.title}
                                         </h5>
                                         <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">LeakTube</p>
                                         <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold">
-                                            <span>{video.views?.toLocaleString()}</span>
+                                            <span>{calculateViews(video._id, video.views)}</span>
                                             <span className="w-1 h-1 bg-white/10 rounded-full" />
                                             <span>{new Date(video.createdAt).toLocaleDateString()}</span>
                                         </div>

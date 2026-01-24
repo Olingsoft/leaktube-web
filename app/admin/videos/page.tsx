@@ -168,11 +168,11 @@ export default function ManageVideos() {
         <div className="p-4 w-[98%] md:p-8 space-y-8 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-black text-white tracking-tight">Manage <span className="text-[#FF2C80]">Videos</span></h1>
+                    <h1 className="text-4xl font-black text-white tracking-tight">Manage <span className="text-[#1B3C53]">Videos</span></h1>
                     <p className="text-white/40 font-medium">You have total {videos.length} videos published.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Link href="/admin/add-content" className="flex items-center space-x-2 px-8 py-3 bg-[#FF2C80] rounded-2xl text-white hover:scale-[1.05] active:scale-95 transition-all text-sm font-black uppercase tracking-widest shadow-[0_20px_40px_rgba(255,44,128,0.2)]">
+                    <Link href="/admin/add-content" className="flex items-center space-x-2 px-8 py-3 bg-[#1B3C53] rounded-2xl text-white hover:scale-[1.05] active:scale-95 transition-all text-sm font-black uppercase tracking-widest shadow-[0_20px_40px_rgba(27,60,83,0.2)]">
                         <Plus className="w-5 h-5" />
                         <span>Add New Video</span>
                     </Link>
@@ -182,11 +182,11 @@ export default function ManageVideos() {
             {/* Filters Bar */}
             <div className="p-6 rounded-[2.5rem] bg-white/[0.03] border border-white/5 backdrop-blur-3xl flex flex-col lg:flex-row gap-6 shadow-2xl">
                 <div className="flex-1 relative group">
-                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[#FF2C80] transition-colors" />
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[#1B3C53] transition-colors" />
                     <input
                         type="text"
                         placeholder="Search by title..."
-                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-16 pr-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#FF2C80]/50 transition-all font-semibold"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl pl-16 pr-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 transition-all font-semibold"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -197,7 +197,7 @@ export default function ManageVideos() {
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
                             className={`px-6 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap border ${selectedCategory === cat
-                                ? "bg-[#FF2C80] border-[#FF2C80] text-white shadow-[0_10px_20px_rgba(255,44,128,0.2)]"
+                                ? "bg-[#1B3C53] border-[#1B3C53] text-white shadow-[0_10px_20px_rgba(27,60,83,0.2)]"
                                 : "bg-white/5 border-white/5 text-white/30 hover:bg-white/10 hover:text-white"
                                 }`}
                         >
@@ -209,7 +209,7 @@ export default function ManageVideos() {
 
             {/* Videos Grid/Table */}
             <div className="rounded-[2.5rem] bg-white/[0.02] border border-white/5 overflow-hidden backdrop-blur-sm shadow-2xl">
-                <div className="overflow-x-auto scrollbar-thin scrollbar-track-white/5 scrollbar-thumb-[#FF2C80]/20">
+                <div className="overflow-x-auto scrollbar-thin scrollbar-track-white/5 scrollbar-thumb-[#1B3C53]/20">
                     <table className="w-full text-left border-collapse min-w-[1000px]">
                         <thead>
                             <tr className="border-b border-white/5 bg-white/[0.01]">
@@ -298,16 +298,16 @@ export default function ManageVideos() {
 
                                                         <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors pointer-events-none" />
                                                         <div className="flex items-center justify-center absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                                            <div className="p-2 rounded-full bg-[#FF2C80] text-white">
+                                                            <div className="p-2 rounded-full bg-[#1B3C53] text-white">
                                                                 <Play className="w-4 h-4 fill-current" />
                                                             </div>
                                                         </div>
-                                                        <div className="absolute bottom-2 right-2 bg-[#FF2C80] px-2 py-0.5 rounded-lg text-[8px] font-black text-white shadow-lg pointer-events-none">
+                                                        <div className="absolute bottom-2 right-2 bg-[#1B3C53] px-2 py-0.5 rounded-lg text-[8px] font-black text-white shadow-lg pointer-events-none">
                                                             {video.duration || "LINK"}
                                                         </div>
                                                     </div>
                                                     <div className="min-w-0">
-                                                        <p className="text-base font-bold text-white truncate max-w-[300px] group-hover:text-[#FF2C80] transition-colors">{video.title}</p>
+                                                        <p className="text-base font-bold text-white truncate max-w-[300px] group-hover:text-[#1B3C53] transition-colors">{video.title}</p>
                                                         <div className="flex items-center space-x-2 mt-1">
                                                             <LinkIcon className="w-3 h-3 text-white/20" />
                                                             <p className="text-xs text-white/20 font-medium truncate max-w-[200px]">{video.videoUrl}</p>
@@ -323,7 +323,7 @@ export default function ManageVideos() {
                                             <td className="px-4 py-6 cursor-pointer" onClick={() => setPreviewVideo(video)}>
                                                 <div className="space-y-1.5">
                                                     <div className="flex items-center space-x-2">
-                                                        <Eye className="w-3.5 h-3.5 text-[#FF2C80]" />
+                                                        <Eye className="w-3.5 h-3.5 text-[#1B3C53]" />
                                                         <span className="text-xs font-black text-white">{video.views.toLocaleString()}</span>
                                                     </div>
                                                     <p className="text-[10px] font-black text-white/10 uppercase">Total Views</p>
@@ -354,7 +354,7 @@ export default function ManageVideos() {
                                                             <Trash2 className="w-4 h-4" />
                                                         )}
                                                     </button>
-                                                    <button className="p-3 bg-white/5 hover:bg-[#FF2C80]/20 rounded-2xl text-white/20 hover:text-[#FF2C80] transition-all">
+                                                    <button className="p-3 bg-white/5 hover:bg-[#1B3C53]/20 rounded-2xl text-white/20 hover:text-[#1B3C53] transition-all">
                                                         <MoreVertical className="w-4 h-4" />
                                                     </button>
                                                 </div>
@@ -378,11 +378,11 @@ export default function ManageVideos() {
             {/* Video Preview Modal */}
             {previewVideo && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 bg-black/90 backdrop-blur-2xl animate-in fade-in duration-300">
-                    <div className="relative w-full max-w-6xl aspect-video bg-black rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(255,44,128,0.2)] border border-white/10">
+                    <div className="relative w-full max-w-6xl aspect-video bg-black rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(27,60,83,0.2)] border border-white/10">
                         {/* Modal Header */}
                         <div className="absolute top-0 left-0 right-0 p-6 bg-gradient-to-b from-black/80 to-transparent z-10 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <div className="p-3 rounded-2xl bg-[#FF2C80] text-white shadow-lg shadow-[#FF2C80]/20">
+                                <div className="p-3 rounded-2xl bg-[#1B3C53] text-white shadow-lg shadow-[#1B3C53]/20">
                                     <Play className="w-5 h-5 fill-current" />
                                 </div>
                                 <div>

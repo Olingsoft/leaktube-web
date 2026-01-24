@@ -27,17 +27,10 @@ export default function Header() {
                 {/* Logo Section */}
                 <Link href="/" className="flex items-center group flex-shrink-0">
                     <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-[#990764] to-[#FF2C80] rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                        <Image
-                            src="/logo.svg"
-                            alt="LeakTube Logo"
-                            width={100}
-                            height={100}
-                            className="h-14 w-auto object-contain relative transition-transform duration-500 group-hover:scale-[1.02]"
-                            priority
-                        />
+                        <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3C53] to-[#1B3C53] rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+                        <h1 className="text-2xl font-bold text-white">Leak<span className="text-[#D02752]">Tube</span></h1>
                     </div>
-                </Link>
+                </Link> 
 
                 {/* Search Bar - Center */}
                 <div className="flex-1 max-w-2xl hidden md:block group">
@@ -69,14 +62,14 @@ export default function Header() {
                         <div className="flex items-center space-x-5 border-l border-white/10 pl-6">
                             <button className="relative text-white/70 hover:text-white transition-colors">
                                 <Bell className="w-5 h-5" />
-                                <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#FF2C80] rounded-full border-2 border-[#0a0a0a]" />
+                                <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#1B3C53] rounded-full border-2 border-[#0a0a0a]" />
                             </button>
                             <button className="w-9 h-9 rounded-full bg-gradient-to-br from-white/10 to-white/20 border border-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all transform hover:scale-110 active:scale-95 shadow-lg">
                                 <User className="w-5 h-5" />
                             </button>
                         </div>
 
-                        <button className="bg-gradient-to-r from-[#FF2C80] to-[#990764] text-white px-6 py-2 rounded-xl font-bold text-sm hover:shadow-[0_0_20px_rgba(255,44,128,0.4)] transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-xl">
+                        <button className="bg-gradient-to-r from-[#1B3C53] to-[#1B3C53] text-white px-6 py-2 rounded-xl font-bold text-sm hover:shadow-[0_0_20px_rgba(27,60,83,0.4)] transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-xl">
                             Go Pro
                         </button>
                     </div>

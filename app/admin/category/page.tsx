@@ -23,7 +23,7 @@ export default function ManageCategories() {
     // Form state
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [color, setSelectedColor] = useState("bg-[#FF2C80]");
+    const [color, setSelectedColor] = useState("bg-[#1B3C53]");
 
     const fetchCategories = async () => {
         setIsLoading(true);
@@ -98,7 +98,7 @@ export default function ManageCategories() {
                     <h1 className="text-3xl font-black text-white">Categories</h1>
                     <p className="text-white/40 font-medium">Organize and manage platform content categories.</p>
                 </div>
-                <button className="flex items-center space-x-2 px-6 py-2.5 bg-[#FF2C80] rounded-xl text-white hover:scale-[1.02] active:scale-95 transition-all text-sm font-bold shadow-[0_0_20px_rgba(255,44,128,0.3)]">
+                <button className="flex items-center space-x-2 px-6 py-2.5 bg-[#1B3C53] rounded-xl text-white hover:scale-[1.02] active:scale-95 transition-all text-sm font-bold shadow-[0_0_20px_rgba(27,60,83,0.3)]">
                     <Plus className="w-4 h-4" />
                     <span>Create Category</span>
                 </button>
@@ -109,7 +109,7 @@ export default function ManageCategories() {
                 <div className="space-y-6">
                     <div className="p-8 rounded-[2rem] bg-white/[0.03] border border-white/5 backdrop-blur-3xl">
                         <h2 className="text-xl font-bold text-white mb-6 flex items-center">
-                            <Plus className="w-5 h-5 mr-2 text-[#FF2C80]" />
+                            <Plus className="w-5 h-5 mr-2 text-[#1B3C53]" />
                             Quick Add
                         </h2>
                         <form className="space-y-5" onSubmit={handleSubmit}>
@@ -120,7 +120,7 @@ export default function ManageCategories() {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="e.g. Entertainment"
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#FF2C80]/50 transition-all font-semibold"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 transition-all font-semibold"
                                 />
                             </div>
                             <div className="space-y-2">
@@ -129,13 +129,13 @@ export default function ManageCategories() {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Brief description..."
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#FF2C80]/50 transition-all font-semibold resize-none h-24"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 transition-all font-semibold resize-none h-24"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-xs font-black text-white/40 uppercase tracking-widest ml-2">Display Color</label>
                                 <div className="flex flex-wrap gap-2">
-                                    {["bg-orange-500", "bg-blue-500", "bg-purple-500", "bg-[#FF2C80]", "bg-green-500", "bg-cyan-500"].map(c => (
+                                    {["bg-orange-500", "bg-blue-500", "bg-purple-500", "bg-[#1B3C53]", "bg-green-500", "bg-cyan-500"].map(c => (
                                         <button
                                             key={c}
                                             type="button"
@@ -155,7 +155,7 @@ export default function ManageCategories() {
                         </form>
                     </div>
 
-                    <div className="p-6 rounded-[2rem] bg-gradient-to-br from-[#FF2C80]/10 to-transparent border border-white/5">
+                    <div className="p-6 rounded-[2rem] bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5">
                         <p className="text-white/40 text-xs font-bold leading-relaxed">
                             Pro Tip: Categorizing your content correctly helps users find what they're looking for faster and increases platform engagement.
                         </p>
@@ -189,11 +189,11 @@ export default function ManageCategories() {
                                         <div className="p-2 text-white/10 group-hover:text-white/30 transition-colors cursor-grab active:cursor-grabbing">
                                             <GripVertical className="w-4 h-4" />
                                         </div>
-                                        <div className={`w-10 h-10 rounded-xl ${category.color || 'bg-[#FF2C80]'} flex items-center justify-center shadow-lg shadow-black/20 text-white`}>
+                                        <div className={`w-10 h-10 rounded-xl ${category.color || 'bg-[#1B3C53]'} flex items-center justify-center shadow-lg shadow-black/20 text-white`}>
                                             <Layers className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <h3 className="text-sm font-bold text-white group-hover:text-[#FF2C80] transition-colors">{category.name}</h3>
+                                            <h3 className="text-sm font-bold text-white group-hover:text-[#1B3C53] transition-colors">{category.name}</h3>
                                             <p className="text-[10px] text-white/30 font-bold uppercase tracking-widest">/{category.slug} • Active</p>
                                         </div>
                                     </div>

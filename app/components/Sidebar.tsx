@@ -85,7 +85,7 @@ export default function Sidebar() {
                                     }`}
                             >
                                 {isActive && (
-                                    <div className="absolute left-0 w-1 h-6 bg-[#FF2C80] rounded-r-full shadow-[0_0_10px_#FF2C80]" />
+                                    <div className="absolute left-0 w-1 h-6 bg-[#1B3C53] rounded-r-full shadow-[0_0_10px_#1B3C53]" />
                                 )}
                                 <span className={`font-semibold text-sm tracking-wide transition-all duration-300 ${isActive ? "translate-x-1" : "group-hover:translate-x-1"}`}>{item.name}</span>
                             </Link>

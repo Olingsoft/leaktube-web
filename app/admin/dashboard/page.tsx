@@ -36,7 +36,7 @@ export default function AdminDashboard() {
             change: "-2.1%",
             positive: false,
             icon: Eye,
-            color: "from-[#FF2C80]/20 to-transparent"
+            color: "from-[#1B3C53]/20 to-transparent"
         },
         {
             name: "Revenue",
@@ -81,7 +81,7 @@ export default function AdminDashboard() {
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between">
                         <h2 className="text-xl font-bold text-white">Recent Uploads</h2>
-                        <button className="text-[#FF2C80] text-xs font-bold hover:underline">View All</button>
+                        <button className="text-[#1B3C53] text-xs font-bold hover:underline">View All</button>
                     </div>
 
                     <div className="space-y-4">
@@ -92,14 +92,14 @@ export default function AdminDashboard() {
                                         <Video className="w-4 h-4 text-white/20" />
                                     </div>
                                     <div>
-                                        <p className="text-sm font-bold text-white group-hover:text-[#FF2C80] transition-colors line-clamp-1">Example Premium Video Content #{i}</p>
+                                        <p className="text-sm font-bold text-white group-hover:text-[#1B3C53] transition-colors line-clamp-1">Example Premium Video Content #{i}</p>
                                         <p className="text-xs text-white/40 flex items-center mt-1">
                                             <Clock className="w-3 h-3 mr-1" /> 2 hours ago • <Eye className="w-3 h-3 mx-1" /> 1.2K views
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                    <span className="px-2 py-1 rounded-md bg-[#FF2C80]/10 text-[#FF2C80] text-[10px] font-bold uppercase">Trending</span>
+                                    <span className="px-2 py-1 rounded-md bg-[#1B3C53]/10 text-[#1B3C53] text-[10px] font-bold uppercase">Trending</span>
                                     <button className="p-2 text-white/20 hover:text-white transition-colors">
                                         <TrendingUp className="w-4 h-4" />
                                     </button>
@@ -139,10 +139,10 @@ export default function AdminDashboard() {
                             <div className="space-y-2">
                                 <div className="flex justify-between text-xs font-bold">
                                     <span className="text-white/40 uppercase tracking-widest">Bandwidth</span>
-                                    <span className="text-[#FF2C80]">48%</span>
+                                    <span className="text-[#1B3C53]">48%</span>
                                 </div>
                                 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <div className="h-full w-[48%] bg-[#FF2C80]" />
+                                    <div className="h-full w-[48%] bg-[#1B3C53]" />
                                 </div>
                             </div>
 
