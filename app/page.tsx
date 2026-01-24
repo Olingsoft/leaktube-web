@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
-import { Play, Loader2, Image as ImageIcon, Search } from "lucide-react";
+import { Play, Loader2, Image as ImageIcon, Search, Eye, Clock } from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 
 
@@ -181,78 +181,88 @@ function HomeContent() {
                 const videoUrl = video.videoUrl;
                 // eg https://mega.nz/embed/etZyRYxI#_hMbsNucef-rchIVQBcKg3RIA2DEAxtYRgVO2sF1p6I!1a
 
-                const videoId = video._id;
                 return (
-                  <Link key={video._id} href={`/watch/${videoId}`} className="group relative">
-                    <div className="relative space-y-4">
-                      {/* Thumbnail Layer */}
-                      <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-[#151515] border border-white/5">
-                        {thumbUrl ? (
-                          thumbUrl.includes('mega.nz') || thumbUrl.includes('mega.io') ? (
-                            <iframe
-                              src={thumbUrl}
-                              className="w-full h-full border-none pointer-events-none"
-                              scrolling="no"
-                            />
+                  <React.Fragment key={video._id}>
+                    <Link href={`/watch/${video._id}`} className="group relative">
+                      <div className="relative space-y-4">
+                        {/* Thumbnail Layer */}
+                        <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-[#151515] border border-white/5">
+                          {thumbUrl ? (
+                            thumbUrl.includes('mega.nz') || thumbUrl.includes('mega.io') ? (
+                              <iframe
+                                src={thumbUrl}
+                                className="w-full h-full border-none pointer-events-none"
+                                scrolling="no"
+                              />
+                            ) : (
+                              <img
+                                src={thumbUrl}
+                                alt={video.title}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              />
+                            )
                           ) : (
-                            <img
-                              src={thumbUrl}
-                              alt={video.title}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                          )
-                        ) : (
-                          <div className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white/10">
-                            <ImageIcon className="w-8 h-8" />
-                            <span className="text-[8px] font-black uppercase tracking-widest">No Preview</span>
-                          </div>
-                        )}
+                            <div className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white/10">
+                              <ImageIcon className="w-8 h-8" />
+                              <span className="text-[8px] font-black uppercase tracking-widest">No Preview</span>
+                            </div>
+                          )}
 
-                        {/* Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                          <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 transform scale-50 group-hover:scale-100 transition-transform duration-500">
-                            <Play className="w-6 h-6 text-white fill-white" />
-                          </div>
-                        </div>
-                        {/* Duration Pin */}
-                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-xl text-white text-[10px] font-black border border-white/10">
-                          {video.duration || "LINK"}
-                        </div>
-                      </div>
-
-                      {/* Content Layer */}
-                      <div className="flex space-x-3 px-1.5">
-                        {/* Author Avatar/Icon */}
-                        {/* <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 flex-shrink-0 flex items-center justify-center group-hover:border-[#1B3C53]/30 transition-all duration-500 shadow-inner">
-                        <div className="w-5 h-5 rounded-lg bg-[#1B3C53]/10 flex items-center justify-center text-[#1B3C53] text-[9px] font-black tracking-tighter shadow-sm group-hover:bg-[#1B3C53]/20 transition-colors">
-                          {video.title.charAt(0).toUpperCase()}
-                        </div>
-                      </div> */}
-
-                        <div className="flex-1 min-w-0 space-y-1">
-                          <h3 className="text-white font-bold text-[10px] md:text-sm line-clamp-2 leading-[1.3] group-hover:text-[#1B3C53] transition-colors duration-300">
-                            {video.title}
-                          </h3>
-
-                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                            <span className="text-white/70 text-[8px] md:text-[11px] font-black uppercase tracking-[0.15em] group-hover:text-white/70 transition-colors">
-                              {video.category || "General"}
-                            </span>
-
-                            <div className="flex items-center space-x-1.5 border-l border-white/10 pl-2">
-                              <span className="text-white/70 text-[8px] md:text-[11px] font-bold whitespace-nowrap">
-                                {calculateViews(video._id, video.views || 0)} views
-                              </span>
-                              <span className="w-0.5 h-0.5 bg-white/0 rounded-full" />
-                              <span className="text-white/70 text-[8px] md:text-[11px] font-bold whitespace-nowrap">
-                                {getRelativeTime(video.createdAt)}
-                              </span>
+                          {/* Overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 transform scale-50 group-hover:scale-100 transition-transform duration-500">
+                              <Play className="w-6 h-6 text-white fill-white" />
                             </div>
                           </div>
+                          {/* Duration Pin */}
+                          <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-xl text-white text-[10px] font-black border border-white/10">
+                            {video.duration || "LINK"}
+                          </div>
+                        </div>
+
+                        {/* Content Layer */}
+                        <div className="flex space-x-3 px-1.5">
+                          <div className="flex-1 min-w-0 space-y-2.5">
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                              {/* Category Tag */}
+                              <div className="flex-shrink-0">
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-[#1B3C53] text-[10px] md:text-[11px] font-black uppercase tracking-widest text-white shadow-md shadow-[#1B3C53]/20">
+                                  {video.category || "General"}
+                                </span>
+                              </div>
+
+                              {/* Secondary Stats Group */}
+                              <div className="flex items-center space-x-3 text-white/50">
+                                {/* Views */}
+                                <div className="flex items-center space-x-2">
+                                  <Eye className="w-4 h-4" />
+                                  <span className="text-[11px] md:text-sm font-bold whitespace-nowrap">
+                                    {calculateViews(video._id, video.views || 0)}
+                                  </span>
+                                </div>
+
+                                <div className="w-1 h-1 bg-white/20 rounded-full" />
+
+                                {/* Time */}
+                                <div className="flex items-center space-x-2">
+                                  <Clock className="w-4 h-4" />
+                                  <span className="text-[11px] md:text-sm font-bold whitespace-nowrap">
+                                    {getRelativeTime(video.createdAt)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <h3 className="text-white font-bold text-[14px] md:text-[14px] line-clamp-2 leading-tight group-hover:text-[#D02752] transition-colors duration-300">
+                              {video.title}
+                            </h3>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
+                    {/* Mobile Divider */}
+                    <div className="sm:hidden h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-4 last:hidden" />
+                  </React.Fragment>
                 );
               })}
           </div>

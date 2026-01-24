@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'c05c4189af96.ngrok-free.app',
+        hostname: 'leaktubeservice.onrender.com',
       },
     ],
   },
