@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import Sidebar from "./components/Sidebar";
-import { Play, Loader2, Image as ImageIcon, Search, Eye, Clock } from "lucide-react";
+import { Play, Loader2, Image as ImageIcon, Search, Eye, Clock, ChevronDown, ChevronUp, TrendingUp } from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 
 
@@ -15,6 +15,7 @@ function HomeContent() {
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isMobileCatOpen, setIsMobileCatOpen] = useState(false);
 
   const getEmbedUrl = (url: string) => {
     if (!url) return "";
@@ -111,7 +112,32 @@ function HomeContent() {
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex-1 lg:ml-72 p-4 md:p-8 pt-4 md:pt-8 overflow-x-hidden">
+      <div className="flex-1 lg:ml-72 p-4 md:p-8 pt-1 md:pt-1 overflow-x-hidden">
+        {/* Trending Tags */}
+        {/* Trending Tags */}
+        <div className="mb-8">
+          <div className="flex flex-col gap-4 items-start">
+            <div className="flex items-center space-x-2 text-[#D02752] flex-shrink-0">
+              <div className="p-1.5 bg-[#D02752]/10 rounded-lg">
+                <TrendingUp className="w-4 h-4" />
+              </div>
+              <span className="text-xs font-black uppercase tracking-widest">Trending Now</span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {["#FinanceBill2026", "#Maandamano", "KRA Updates", "Nairobi Rain", "Safaricom", "#RutoMustGo", "Kenya Power", "Fuel Prices", "#DarkTuesday", "Education Crisis"].map((trend, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSearchQuery(trend)}
+                  className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:border-[#D02752] text-[10px] md:text-xs font-bold text-white/60 hover:text-white transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(208,39,82,0.2)]"
+                >
+                  {trend}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative max-w-2xl mx-auto">
@@ -121,27 +147,41 @@ function HomeContent() {
               placeholder="Search videos..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 md:py-4 bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl text-white placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-white/20 transition-all duration-300 text-sm md:text-base font-medium backdrop-blur-xl shadow-lg"
+              className="w-full pl-12 pr-4 py-3.5 md:py-4 bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl text-white placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-[#D02752] transition-all duration-300 text-sm md:text-base font-medium backdrop-blur-xl shadow-lg"
             />
           </div>
         </div>
 
-        <div className="md:hidden flex items-center space-x-2 overflow-x-auto pb-4 mb-4 scrollbar-none -mx-4 px-4">
-          {categories.map((cat) => {
-            const isActive = (cat === "All" && !categoryParam) || (categoryParam === cat);
-            return (
-              <Link
-                key={cat}
-                href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${isActive
-                  ? "bg-white text-[#0a0a0a] shadow-lg"
-                  : "bg-white/5 text-white/60 border border-white/5"
-                  }`}
-              >
-                {cat}
-              </Link>
-            );
-          })}
+        {/* Mobile Category Select */}
+        <div className="md:hidden mb-6 relative z-30">
+          <button
+            onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
+            className="w-full flex items-center justify-between px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm hover:bg-white/10 transition-colors"
+          >
+            <span>{categoryParam || "All Categories"}</span>
+            {isMobileCatOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </button>
+
+          {isMobileCatOpen && (
+            <div className="absolute top-full left-0 right-0 mt-2 p-4 bg-[#151515] border border-white/10 rounded-2xl shadow-2xl flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2 z-50">
+              {categories.map((cat) => {
+                const isActive = (cat === "All" && !categoryParam) || (categoryParam === cat);
+                return (
+                  <Link
+                    key={cat}
+                    href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
+                    onClick={() => setIsMobileCatOpen(false)}
+                    className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${isActive
+                      ? "bg-[#D02752] text-white shadow-lg"
+                      : "bg-white/5 text-white/60 border border-white/5 hover:bg-white/10"
+                      }`}
+                  >
+                    {cat}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {isLoading ? (

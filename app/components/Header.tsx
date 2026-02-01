@@ -56,23 +56,7 @@ export default function Header() {
                         </Link>
                     </div>
 
-                    {/* Search Bar - Center */}
-                    <div className="flex-1 max-w-xl hidden md:block group">
-                        <div className="relative flex items-center transition-all duration-300">
-                            <div className="absolute inset-0 bg-white/5 rounded-2xl blur-sm group-focus-within:bg-white/10 transition-all duration-300" />
-                            <div className="relative flex items-center w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-2 group-focus-within:border-white/20 group-hover:border-white/20 transition-all duration-300">
-                                <Search className="w-5 h-5 text-white/40 group-focus-within:text-white/80 transition-colors" />
-                                <input
-                                    type="text"
-                                    placeholder="Search premium content..."
-                                    className="w-full bg-transparent border-none focus:ring-0 text-white placeholder-white/40 px-3 text-sm focus:outline-none"
-                                />
-                                <div className="flex items-center space-x-1 px-1.5 py-0.5 bg-white/5 border border-white/10 rounded-md text-[10px] text-white/30 group-focus-within:opacity-0 transition-opacity">
-                                    <span>/</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     {/* Right Actions */}
                     <div className="flex items-center relative z-50">
