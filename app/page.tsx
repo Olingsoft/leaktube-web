@@ -147,7 +147,7 @@ function HomeContent() {
         {/* Trending Tags */}
         <div className="mb-8">
           <div className="flex flex-col gap-4 items-start">
-            <div className="flex items-center space-x-2 text-[#D02752] flex-shrink-0">
+            <div className="flex items-center space-x-2 text-[#e15aed] flex-shrink-0">
               <div className="p-1.5 bg-[#D02752]/10 rounded-lg">
                 <TrendingUp className="w-4 h-4" />
               </div>

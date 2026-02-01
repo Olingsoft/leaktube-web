@@ -36,7 +36,7 @@ export default function Header() {
                     <Link href="/" className="flex items-center group flex-shrink-0 relative z-50">
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3C53] to-[#1B3C53] rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                            <h1 className="text-2xl font-bold text-white">💦Unite<span className="text-[#e15aed]">Kenyans</span><span className="text-xs">.co.ke</span></h1>
+                            <h1 className="text-2xl font-bold text-white">Unite<span className="text-[#e15aed]">Kenyans</span><span className="text-xs">.co.ke</span></h1>
                         </div>
                     </Link>
 
