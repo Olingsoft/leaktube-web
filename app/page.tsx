@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Sidebar from "./components/Sidebar";
 import { Play, Loader2, Image as ImageIcon, Search, Eye, Clock, ChevronDown, ChevronUp, TrendingUp } from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
@@ -11,7 +11,37 @@ import { getApiUrl, API_BASE_URL } from "@/utils/api";
 function HomeContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
+  const router = useRouter();
   const [videos, setVideos] = useState<any[]>([]);
+  const [trends, setTrends] = useState<any[]>([]);
+
+  // ... existing code ...
+
+  useEffect(() => {
+    const fetchTrends = async () => {
+      try {
+        const response = await fetch(getApiUrl('/api/trends'));
+        const data = await response.json();
+        if (data.success) {
+          setTrends(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching trends:", error);
+      }
+    };
+    fetchTrends();
+  }, []);
+
+  const handleTrendClick = (trend: any) => {
+    if (trend.assignedVideo) {
+      // If it's an object with _id, use that. If populated, it might be the full object.
+      const videoId = typeof trend.assignedVideo === 'object' ? trend.assignedVideo._id : trend.assignedVideo;
+      router.push(`/watch/${videoId}`);
+    } else {
+      setSearchQuery(trend.phrase);
+    }
+  };
+
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -125,15 +155,19 @@ function HomeContent() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              {["#FinanceBill2026", "#Maandamano", "KRA Updates", "Nairobi Rain", "Safaricom", "#RutoMustGo", "Kenya Power", "Fuel Prices", "#DarkTuesday", "Education Crisis"].map((trend, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSearchQuery(trend)}
-                  className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:border-[#D02752] text-[10px] md:text-xs font-bold text-white/60 hover:text-white transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(208,39,82,0.2)]"
-                >
-                  {trend}
-                </button>
-              ))}
+              {trends.length > 0 ? (
+                trends.map((trend) => (
+                  <button
+                    key={trend._id}
+                    onClick={() => handleTrendClick(trend)}
+                    className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:border-[#D02752] text-[10px] md:text-xs font-bold text-white/60 hover:text-white transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(208,39,82,0.2)]"
+                  >
+                    {trend.phrase}
+                  </button>
+                ))
+              ) : (
+                <div className="text-white/40 text-xs">No trending topics</div>
+              )}
             </div>
           </div>
         </div>
@@ -287,7 +321,7 @@ function HomeContent() {
                                 <div className="flex items-center space-x-2">
                                   <Clock className="w-4 h-4" />
                                   <span className="text-[11px] md:text-sm font-bold whitespace-nowrap">
-                                    {getRelativeTime(video.createdAt)}
+                                    {getRelativeTime(video.createdAt)} 💦
                                   </span>
                                 </div>
                               </div>

@@ -15,13 +15,17 @@ import {
     Menu,
     X,
     Bell,
-    Layers
+    Layers,
+    TrendingUp,
+    FileText
 } from "lucide-react";
 import { useState } from "react";
 
 const adminNavItems = [
     { name: "Overview", icon: LayoutDashboard, href: "/admin/dashboard" },
     { name: "Categories", icon: Layers, href: "/admin/category" },
+    { name: "Trends", icon: TrendingUp, href: "/admin/trends" },
+    { name: "Blogs", icon: FileText, href: "/admin/blogs" },
     { name: "Add Content", icon: PlusCircle, href: "/admin/add-content" },
     { name: "Manage Videos", icon: Video, href: "/admin/videos" },
     { name: "Users", icon: Users, href: "/admin/users" },
