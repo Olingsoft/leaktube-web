@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Twitter, Instagram, Youtube, Mail, MapPin, Phone, Github } from "lucide-react";
 
 export default function Footer() {
@@ -15,10 +16,13 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="space-y-6">
                         <Link href="/" className="group inline-block">
-                            <h2 className="text-2xl font-bold text-white">
-                                Unite<span className="text-[#e15aed]">Kenyans</span>
-                                <span className="text-xs ml-1">.co.ke</span>
-                            </h2>
+                            <Image
+                                src="/logo.png"
+                                alt="Unite Kenyans"
+                                width={150}
+                                height={40}
+                                className="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300"
+                            />
                         </Link>
                         <p className="text-white/50 text-sm leading-relaxed max-w-xs">
                             Connecting Kenyans through information, transparency, and digital awareness. Stay updated with the latest trends and stories across the nation.

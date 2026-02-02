@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Search, Bell, User, PlusCircle, ListFilter, X, BookOpen, Home, Settings, ChevronDown, Info, Shield, HelpCircle, FileText, Phone } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -36,8 +37,14 @@ export default function Header() {
                     {/* Logo Section */}
                     <Link href="/" className="flex items-center group flex-shrink-0 relative z-50">
                         <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3C53] to-[#1B3C53] rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                            <h1 className="text-2xl font-bold text-white">Unite<span className="text-[      ]">Kenyans</span><span className="text-xs">.co.ke</span></h1>
+                            <div className="absolute ml-6 inset-0 bg-gradient-to-tr from-[#e15aed]/20 to-[#1B3C53]/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <Image
+                                src="/logo.png"
+                                alt="Unite Kenyans"
+                                width={200}
+                                height={48}
+                                className="h-10 md:h-12 w-auto object-contain relative z-10 hover:scale-105 transition-transform duration-300"
+                            />
                         </div>
                     </Link>
 
