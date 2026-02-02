@@ -1,32 +1,66 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import Sidebar from "./components/Sidebar";
-import { Play, Loader2, Image as ImageIcon, Search, Eye, Clock, ChevronDown, ChevronUp, TrendingUp } from "lucide-react";
+import {
+  Play,
+  Loader2,
+  Image as ImageIcon,
+  Search,
+  Eye,
+  Clock,
+  ChevronDown,
+  ChevronUp,
+  TrendingUp,
+  X
+} from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
-
 
 function HomeContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
   const router = useRouter();
+
   const [videos, setVideos] = useState<any[]>([]);
   const [trends, setTrends] = useState<any[]>([]);
+  const [categories, setCategories] = useState<string[]>(["All"]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isMobileCatOpen, setIsMobileCatOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const desktopCategoryRef = useRef<HTMLDivElement>(null);
+  const mobileCategoryRef = useRef<HTMLDivElement>(null);
 
-  // ... existing code ...
+  /* ------------------ Click Outside to Close Category Dropdown ------------------ */
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isOutsideDesktop = !desktopCategoryRef.current?.contains(event.target as Node);
+      const isOutsideMobile = !mobileCategoryRef.current?.contains(event.target as Node);
 
+      if (isOutsideDesktop && isOutsideMobile) {
+        setIsMobileCatOpen(false);
+      }
+    };
+
+    if (isMobileCatOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileCatOpen]);
+
+  /* ------------------ Fetch Trending ------------------ */
   useEffect(() => {
     const fetchTrends = async () => {
       try {
-        const response = await fetch(getApiUrl('/api/trends'));
-        const data = await response.json();
-        if (data.success) {
-          setTrends(data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching trends:", error);
+        const res = await fetch(getApiUrl("/api/trends"));
+        const data = await res.json();
+        if (data.success) setTrends(data.data);
+      } catch (e) {
+        console.error(e);
       }
     };
     fetchTrends();
@@ -34,49 +68,65 @@ function HomeContent() {
 
   const handleTrendClick = (trend: any) => {
     if (trend.assignedVideo) {
-      // If it's an object with _id, use that. If populated, it might be the full object.
-      const videoId = typeof trend.assignedVideo === 'object' ? trend.assignedVideo._id : trend.assignedVideo;
+      const videoId =
+        typeof trend.assignedVideo === "object"
+          ? trend.assignedVideo._id
+          : trend.assignedVideo;
       router.push(`/watch/${videoId}`);
     } else {
       setSearchQuery(trend.phrase);
+      setShowSearch(true);
     }
   };
 
-  const [categories, setCategories] = useState<string[]>(["All"]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isMobileCatOpen, setIsMobileCatOpen] = useState(false);
-
+  /* ------------------ Helpers ------------------ */
   const getEmbedUrl = (url: string) => {
     if (!url) return "";
-    // Handle Mega.nz
-    if (url.includes('mega.nz') || url.includes('mega.io')) {
-      const parts = url.split('/');
+    if (url.includes("mega.nz") || url.includes("mega.io")) {
+      const parts = url.split("/");
       const filePart = parts[parts.length - 1];
-      if (filePart.includes('#')) {
-        const [id, key] = filePart.replace('file/', '').split('#');
+      if (filePart.includes("#")) {
+        const [id, key] = filePart.replace("file/", "").split("#");
         return `https://mega.nz/embed/${id}#${key}`;
       }
-      return url.replace('mega.nz/file/', 'mega.nz/embed/').replace('mega.nz/#', 'mega.nz/embed/#');
     }
     return url;
   };
 
+  const getThumbnailUrl = (url: string) => {
+    if (!url) return undefined;
+    if (url.includes("localhost:8000")) {
+      return url.replace("http://localhost:8000", API_BASE_URL);
+    }
+    return url;
+  };
+
+  const getRelativeTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const diff = Date.now() - date.getTime();
+    const m = Math.floor(diff / 60000);
+    const h = Math.floor(m / 60);
+    const d = Math.floor(h / 24);
+    if (d > 0) return `${d}d ago`;
+    if (h > 0) return `${h}h ago`;
+    if (m > 0) return `${m}m ago`;
+    return "Just now";
+  };
+
+  const calculateViews = (id: string, base = 0) => {
+    const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+    return (base + ((seed % 43000) + 7000)).toLocaleString();
+  };
+
+  /* ------------------ Fetch Videos ------------------ */
   const fetchVideos = async () => {
     setIsLoading(true);
     try {
-      let url = getApiUrl('/api/videos');
-      if (categoryParam) {
-        url += `?category=${encodeURIComponent(categoryParam)}`;
-      }
-
-      const response = await fetch(url);
-      const data = await response.json();
-      if (data.success) {
-        setVideos(data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching videos:", error);
+      let url = getApiUrl("/api/videos");
+      if (categoryParam) url += `?category=${encodeURIComponent(categoryParam)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.success) setVideos(data.data);
     } finally {
       setIsLoading(false);
     }
@@ -88,257 +138,269 @@ function HomeContent() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-        const response = await fetch(getApiUrl('/api/categories'));
-        const data = await response.json();
-        if (data.success) {
-          // Extract just the names
-          const categoryNames = data.data.map((cat: any) => cat.name);
-          setCategories(["All", ...categoryNames]);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+      const res = await fetch(getApiUrl("/api/categories"));
+      const data = await res.json();
+      if (data.success) {
+        setCategories(["All", ...data.data.map((c: any) => c.name)]);
       }
     };
-
     fetchCategories();
   }, []);
 
-  const getRelativeTime = (dateString: string) => {
-    if (!dateString) return "Recently";
-    const date = new Date(dateString);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) return `${days}d ago`;
-    if (hours > 0) return `${hours}h ago`;
-    if (minutes > 0) return `${minutes}m ago`;
-    return "Just now";
-  };
-
-  const getThumbnailUrl = (url: string) => {
-    if (!url) return null;
-    if (url.includes('mega.nz') || url.includes('mega.io')) {
-      return getEmbedUrl(url);
-    }
-    // Fix for images stored with localhost URL when accessing from other devices
-    if (url.includes('localhost:8000')) {
-      return url.replace('http://localhost:8000', API_BASE_URL);
-    }
-    return url;
-  };
-
-  const calculateViews = (id: string, baseViews: number = 0) => {
-    // Deterministic random views based on ID to make each video look unique
-    const seed = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const randomBoost = (seed % 43000) + 7000; // range 7k to 50k
-    return (baseViews + randomBoost).toLocaleString();
-  };
-
+  /* ========================== UI ========================== */
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 lg:ml-72 p-4 md:p-8 pt-1 md:pt-1 overflow-x-hidden">
-        {/* Trending Tags */}
-        {/* Trending Tags */}
-        <div className="mb-8">
-          <div className="flex flex-col gap-4 items-start">
-            <div className="flex items-center space-x-2 text-[#e15aed] flex-shrink-0">
-              <div className="p-1.5 bg-[#D02752]/10 rounded-lg">
-                <TrendingUp className="w-4 h-4" />
+    <div className="min-h-screen">
+      <div className="max-w-[1800px] mx-auto px-4 md:px-8 pt-1 md:pt-1">
+
+        {/* ---------------- Mini Header: Trending + Category + Search ---------------- */}
+        <div className="mb-8 relative z-[9999]">
+          {/* Desktop Layout */}
+          <div className="hidden md:flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+            {/* Trending Section */}
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="flex items-center gap-2 text-[#e15aed] shrink-0">
+                <div className="p-2 rounded-xl bg-[#e15aed]/10">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <span className="text-xs font-black tracking-widest uppercase whitespace-nowrap">
+                  Trending
+                </span>
               </div>
-              <span className="text-xs font-black uppercase tracking-widest">Trending Now</span>
+              <div className="flex flex-wrap gap-2 min-w-0">
+                {trends.slice(0, 4).map((t) => (
+                  <button
+                    key={t._id}
+                    onClick={() => handleTrendClick(t)}
+                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
+                  >
+                    {t.phrase}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {trends.length > 0 ? (
-                trends.map((trend) => (
-                  <button
-                    key={trend._id}
-                    onClick={() => handleTrendClick(trend)}
-                    className="px-3 py-1 rounded-lg bg-white/5 border border-white/10 hover:border-[#D02752] text-[10px] md:text-xs font-bold text-white/60 hover:text-white transition-all hover:scale-105 hover:shadow-[0_0_15px_rgba(208,39,82,0.2)]"
-                  >
-                    {trend.phrase}
-                  </button>
-                ))
+            {/* Divider */}
+            <div className="w-px h-10 bg-white/10"></div>
+
+            {/* Category Dropdown */}
+            <div ref={desktopCategoryRef} className="relative z-[9999]">
+              <button
+                onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition whitespace-nowrap"
+              >
+                <span className="text-sm">{categoryParam || "All Categories"}</span>
+                {isMobileCatOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+
+              {isMobileCatOpen && (
+                <div className="absolute top-full mt-2 right-0 min-w-[250px] bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap gap-2 backdrop-blur-xl z-[999]">
+                  {categories.map((cat) => {
+                    const active = (cat === "All" && !categoryParam) || cat === categoryParam;
+                    return (
+                      <Link
+                        key={cat}
+                        href={cat === "All" ? "/" : `/?category=${cat}`}
+                        onClick={() => setIsMobileCatOpen(false)}
+                        className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition ${active
+                          ? "bg-[#e15aed] text-white"
+                          : "bg-white/5 text-white/60 hover:bg-white/10"
+                          }`}
+                      >
+                        {cat}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="w-px h-10 bg-white/10"></div>
+
+            {/* Search */}
+            <div className="shrink-0">
+              {!showSearch ? (
+                <button
+                  onClick={() => setShowSearch(true)}
+                  className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition group"
+                >
+                  <Search className="w-5 h-5 text-white/70 group-hover:text-white transition" />
+                </button>
               ) : (
-                <div className="text-white/40 text-xs">No trending topics</div>
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 shadow-2xl w-[280px] animate-in fade-in zoom-in backdrop-blur-xl">
+                  <Search className="w-4 h-4 text-white/40" />
+                  <input
+                    autoFocus
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search..."
+                    className="flex-1 bg-transparent outline-none text-white placeholder-white/40 text-sm"
+                  />
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setShowSearch(false);
+                    }}
+                    className="hover:scale-110 transition"
+                  >
+                    <X className="w-4 h-4 text-white/40 hover:text-white" />
+                  </button>
+                </div>
               )}
             </div>
           </div>
-        </div>
 
-        {/* Search Bar */}
-        <div className="mb-6">
-          <div className="relative max-w-2xl mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40 pointer-events-none z-10" />
-            <input
-              type="text"
-              placeholder="Search videos..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 md:py-4 bg-white/5 border border-white/10 rounded-2xl md:rounded-3xl text-white placeholder-white/40 focus:outline-none focus:bg-white/10 focus:border-[#D02752] transition-all duration-300 text-sm md:text-base font-medium backdrop-blur-xl shadow-lg"
-            />
+          {/* Mobile Layout */}
+          <div className="md:hidden space-y-3">
+            {/* Top Row: Category + Search */}
+            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+              {/* Category Dropdown */}
+              <div ref={mobileCategoryRef} className="relative flex-1 z-[9999]">
+                <button
+                  onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
+                  className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm"
+                >
+                  <span className="truncate">{categoryParam || "All Categories"}</span>
+                  {isMobileCatOpen ? <ChevronUp className="w-4 h-4 shrink-0" /> : <ChevronDown className="w-4 h-4 shrink-0" />}
+                </button>
+
+                {isMobileCatOpen && (
+                  <div className="absolute top-full mt-2 left-0 right-0 bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap gap-2 backdrop-blur-xl z-[999]">
+                    {categories.map((cat) => {
+                      const active = (cat === "All" && !categoryParam) || cat === categoryParam;
+                      return (
+                        <Link
+                          key={cat}
+                          href={cat === "All" ? "/" : `/?category=${cat}`}
+                          onClick={() => setIsMobileCatOpen(false)}
+                          className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${active
+                            ? "bg-[#e15aed] text-white"
+                            : "bg-white/5 text-white/60"
+                            }`}
+                        >
+                          {cat}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Search Button */}
+              {!showSearch ? (
+                <button
+                  onClick={() => setShowSearch(true)}
+                  className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition"
+                >
+                  <Search className="w-5 h-5 text-white/70" />
+                </button>
+              ) : (
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 flex-1 backdrop-blur-xl">
+                  <Search className="w-4 h-4 text-white/40" />
+                  <input
+                    autoFocus
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search..."
+                    className="flex-1 bg-transparent outline-none text-white placeholder-white/40 text-sm"
+                  />
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setShowSearch(false);
+                    }}
+                    className="hover:scale-110 transition"
+                  >
+                    <X className="w-4 h-4 text-white/40 hover:text-white" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Trending Section */}
+            <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
+              <div className="flex items-center gap-2 text-[#e15aed] mb-3">
+                <div className="p-2 rounded-xl bg-[#e15aed]/10">
+                  <TrendingUp className="w-4 h-4" />
+                </div>
+                <span className="text-xs font-black tracking-widest uppercase">
+                  Trending Now
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {trends.map((t) => (
+                  <button
+                    key={t._id}
+                    onClick={() => handleTrendClick(t)}
+                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
+                  >
+                    {t.phrase}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Mobile Category Select */}
-        <div className="md:hidden mb-6 relative z-30">
-          <button
-            onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
-            className="w-full flex items-center justify-between px-5 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm hover:bg-white/10 transition-colors"
-          >
-            <span>{categoryParam || "All Categories"}</span>
-            {isMobileCatOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
-
-          {isMobileCatOpen && (
-            <div className="absolute top-full left-0 right-0 mt-2 p-4 bg-[#151515] border border-white/10 rounded-2xl shadow-2xl flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2 z-50">
-              {categories.map((cat) => {
-                const isActive = (cat === "All" && !categoryParam) || (categoryParam === cat);
-                return (
-                  <Link
-                    key={cat}
-                    href={cat === "All" ? "/" : `/?category=${encodeURIComponent(cat)}`}
-                    onClick={() => setIsMobileCatOpen(false)}
-                    className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${isActive
-                      ? "bg-[#D02752] text-white shadow-lg"
-                      : "bg-white/5 text-white/60 border border-white/5 hover:bg-white/10"
-                      }`}
-                  >
-                    {cat}
-                  </Link>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
+        {/* ---------------- Videos Grid ---------------- */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-3 md:gap-x-6 gap-y-6 md:gap-y-10">
-            {[...Array(12)].map((_, i) => (
-              <div key={i} className="group relative space-y-4">
-                <div className="relative aspect-video rounded-3xl overflow-hidden bg-white/25 animate-pulse border border-white/5" />
-                <div className="flex space-x-3 px-1.5">
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-white/25 rounded-md w-3/4 animate-pulse" />
-                    <div className="h-3 bg-white/25 rounded-md w-1/2 animate-pulse" />
-                  </div>
-                </div>
-              </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="aspect-video rounded-3xl bg-white/10 animate-pulse"
+              />
             ))}
           </div>
-        ) : videos.length === 0 ? (
-          <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4 opacity-20">
-            <div className="w-20 h-20 rounded-full border-2 border-dashed border-white flex items-center justify-center">
-              <Play className="w-8 h-8 text-white ml-1" />
-            </div>
-            <p className="text-white font-black uppercase tracking-widest text-xl">No files found</p>
-          </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-3 md:gap-x-6 gap-y-6 md:gap-y-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {videos
-              .filter((video) => {
-                if (!searchQuery) return true;
-                const query = searchQuery.toLowerCase();
-                return (
-                  video.title?.toLowerCase().includes(query) ||
-                  video.category?.toLowerCase().includes(query)
-                );
-              })
-              .map((video) => {
-                const thumbUrl = getThumbnailUrl(video.thumbnailUrl);
-                const videoUrl = video.videoUrl;
-                // eg https://mega.nz/embed/etZyRYxI#_hMbsNucef-rchIVQBcKg3RIA2DEAxtYRgVO2sF1p6I!1a
-
-                return (
-                  <React.Fragment key={video._id}>
-                    <Link href={`/watch/${video._id}`} className="group relative">
-                      <div className="relative space-y-4">
-                        {/* Thumbnail Layer */}
-                        <div className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 transform group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] bg-[#151515] border border-white/5">
-                          {thumbUrl ? (
-                            thumbUrl.includes('mega.nz') || thumbUrl.includes('mega.io') ? (
-                              <iframe
-                                src={thumbUrl}
-                                className="w-full h-full border-none pointer-events-none"
-                                scrolling="no"
-                              />
-                            ) : (
-                              <img
-                                src={thumbUrl}
-                                alt={video.title}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                              />
-                            )
-                          ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center space-y-2 text-white/10">
-                              <ImageIcon className="w-8 h-8" />
-                              <span className="text-[8px] font-black uppercase tracking-widest">No Preview</span>
-                            </div>
-                          )}
-
-                          {/* Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 transform scale-50 group-hover:scale-100 transition-transform duration-500">
-                              <Play className="w-6 h-6 text-white fill-white" />
-                            </div>
-                          </div>
-                          {/* Duration Pin */}
-                          <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md px-2 py-1 rounded-xl text-white text-[10px] font-black border border-white/10">
-                            {video.duration || "LINK"}
-                          </div>
-                        </div>
-
-                        {/* Content Layer */}
-                        <div className="flex space-x-3 px-1.5">
-                          <div className="flex-1 min-w-0 space-y-2.5">
-                            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                              {/* Category Tag */}
-                              <div className="flex-shrink-0">
-                                <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-[#1B3C53] text-[10px] md:text-[11px] font-black uppercase tracking-widest text-white shadow-md shadow-[#1B3C53]/20">
-                                  {video.category || "General"}
-                                </span>
-                              </div>
-
-                              {/* Secondary Stats Group */}
-                              <div className="flex items-center space-x-3 text-white/50">
-                                {/* Views */}
-                                <div className="flex items-center space-x-2">
-                                  <Eye className="w-4 h-4" />
-                                  <span className="text-[11px] md:text-sm font-bold whitespace-nowrap">
-                                    {calculateViews(video._id, video.views || 0)}
-                                  </span>
-                                </div>
-
-                                <div className="w-1 h-1 bg-white/20 rounded-full" />
-
-                                {/* Time */}
-                                <div className="flex items-center space-x-2">
-                                  <Clock className="w-4 h-4" />
-                                  <span className="text-[11px] md:text-sm font-bold whitespace-nowrap">
-                                    {getRelativeTime(video.createdAt)} 💦
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <h3 className="text-white font-bold text-[14px] md:text-[14px] line-clamp-2 leading-tight group-hover:text-[#D02752] transition-colors duration-300">
-                              {video.title}
-                            </h3>
-                          </div>
-                        </div>
+              .filter((v) =>
+                searchQuery
+                  ? v.title?.toLowerCase().includes(searchQuery.toLowerCase())
+                  : true
+              )
+              .map((video) => (
+                <Link
+                  key={video._id}
+                  href={`/watch/${video._id}`}
+                  className="group space-y-3"
+                >
+                  <div className="relative aspect-video rounded-3xl overflow-hidden bg-[#151515] border border-white/5">
+                    {video.thumbnailUrl ? (
+                      <img
+                        src={getThumbnailUrl(video.thumbnailUrl)}
+                        className="w-full h-full object-cover group-hover:scale-110 transition"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-white/10">
+                        <ImageIcon />
                       </div>
-                    </Link>
-                    {/* Mobile Divider */}
-                    <div className="sm:hidden h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-4 last:hidden" />
-                  </React.Fragment>
-                );
-              })}
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                      <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                        <Play className="text-white" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h3 className="text-white font-bold text-sm line-clamp-2 group-hover:text-[#e15aed]">
+                      {video.title}
+                    </h3>
+                    <div className="flex items-center gap-3 text-white/50 text-xs">
+                      <span className="flex items-center gap-1">
+                        <Eye className="w-3 h-3" />
+                        {calculateViews(video._id)}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {getRelativeTime(video.createdAt)}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
           </div>
         )}
       </div>
@@ -348,16 +410,14 @@ function HomeContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-        <Loader2 className="w-10 h-10 text-[#1B3C53] animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+          <Loader2 className="w-10 h-10 animate-spin text-[#1B3C53]" />
+        </div>
+      }
+    >
       <HomeContent />
     </Suspense>
   );
 }
-
-
-
-

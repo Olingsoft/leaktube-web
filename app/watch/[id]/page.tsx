@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import Sidebar from "../../components/Sidebar";
 import {
+    ChevronDown,
+    ChevronUp,
+    ChevronLeft,
     Play,
     ThumbsUp,
     ThumbsDown,
@@ -179,6 +182,17 @@ function WatchPageContent() {
 
                     {/* Main Video Section */}
                     <div className="flex-1 space-y-6 px-3 ">
+                        {/* Back Button */}
+                        <div className="flex items-center">
+                            <Link
+                                href="/"
+                                className="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/70 hover:text-white hover:bg-white/10 hover:border-[#D02752]/50 transition-all duration-300"
+                            >
+                                <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                                <span className="text-xs font-black uppercase tracking-widest">Back to Videos</span>
+                            </Link>
+                        </div>
+
                         {/* Video Player Section with Premium Border */}
                         <div className="relative group/player transition-all duration-700">
                             {/* Outer Glow Effect */}

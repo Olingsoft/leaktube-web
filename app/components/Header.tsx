@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Search, Bell, User, PlusCircle, ListFilter, X, BookOpen, Home, Settings } from "lucide-react";
+import { Search, Bell, User, PlusCircle, ListFilter, X, BookOpen, Home, Settings, ChevronDown, Info, Shield, HelpCircle, FileText, Phone } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isMoreOpen, setIsMoreOpen] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -36,23 +37,59 @@ export default function Header() {
                     <Link href="/" className="flex items-center group flex-shrink-0 relative z-50">
                         <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3C53] to-[#1B3C53] rounded-lg blur-md opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                            <h1 className="text-2xl font-bold text-white">Unite<span className="text-[#e15aed]">Kenyans</span><span className="text-xs">.co.ke</span></h1>
+                            <h1 className="text-2xl font-bold text-white">Unite<span className="text-[      ]">Kenyans</span><span className="text-xs">.co.ke</span></h1>
                         </div>
                     </Link>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden lg:flex items-center space-x-8">
+                    <div className="hidden xl:flex items-center space-x-6">
                         <Link
                             href="/"
-                            className={`text-sm font-bold uppercase tracking-widest transition-colors ${pathname === '/' ? 'text-[#D02752]' : 'text-white/60 hover:text-[#D02752]'}`}
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/' ? 'text-[#e15aed]' : 'text-white/60 hover:text-[#e15aed]'}`}
                         >
-                            <span className="flex items-center"><Home className="w-4 h-4 mr-2" /> Videos</span>
+                            <span className="flex items-center"><Home className="w-4 h-4 mr-1.5" /> Videos</span>
                         </Link>
                         <Link
                             href="/blogs"
-                            className={`text-sm font-bold uppercase tracking-widest transition-colors ${pathname.startsWith('/blogs') ? 'text-[#D02752]' : 'text-white/60 hover:text-[#D02752]'}`}
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname.startsWith('/blogs') ? 'text-[#e15aed]' : 'text-white/60 hover:text-[#e15aed]'}`}
                         >
-                            <span className="flex items-center"><BookOpen className="w-4 h-4 mr-2" /> Blogs</span>
+                            <span className="flex items-center"><BookOpen className="w-4 h-4 mr-1.5" /> Blogs</span>
+                        </Link>
+                        <Link
+                            href="/about"
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/about' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
+                        >
+                            About
+                        </Link>
+                        <Link
+                            href="/contact"
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/contact' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
+                        >
+                            Contact
+                        </Link>
+                        <Link
+                            href="/faq"
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/faq' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
+                        >
+                            FAQ
+                        </Link>
+                        <Link
+                            href="/dmca"
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/dmca' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
+                        >
+                            DMCA
+                        </Link>
+                        <Link
+                            href="/terms"
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/terms' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
+                        >
+                            Terms
+                        </Link>
+                        <Link
+                            href="/privacy"
+                            className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/privacy' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
+                        >
+                            Privacy
                         </Link>
                     </div>
 
@@ -112,14 +149,14 @@ export default function Header() {
                     <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4 ml-4">Menu</p>
                     <Link
                         href="/"
-                        className={`flex items-center p-4 rounded-2xl transition-all ${pathname === '/' ? 'bg-[#1B3C53] text-white shadow-lg' : 'text-white/60 hover:bg-white/5 hover:text-[#D02752]'}`}
+                        className={`flex items-center p-4 rounded-2xl transition-all ${pathname === '/' ? 'bg-[#1B3C53] text-white shadow-lg' : 'text-white/60 hover:bg-white/5 hover:text-[#e15aed]'}`}
                     >
                         <Home className="w-5 h-5 mr-4" />
                         <span className="font-bold">Home</span>
                     </Link>
                     <Link
                         href="/blogs"
-                        className={`flex items-center p-4 rounded-2xl transition-all ${pathname.startsWith('/blogs') ? 'bg-[#1B3C53] text-white shadow-lg' : 'text-white/60 hover:bg-white/5 hover:text-[#D02752]'}`}
+                        className={`flex items-center p-4 rounded-2xl transition-all ${pathname.startsWith('/blogs') ? 'bg-[#1B3C53] text-white shadow-lg' : 'text-white/60 hover:bg-white/5 hover:text-[#e15aed]'}`}
                     >
                         <BookOpen className="w-5 h-5 mr-4" />
                         <span className="font-bold">Blogs</span>
@@ -145,6 +182,35 @@ export default function Header() {
                         <Settings className="w-5 h-5 mr-4" />
                         <span className="font-bold">Settings</span>
                     </button>
+                </div>
+
+                {/* More Links Mobile */}
+                <div className="space-y-4 pb-20">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-2 ml-4">Information</p>
+                    <Link href="/about" className="w-full flex items-center p-4 rounded-2xl text-white/60 hover:bg-white/5 transition-all">
+                        <Info className="w-5 h-5 mr-4" />
+                        <span className="font-bold">About Us</span>
+                    </Link>
+                    <Link href="/contact" className="w-full flex items-center p-4 rounded-2xl text-white/60 hover:bg-white/5 transition-all">
+                        <Phone className="w-5 h-5 mr-4" />
+                        <span className="font-bold">Contact Us</span>
+                    </Link>
+                    <Link href="/faq" className="w-full flex items-center p-4 rounded-2xl text-white/60 hover:bg-white/5 transition-all">
+                        <HelpCircle className="w-5 h-5 mr-4" />
+                        <span className="font-bold">FAQ</span>
+                    </Link>
+                    <Link href="/dmca" className="w-full flex items-center p-4 rounded-2xl text-white/60 hover:bg-white/5 transition-all">
+                        <Shield className="w-5 h-5 mr-4" />
+                        <span className="font-bold">DMCA</span>
+                    </Link>
+                    <Link href="/terms" className="w-full flex items-center p-4 rounded-2xl text-white/60 hover:bg-white/5 transition-all">
+                        <FileText className="w-5 h-5 mr-4" />
+                        <span className="font-bold">Terms of Service</span>
+                    </Link>
+                    <Link href="/privacy" className="w-full flex items-center p-4 rounded-2xl text-white/60 hover:bg-white/5 transition-all">
+                        <Shield className="w-5 h-5 mr-4" />
+                        <span className="font-bold">Privacy Policy</span>
+                    </Link>
                 </div>
 
 
