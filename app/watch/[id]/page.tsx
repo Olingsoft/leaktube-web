@@ -1,6 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
-import Sidebar from "../../components/Sidebar";
+import SkyscraperAd from "../../components/SkyscraperAd";
 import WatchClient from "./WatchClient";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 import { extractIdFromSlug } from "@/utils/seo";
@@ -144,8 +144,8 @@ export default async function WatchPage({ params }: { params: Promise<{ id: stri
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <div className="flex min-h-screen">
-                <Sidebar />
-                <div className="flex-1 lg:ml-72 md:p-8 pt-0 md:pt-8 pb-20 overflow-x-hidden">
+                <SkyscraperAd />
+                <div className="flex-1 md:ml-60 lg:ml-64 md:p-8 pt-0 md:pt-8 pb-20 overflow-x-hidden">
                     <WatchClient
                         video={processedVideo}
                         relatedVideos={processedRelated}
