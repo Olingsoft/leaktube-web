@@ -26,7 +26,13 @@ export default function InVideoAd() {
                     <X size={16} />
                 </button>
 
-                <div>
+                <div style={{
+                    background: 'rgba(0, 0, 0, 0.9)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '20px',
+                    padding: '12px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)'
+                }}>
                     <ins id="1110438" data-width="308" data-height="286"></ins>
 
                     <Script
