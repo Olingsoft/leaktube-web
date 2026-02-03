@@ -31,7 +31,8 @@ export const metadata: Metadata = {
     "Viral content Kenya",
     "Online privacy Kenya",
     "Digital awareness Kenya",
-    "Leaked video rumors Kenya"
+    "Leaked video rumors Kenya",
+    "Kenya leaked videos"
   ],
   openGraph: {
     title: "Unite Kenyans | Kenya Viral & Trending Stories",
