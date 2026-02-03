@@ -4,6 +4,7 @@ import "./globals.css";
 import HeaderWrapper from "./components/HeaderWrapper";
 import MainContentWrapper from "./components/MainContentWrapper";
 import Footer from "./components/Footer";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,6 +62,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-M1DKMDJFYV"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-M1DKMDJFYV');
+        `}
+      </Script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -73,3 +87,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+// measure ment id G-M1DKMDJFYV
