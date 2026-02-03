@@ -50,8 +50,10 @@ export const metadata: Metadata = {
       "Kenya’s hub for viral trends, social media discussions, and digital awareness.",
   },
   robots: {
-    index: true,
     follow: true,
+  },
+  other: {
+    "juicyads-site-verification": "57753ffadf9597cc22ba70b03558b031",
   },
 };
 
