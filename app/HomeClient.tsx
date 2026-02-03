@@ -39,6 +39,18 @@ export default function HomeClient({
     const [showSearch, setShowSearch] = useState(false);
     const desktopCategoryRef = useRef<HTMLDivElement>(null);
     const mobileCategoryRef = useRef<HTMLDivElement>(null);
+    const [isAgeVerified, setIsAgeVerified] = useState(false);
+
+    useEffect(() => {
+        const verified = localStorage.getItem("age_verified");
+        if (verified === "true") {
+            setIsAgeVerified(true);
+        }
+
+        const handleVerified = () => setIsAgeVerified(true);
+        window.addEventListener("ageVerified", handleVerified);
+        return () => window.removeEventListener("ageVerified", handleVerified);
+    }, []);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -77,98 +89,43 @@ export default function HomeClient({
             <TopBannerAd />
 
             {/* Mini Header: Trending + Category + Search */}
-            <div className="mb-8 relative z-[9999]">
-                {/* Desktop Layout */}
-                <div className="hidden md:flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="flex items-center gap-2 text-[#e15aed] shrink-0">
-                            <div className="p-2 rounded-xl bg-[#e15aed]/10">
-                                <TrendingUp className="w-4 h-4" />
+            {isAgeVerified && (
+                <div className="mb-8 relative z-[9999]">
+                    {/* Desktop Layout */}
+                    <div className="hidden md:flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <div className="flex items-center gap-2 text-[#e15aed] shrink-0">
+                                <div className="p-2 rounded-xl bg-[#e15aed]/10">
+                                    <TrendingUp className="w-4 h-4" />
+                                </div>
+                                <span className="text-xs font-black tracking-widest uppercase whitespace-nowrap">Trending</span>
                             </div>
-                            <span className="text-xs font-black tracking-widest uppercase whitespace-nowrap">Trending</span>
+                            <div className="flex flex-wrap gap-2 min-w-0">
+                                {trends.slice(0, 4).map((t) => (
+                                    <button
+                                        key={t._id}
+                                        onClick={() => handleTrendClick(t)}
+                                        className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
+                                    >
+                                        {t.phrase}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 min-w-0">
-                            {trends.slice(0, 4).map((t) => (
-                                <button
-                                    key={t._id}
-                                    onClick={() => handleTrendClick(t)}
-                                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
-                                >
-                                    {t.phrase}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
 
-                    <div className="w-px h-10 bg-white/10"></div>
+                        <div className="w-px h-10 bg-white/10"></div>
 
-                    <div ref={desktopCategoryRef} className="relative z-[9999]">
-                        <button
-                            onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
-                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition whitespace-nowrap"
-                        >
-                            <span className="text-sm">{categoryParam || "All Categories"}</span>
-                            {isMobileCatOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                        </button>
-
-                        {isMobileCatOpen && (
-                            <div className="absolute top-full mt-2 right-0 min-w-[250px] bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap gap-2 backdrop-blur-xl z-[999]">
-                                {categories.map((cat) => {
-                                    const active = (cat === "All" && !categoryParam) || cat === categoryParam;
-                                    return (
-                                        <Link
-                                            key={cat}
-                                            href={cat === "All" ? "/" : `/?category=${cat}`}
-                                            onClick={() => setIsMobileCatOpen(false)}
-                                            className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition ${active ? "bg-[#e15aed] text-white" : "bg-white/5 text-white/60 hover:bg-white/10"}`}
-                                        >
-                                            {cat}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="w-px h-10 bg-white/10"></div>
-
-                    <div className="shrink-0">
-                        {!showSearch ? (
-                            <button onClick={() => setShowSearch(true)} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition group">
-                                <Search className="w-5 h-5 text-white/70 group-hover:text-white transition" />
-                            </button>
-                        ) : (
-                            <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 shadow-2xl w-[280px] animate-in fade-in zoom-in backdrop-blur-xl">
-                                <Search className="w-4 h-4 text-white/40" />
-                                <input
-                                    autoFocus
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search..."
-                                    className="flex-1 bg-transparent outline-none text-white placeholder-white/40 text-sm"
-                                />
-                                <button onClick={() => { setSearchQuery(""); setShowSearch(false); }} className="hover:scale-110 transition">
-                                    <X className="w-4 h-4 text-white/40 hover:text-white" />
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Mobile Layout */}
-                <div className="md:hidden space-y-3">
-                    <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
-                        <div ref={mobileCategoryRef} className="relative flex-1 z-[9999]">
+                        <div ref={desktopCategoryRef} className="relative z-[9999]">
                             <button
                                 onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
-                                className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm"
+                                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition whitespace-nowrap"
                             >
-                                <span className="truncate">{categoryParam || "All Categories"}</span>
-                                {isMobileCatOpen ? <ChevronUp className="w-4 h-4 shrink-0" /> : <ChevronDown className="w-4 h-4 shrink-0" />}
+                                <span className="text-sm">{categoryParam || "All Categories"}</span>
+                                {isMobileCatOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                             </button>
 
                             {isMobileCatOpen && (
-                                <div className="absolute top-full mt-2 left-0 right-0 bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap gap-2 backdrop-blur-xl z-[999]">
+                                <div className="absolute top-full mt-2 right-0 min-w-[250px] bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap gap-2 backdrop-blur-xl z-[999]">
                                     {categories.map((cat) => {
                                         const active = (cat === "All" && !categoryParam) || cat === categoryParam;
                                         return (
@@ -176,7 +133,7 @@ export default function HomeClient({
                                                 key={cat}
                                                 href={cat === "All" ? "/" : `/?category=${cat}`}
                                                 onClick={() => setIsMobileCatOpen(false)}
-                                                className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${active ? "bg-[#e15aed] text-white" : "bg-white/5 text-white/60"}`}
+                                                className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition ${active ? "bg-[#e15aed] text-white" : "bg-white/5 text-white/60 hover:bg-white/10"}`}
                                             >
                                                 {cat}
                                             </Link>
@@ -186,48 +143,105 @@ export default function HomeClient({
                             )}
                         </div>
 
-                        {!showSearch ? (
-                            <button onClick={() => setShowSearch(true)} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-                                <Search className="w-5 h-5 text-white/70" />
-                            </button>
-                        ) : (
-                            <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 flex-1 backdrop-blur-xl">
-                                <Search className="w-4 h-4 text-white/40" />
-                                <input
-                                    autoFocus
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search..."
-                                    className="flex-1 bg-transparent outline-none text-white placeholder-white/40 text-sm"
-                                />
-                                <button onClick={() => { setSearchQuery(""); setShowSearch(false); }} className="hover:scale-110 transition">
-                                    <X className="w-4 h-4 text-white/40 hover:text-white" />
+                        <div className="w-px h-10 bg-white/10"></div>
+
+                        <div className="shrink-0">
+                            {!showSearch ? (
+                                <button onClick={() => setShowSearch(true)} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition group">
+                                    <Search className="w-5 h-5 text-white/70 group-hover:text-white transition" />
                                 </button>
-                            </div>
-                        )}
+                            ) : (
+                                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 shadow-2xl w-[280px] animate-in fade-in zoom-in backdrop-blur-xl">
+                                    <Search className="w-4 h-4 text-white/40" />
+                                    <input
+                                        autoFocus
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="Search..."
+                                        className="flex-1 bg-transparent outline-none text-white placeholder-white/40 text-sm"
+                                    />
+                                    <button onClick={() => { setSearchQuery(""); setShowSearch(false); }} className="hover:scale-110 transition">
+                                        <X className="w-4 h-4 text-white/40 hover:text-white" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
-                        <div className="flex items-center gap-2 text-[#e15aed] mb-3">
-                            <div className="p-2 rounded-xl bg-[#e15aed]/10">
-                                <TrendingUp className="w-4 h-4" />
-                            </div>
-                            <span className="text-xs font-black tracking-widest uppercase">Trending Now</span>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {trends.map((t) => (
+                    {/* Mobile Layout */}
+                    <div className="md:hidden space-y-3">
+                        <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/5 border border-white/10">
+                            <div ref={mobileCategoryRef} className="relative flex-1 z-[9999]">
                                 <button
-                                    key={t._id}
-                                    onClick={() => handleTrendClick(t)}
-                                    className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
+                                    onClick={() => setIsMobileCatOpen(!isMobileCatOpen)}
+                                    className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-sm"
                                 >
-                                    {t.phrase}
+                                    <span className="truncate">{categoryParam || "All Categories"}</span>
+                                    {isMobileCatOpen ? <ChevronUp className="w-4 h-4 shrink-0" /> : <ChevronDown className="w-4 h-4 shrink-0" />}
                                 </button>
-                            ))}
+
+                                {isMobileCatOpen && (
+                                    <div className="absolute top-full mt-2 left-0 right-0 bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl flex flex-wrap gap-2 backdrop-blur-xl z-[999]">
+                                        {categories.map((cat) => {
+                                            const active = (cat === "All" && !categoryParam) || cat === categoryParam;
+                                            return (
+                                                <Link
+                                                    key={cat}
+                                                    href={cat === "All" ? "/" : `/?category=${cat}`}
+                                                    onClick={() => setIsMobileCatOpen(false)}
+                                                    className={`px-4 py-2 rounded-xl text-xs font-black uppercase ${active ? "bg-[#e15aed] text-white" : "bg-white/5 text-white/60"}`}
+                                                >
+                                                    {cat}
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+
+                            {!showSearch ? (
+                                <button onClick={() => setShowSearch(true)} className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+                                    <Search className="w-5 h-5 text-white/70" />
+                                </button>
+                            ) : (
+                                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 flex-1 backdrop-blur-xl">
+                                    <Search className="w-4 h-4 text-white/40" />
+                                    <input
+                                        autoFocus
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="Search..."
+                                        className="flex-1 bg-transparent outline-none text-white placeholder-white/40 text-sm"
+                                    />
+                                    <button onClick={() => { setSearchQuery(""); setShowSearch(false); }} className="hover:scale-110 transition">
+                                        <X className="w-4 h-4 text-white/40 hover:text-white" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
+                            <div className="flex items-center gap-2 text-[#e15aed] mb-3">
+                                <div className="p-2 rounded-xl bg-[#e15aed]/10">
+                                    <TrendingUp className="w-4 h-4" />
+                                </div>
+                                <span className="text-xs font-black tracking-widest uppercase">Trending Now</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {trends.map((t) => (
+                                    <button
+                                        key={t._id}
+                                        onClick={() => handleTrendClick(t)}
+                                        className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
+                                    >
+                                        {t.phrase}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Mobile Only Ad Banner */}
             <div className="md:hidden mb-6">

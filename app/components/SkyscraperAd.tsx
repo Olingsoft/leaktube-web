@@ -5,7 +5,7 @@ import Script from "next/script";
 
 export default function SkyscraperAd() {
     return (
-        <aside style={{ position: 'fixed', left: '20px', top: '100px', zIndex: 40, maxWidth: 'calc(100% - 40px)' }}>
+        <aside className="hidden md:block" style={{ position: 'fixed', left: '20px', top: '100px', zIndex: 40, maxWidth: 'calc(100% - 40px)' }}>
             <div style={{ overflow: 'hidden' }}>
                 <ins id="1110440" data-width="160" data-height="600"></ins>
 

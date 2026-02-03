@@ -4,6 +4,7 @@ import "./globals.css";
 import HeaderWrapper from "./components/HeaderWrapper";
 import MainContentWrapper from "./components/MainContentWrapper";
 import Footer from "./components/Footer";
+import AgeVerificationModal from "./components/AgeVerificationModal";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -81,6 +82,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AgeVerificationModal />
         <HeaderWrapper />
         <MainContentWrapper>
           {children}
