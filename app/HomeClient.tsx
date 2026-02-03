@@ -16,6 +16,9 @@ import {
 } from "lucide-react";
 import { slugify } from "@/utils/seo";
 import { getThumbnailUrl, getRelativeTime, calculateViews } from "@/utils/format";
+import HomeAdBanner from "./components/HomeAdBanner";
+import VideoGridAd from "./components/VideoGridAd";
+import TopBannerAd from "./components/TopBannerAd";
 
 interface HomeClientProps {
     initialVideos: any[];
@@ -70,6 +73,9 @@ export default function HomeClient({
 
     return (
         <div className="max-w-[1800px] mx-auto px-4 md:px-8 pt-1">
+            {/* Top Leaderboard Ad */}
+            <TopBannerAd />
+
             {/* Mini Header: Trending + Category + Search */}
             <div className="mb-8 relative z-[9999]">
                 {/* Desktop Layout */}
@@ -223,52 +229,65 @@ export default function HomeClient({
                 </div>
             </div>
 
+            {/* Mobile Only Ad Banner */}
+            <div className="md:hidden mb-6">
+                <HomeAdBanner />
+            </div>
+
             {/* Videos Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {filteredVideos.map((video) => (
-                    <Link
-                        key={video._id}
-                        href={`/watch/${slugify(video.title)}-${video._id}`}
-                        className="group space-y-3"
-                    >
-                        <div className="relative aspect-video rounded-3xl overflow-hidden bg-[#151515] border border-white/5">
-                            {video.thumbnailUrl ? (
-                                <img
-                                    src={getThumbnailUrl(video.thumbnailUrl)}
-                                    alt={video.title}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition"
-                                    loading="lazy"
-                                />
-                            ) : (
-                                <div className="flex h-full items-center justify-center text-white/10">
-                                    <ImageIcon />
-                                </div>
-                            )}
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                                    <Play className="text-white" />
+                {filteredVideos.map((video, index) => (
+                    <React.Fragment key={video._id}>
+                        <Link
+                            href={`/watch/${slugify(video.title)}-${video._id}`}
+                            className="group space-y-3"
+                        >
+                            <div className="relative aspect-video rounded-3xl overflow-hidden bg-[#151515] border border-white/5">
+                                {video.thumbnailUrl ? (
+                                    <img
+                                        src={getThumbnailUrl(video.thumbnailUrl)}
+                                        alt={video.title}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition"
+                                        loading="lazy"
+                                    />
+                                ) : (
+                                    <div className="flex h-full items-center justify-center text-white/10">
+                                        <ImageIcon />
+                                    </div>
+                                )}
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                                        <Play className="text-white" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="space-y-1">
-                            <h3 className="text-white font-bold text-sm line-clamp-2 group-hover:text-[#e15aed]">
-                                {video.title}
-                            </h3>
-                            <div className="flex items-center gap-3 text-white/50 text-xs">
-                                <span className="flex items-center gap-1">
-                                    <Eye className="w-3 h-3" />
-                                    {calculateViews(video._id, video.views)}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                    <Clock className="w-3 h-3" />
-                                    {getRelativeTime(video.createdAt)} 💦
-                                </span>
+                            <div className="space-y-1">
+                                <h3 className="text-white font-bold text-sm line-clamp-2 group-hover:text-[#e15aed]">
+                                    {video.title}
+                                </h3>
+                                <div className="flex items-center gap-3 text-white/50 text-xs">
+                                    <span className="flex items-center gap-1">
+                                        <Eye className="w-3 h-3" />
+                                        {calculateViews(video._id, video.views)}
+                                    </span>
+                                    <span className="flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {getRelativeTime(video.createdAt)} 💦
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </Link>
+                        </Link>
+
+                        {/* Insert Ad after every 4 videos */}
+                        {(index + 1) % 4 === 0 && (
+                            <div className="sm:col-span-1">
+                                <VideoGridAd />
+                            </div>
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }
