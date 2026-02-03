@@ -36,8 +36,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Unite Kenyans | Kenya Viral & Trending Stories",
     description:
-      "Discover what’s trending in Kenya — viral videos, social media discussions, and online awareness. Unite Kenyans connects Kenyans through information, not exploitation.",
-    url: "https://yourdomain.co.ke",
+      "Discover Leaks content trending in Kenya — viral videos, social media discussions, and online awareness. Unite Kenyans connects Kenyans through information, not exploitation.",
+    url: "https://www.unitekenyans.co.ke/",
     siteName: "Unite Kenyans",
     locale: "en_KE",
     type: "website",
