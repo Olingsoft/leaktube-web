@@ -1,58 +1,93 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React from "react";
+import { Metadata } from "next";
 import Link from "next/link";
 import Sidebar from "../../components/Sidebar";
-import { Calendar, User, ArrowLeft, Loader2, BookOpen, Share2 } from "lucide-react";
-import { getApiUrl, API_BASE_URL } from "@/utils/api";
+import { User, ArrowLeft, BookOpen } from "lucide-react";
+import { getApiUrl } from "@/utils/api";
+import { extractIdFromSlug } from "@/utils/seo";
+import { getThumbnailUrl as formatThumbnailUrl } from "@/utils/format";
+import ShareButton from "./ShareButton";
 
-export default function BlogDetailPage() {
-    const { id } = useParams();
-    const router = useRouter();
-    const [blog, setBlog] = useState<any>(null);
-    const [isLoading, setIsLoading] = useState(true);
+interface Blog {
+    _id: string;
+    title: string;
+    content: string;
+    category: string;
+    author: string;
+    thumbnailUrl: string;
+    createdAt: string;
+}
 
-    useEffect(() => {
-        const fetchBlog = async () => {
-            try {
-                const response = await fetch(getApiUrl(`/api/blogs/${id}`));
-                const data = await response.json();
-                if (data.success) {
-                    setBlog(data.data);
-                } else {
-                    router.push("/blogs");
-                }
-            } catch (error) {
-                console.error("Error fetching blog:", error);
-                router.push("/blogs");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        if (id) fetchBlog();
-    }, [id, router]);
+async function getBlogData(id: string) {
+    const actualId = id.includes('-') ? extractIdFromSlug(id) : id;
+    try {
+        const res = await fetch(getApiUrl(`/api/blogs/${actualId}`), { next: { revalidate: 3600 } });
+        const data = await res.json();
+        return data.success ? data.data : null;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}
 
-    const getThumbnailUrl = (url: string) => {
-        if (!url) return null;
-        if (url.includes('localhost:8000')) {
-            return url.replace('http://localhost:8000', API_BASE_URL);
-        }
-        return url;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params;
+    const blog = await getBlogData(id);
+    if (!blog) return { title: "Blog Not Found - Unite Kenyans" };
+
+    const thumbnail = formatThumbnailUrl(blog.thumbnailUrl);
+
+    return {
+        title: `${blog.title} | Unite Kenyans`,
+        description: blog.content.replace(/<[^>]*>/g, '').substring(0, 160),
+        openGraph: {
+            title: blog.title,
+            description: blog.content.replace(/<[^>]*>/g, '').substring(0, 160),
+            type: "article",
+            images: thumbnail ? [{ url: thumbnail }] : [],
+        },
     };
+}
 
-    if (isLoading) {
+export default async function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const blog = await getBlogData(id);
+
+    if (!blog) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a]">
-                <Loader2 className="w-10 h-10 text-[#D02752] animate-spin" />
+            <div className="flex min-h-screen items-center justify-center">
+                <p className="text-white font-black uppercase tracking-widest">Article Not Found</p>
             </div>
         );
     }
 
-    if (!blog) return null;
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": blog.title,
+        "image": formatThumbnailUrl(blog.thumbnailUrl),
+        "author": {
+            "@type": "Person",
+            "name": blog.author
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Unite Kenyans",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://unitekenyans.co.ke/logo.png" // Update with real logo
+            }
+        },
+        "datePublished": blog.createdAt,
+        "description": blog.content.replace(/<[^>]*>/g, '').substring(0, 160)
+    };
 
     return (
-        <div className="flex min-h-screen bg-[#0a0a0a]">
+        <div className="flex min-h-screen">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <Sidebar />
             <div className="flex-1 lg:ml-72 p-4 md:p-8 pt-4 md:pt-8 overflow-x-hidden">
                 {/* Navigation */}
@@ -101,9 +136,7 @@ export default function BlogDetailPage() {
                                 </p>
                             </div>
 
-                            <button className="ml-auto w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-all border border-white/10 text-white/60 hover:text-white">
-                                <Share2 className="w-5 h-5" />
-                            </button>
+                            <ShareButton title={blog.title} />
                         </div>
                     </header>
 
@@ -111,7 +144,7 @@ export default function BlogDetailPage() {
                     {blog.thumbnailUrl && (
                         <div className="mb-12 rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl relative aspect-video md:aspect-[21/9]">
                             <img
-                                src={getThumbnailUrl(blog.thumbnailUrl) || ''}
+                                src={formatThumbnailUrl(blog.thumbnailUrl) || ''}
                                 alt={blog.title}
                                 className="w-full h-full object-cover"
                             />
