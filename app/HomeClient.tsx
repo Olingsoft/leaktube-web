@@ -262,7 +262,7 @@ export default function HomeClient({
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <Clock className="w-3 h-3" />
-                                    {getRelativeTime(video.createdAt)}
+                                    {getRelativeTime(video.createdAt)} 💦
                                 </span>
                             </div>
                         </div>
