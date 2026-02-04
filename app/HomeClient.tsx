@@ -25,18 +25,20 @@ interface HomeClientProps {
     trends: any[];
     categories: string[];
     categoryParam: string | undefined;
+    initialSearch?: string;
 }
 
 export default function HomeClient({
     initialVideos,
     trends,
     categories,
-    categoryParam
+    categoryParam,
+    initialSearch = ""
 }: HomeClientProps) {
     const router = useRouter();
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState(initialSearch);
     const [isMobileCatOpen, setIsMobileCatOpen] = useState(false);
-    const [showSearch, setShowSearch] = useState(false);
+    const [showSearch, setShowSearch] = useState(!!initialSearch);
     const desktopCategoryRef = useRef<HTMLDivElement>(null);
     const mobileCategoryRef = useRef<HTMLDivElement>(null);
     const [isAgeVerified, setIsAgeVerified] = useState(false);

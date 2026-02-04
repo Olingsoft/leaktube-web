@@ -41,7 +41,7 @@ export default function AgeVerificationModal() {
                     <div className="flex justify-center flex-col items-center space-y-6">
                       
                         <div className="w-16 h-16 rounded-full bg-[#D02752]/10 border border-[#D02752]/20 flex items-center justify-center">
-                            <AlertTriangle className="w-8 h-8 text-[#D02752]" />
+                            {/* <AlertTriangle className="w-8 h-8 text-[#D02752]" /> */}
                         </div>
 
                           <div className="relative">

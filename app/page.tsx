@@ -25,10 +25,16 @@ export const metadata: Metadata = {
 /**
  * Data Fetching (Server Side)
  */
-async function getVideos(category?: string) {
+async function getVideos(category?: string, search?: string) {
   try {
     let url = getApiUrl("/api/videos");
-    if (category) url += `?category=${encodeURIComponent(category)}`;
+    const params = new URLSearchParams();
+    if (category) params.append("category", category);
+    if (search) params.append("search", search);
+
+    const queryString = params.toString();
+    if (queryString) url += `?${queryString}`;
+
     const res = await fetch(url, { next: { revalidate: 3600 } });
     const data = await res.json();
     return data.success ? data.data : [];
@@ -60,13 +66,14 @@ async function getCategories() {
   }
 }
 
-export default async function Home({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-  const { category } = await searchParams;
+export default async function Home({ searchParams }: { searchParams: Promise<{ category?: string; q?: string }> }) {
+  const { category, q } = await searchParams;
   const categoryParam = category;
+  const searchParam = q;
 
   // Fetch data in parallel
   const [videos, trends, rawCategories] = await Promise.all([
-    getVideos(categoryParam),
+    getVideos(categoryParam, searchParam),
     getTrends(),
     getCategories()
   ]);
@@ -80,6 +87,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         trends={trends}
         categories={categories}
         categoryParam={categoryParam}
+        initialSearch={searchParam}
       />
     </div>
   );
