@@ -21,9 +21,23 @@ interface Video {
  */
 const getEmbedUrl = (url: string) => {
     if (!url) return "";
+
+    // Handle Mega.nz
     if (url.includes('mega.nz')) {
-        return url.replace('mega.nz/file/', 'mega.nz/embed/');
+        // Handle "file" format: https://mega.nz/file/ID#KEY
+        if (url.includes('/file/')) {
+            return url.replace('/file/', '/embed/');
+        }
+        // Handle hash format: https://mega.nz/#!ID!KEY
+        if (url.includes('#!')) {
+            return url.replace('#!', 'embed/#!');
+        }
+        // Fallback for already correct embed links or unknown formats - try to force embed if not present
+        if (!url.includes('/embed/')) {
+            return url.replace('mega.nz/', 'mega.nz/embed/');
+        }
     }
+
     return url;
 };
 

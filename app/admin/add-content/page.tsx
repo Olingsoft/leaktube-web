@@ -14,6 +14,7 @@ import {
     CheckCircle,
     AlertCircle
 } from "lucide-react";
+import { API_BASE_URL } from "../../../utils/api";
 
 export default function AddContentPage() {
     const [selectedType, setSelectedType] = useState("video");
@@ -37,7 +38,7 @@ export default function AddContentPage() {
 
     const fetchCategories = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/categories');
+            const response = await fetch(`${API_BASE_URL}/api/categories`);
             const data = await response.json();
             if (data.success) {
                 setCategories(data.data);
@@ -76,18 +77,18 @@ export default function AddContentPage() {
 
         try {
             const dataToSend = new FormData();
-            dataToSend.append('title', formData.title);
+            dataToSend.append('title', formData.title.trim());
             dataToSend.append('category', formData.category);
-            dataToSend.append('description', formData.description);
-            dataToSend.append('videoUrl', formData.videoUrl);
+            dataToSend.append('description', formData.description.trim());
+            dataToSend.append('videoUrl', formData.videoUrl.trim());
 
             if (thumbnailFile) {
                 dataToSend.append('thumbnail', thumbnailFile);
             } else if (formData.thumbnailUrl) {
-                dataToSend.append('thumbnailUrl', formData.thumbnailUrl);
+                dataToSend.append('thumbnailUrl', formData.thumbnailUrl.trim());
             }
 
-            const response = await fetch('http://localhost:8000/api/videos', {
+            const response = await fetch(`${API_BASE_URL}/api/videos`, {
                 method: 'POST',
                 body: dataToSend, // Fetch handles Boundary correctly with FormData
             });
