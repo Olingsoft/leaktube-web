@@ -21,6 +21,7 @@ import {
     Play
 } from "lucide-react";
 import Link from "next/link";
+import { API_BASE_URL } from "../../../utils/api";
 
 const mockVideos = [
     {
@@ -126,7 +127,7 @@ export default function ManageVideos() {
             if (searchTerm) query.append('search', searchTerm);
             if (selectedCategory !== 'All') query.append('category', selectedCategory);
 
-            const response = await fetch(`http://localhost:8000/api/videos?${query.toString()}`);
+            const response = await fetch(`${API_BASE_URL}/api/videos?${query.toString()}`);
             const data = await response.json();
             if (data.success) {
                 setVideos(data.data);
@@ -150,7 +151,7 @@ export default function ManageVideos() {
 
         setIsDeleting(id);
         try {
-            const response = await fetch(`http://localhost:8000/api/videos/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/videos/${id}`, {
                 method: 'DELETE',
             });
             const data = await response.json();

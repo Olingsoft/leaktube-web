@@ -9,6 +9,7 @@
 
 const PROPERTY_ID = process.env.GA4_PROPERTY_ID || '471855663'; // Fallback or placeholder
 const API_KEY = process.env.GA4_API_KEY || 'AIzaSyDk6n7VDmzWsZodB8esC8ufYGRTyq-LS9M';
+import { API_BASE_URL } from "../../utils/api";
 
 export async function getAnalyticsData() {
     try {
@@ -37,7 +38,7 @@ export async function getAnalyticsData() {
 
 export async function getBackendStats() {
     try {
-        const response = await fetch('http://localhost:8000/api/admin/stats', {
+        const response = await fetch(`${API_BASE_URL}/api/admin/stats`, {
             cache: 'no-store'
         });
         const result = await response.json();

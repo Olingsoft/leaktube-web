@@ -13,6 +13,7 @@ import {
     ChevronRight,
     GripVertical
 } from "lucide-react";
+import { API_BASE_URL } from "../../../utils/api";
 
 export default function ManageCategories() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ export default function ManageCategories() {
     const fetchCategories = async () => {
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:8000/api/categories');
+            const response = await fetch(`${API_BASE_URL}/api/categories`);
             const data = await response.json();
             if (data.success) {
                 setCategories(data.data);
@@ -50,7 +51,7 @@ export default function ManageCategories() {
 
         setIsSaving(true);
         try {
-            const response = await fetch('http://localhost:8000/api/categories', {
+            const response = await fetch(`${API_BASE_URL}/api/categories`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, description, color })
@@ -75,7 +76,7 @@ export default function ManageCategories() {
         if (!confirm("Are you sure? This may affect videos in this category.")) return;
 
         try {
-            const response = await fetch(`http://localhost:8000/api/categories/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, {
                 method: 'DELETE'
             });
             const data = await response.json();

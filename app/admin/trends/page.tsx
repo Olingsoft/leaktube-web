@@ -10,6 +10,7 @@ import {
     Video,
     Hash
 } from "lucide-react";
+import { API_BASE_URL } from "../../../utils/api";
 
 export default function TrendsPage() {
     const [trends, setTrends] = useState<any[]>([]);
@@ -28,7 +29,7 @@ export default function TrendsPage() {
 
     const fetchTrends = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/trends');
+            const response = await fetch(`${API_BASE_URL}/api/trends`);
             const data = await response.json();
             if (data.success) {
                 setTrends(data.data);
@@ -42,7 +43,7 @@ export default function TrendsPage() {
 
     const fetchVideos = async () => {
         try {
-            const response = await fetch('http://localhost:8000/api/videos');
+            const response = await fetch(`${API_BASE_URL}/api/videos`);
             const data = await response.json();
             if (data.success) {
                 setVideos(data.data);
@@ -67,7 +68,7 @@ export default function TrendsPage() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/trends', {
+            const response = await fetch(`${API_BASE_URL}/api/trends`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -108,7 +109,7 @@ export default function TrendsPage() {
         if (!confirm("Are you sure you want to delete this trend?")) return;
 
         try {
-            const response = await fetch(`http://localhost:8000/api/trends/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/api/trends/${id}`, {
                 method: 'DELETE'
             });
             const data = await response.json();
