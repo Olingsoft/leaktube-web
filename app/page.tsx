@@ -36,7 +36,7 @@ async function getVideos(category?: string, search?: string) {
     const queryString = params.toString();
     if (queryString) url += `?${queryString}`;
 
-    const res = await fetch(url, { next: { revalidate: 2 } });
+    const res = await fetch(url, { next: { revalidate: 3600 } });
     const data = await res.json();
     return data.success ? data.data : [];
   } catch (e) {
