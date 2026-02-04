@@ -40,7 +40,7 @@ export default function WatchClient({
     thumbnailUrl,
 }: WatchClientProps) {
     return (
-        <div className="max-w-[1700px] mx-auto flex flex-col xl:flex-row gap-8">
+        <div className="w-full max-w-[2000px] mx-auto flex flex-col xl:flex-row gap-6">
             {/* Main Video Section */}
             <div className="flex-1 space-y-6 px-3">
                 {/* Back Button */}
@@ -153,7 +153,7 @@ export default function WatchClient({
             </div>
 
             {/* Sidebar - Related & Ads */}
-            <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0">
+            <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0 flex-shrink-0">
                 <div className="p-4 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group flex justify-center">
                     <HomeAdBanner />
                 </div>

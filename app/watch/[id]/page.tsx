@@ -143,9 +143,9 @@ export default async function WatchPage({ params }: { params: Promise<{ id: stri
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <div className="flex min-h-screen">
-                <SkyscraperAd />
-                <div className="flex-1 md:ml-60 lg:ml-64 md:p-8 pt-0 md:pt-8 pb-20 overflow-x-hidden">
+            <div className="flex min-h-screen relative">
+                {/* <SkyscraperAd side="left" /> */}
+                <div className="flex-1 xl:mr-[200px] p-4 md:p-6 pt-0 md:pt-6 pb-20 overflow-x-hidden min-w-0 transition-all duration-300">
                     <WatchClient
                         video={processedVideo}
                         relatedVideos={processedRelated}
@@ -153,6 +153,7 @@ export default async function WatchPage({ params }: { params: Promise<{ id: stri
                         thumbnailUrl={processedVideo.thumbnailUrl || ""}
                     />
                 </div>
+                <SkyscraperAd side="right" />
             </div>
         </>
     );
