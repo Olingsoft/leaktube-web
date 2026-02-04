@@ -40,11 +40,7 @@ export default function WatchClient({
     thumbnailUrl,
 }: WatchClientProps) {
     return (
-<<<<<<< HEAD
-        <div className="w-full max-w-[2000px] mx-auto flex flex-col xl:flex-row gap-6">
-=======
         <div className="max-w-[2000px] mx-auto flex flex-col xl:flex-row gap-8">
->>>>>>> SEO-brch
             {/* Main Video Section */}
             <div className="flex-1 space-y-6 px-3">
                 {/* Back Button */}
@@ -58,29 +54,6 @@ export default function WatchClient({
                     </Link>
                 </div>
 
-<<<<<<< HEAD
-                {/* Video Player Section with Premium Border */}
-                <div className="relative group/player transition-all duration-700">
-                    <div className="absolute -inset-[1px] bg-gradient-to-tr from-[#1B3C53] via-white/20 to-[#D02752]/50 rounded-[2rem] md:rounded-[3.1rem] blur-sm opacity-50 group-hover/player:opacity-100 transition-opacity duration-700" />
-                    <div className="relative p-[1px] bg-gradient-to-tr from-white/10 via-white/5 to-white/10 rounded-[2rem] md:rounded-[3.1rem] shadow-2xl overflow-hidden backdrop-blur-3xl">
-                        <div className="relative aspect-[4/3] md:aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a] shadow-inner">
-                            <iframe
-                                width="100%"
-                                height="110%"
-                                frameBorder="0"
-                                src={videoEmbedUrl}
-                                allowFullScreen
-                                allow="autoplay;"
-                                title={video.title}
-                                className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
-                            ></iframe>
-                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-
-                            {/* In-Video Ad Overlay */}
-                            {/* <InVideoAd /> */}
-                        </div>
-                    </div>
-=======
                 {/* Video Player Section */}
                 <div className="relative aspect-[4/3] md:aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a]">
                     <iframe
@@ -95,7 +68,6 @@ export default function WatchClient({
                     ></iframe>
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
                     <InVideoAd />
->>>>>>> SEO-brch
                 </div>
 
                 {/* Video Info */}
@@ -174,11 +146,7 @@ export default function WatchClient({
             </div>
 
             {/* Sidebar - Related & Ads */}
-<<<<<<< HEAD
-            <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0 flex-shrink-0">
-=======
             <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0">
->>>>>>> SEO-brch
                 <div className="p-4 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group flex justify-center">
                     <HomeAdBanner />
                 </div>
