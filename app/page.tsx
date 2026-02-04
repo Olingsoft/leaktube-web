@@ -82,16 +82,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
   const categories = ["All", ...rawCategories];
 
   return (
-<<<<<<< HEAD
-    <div className="min-h-screen">
-      <HomeClient
-        initialVideos={videos}
-        trends={trends}
-        categories={categories}
-        categoryParam={categoryParam}
-        initialSearch={searchParam}
-      />
-=======
     <div className="min-h-screen flex relative">
       <SkyscraperAd side="left" />
       <div className="flex-1 w-full min-w-0 md:ml-[180px] xl:ml-[200px] xl:mr-[200px] transition-all duration-300">
@@ -103,7 +93,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         />
       </div>
       <SkyscraperAd side="right" />
->>>>>>> SEO-brch
     </div>
   );
 }
