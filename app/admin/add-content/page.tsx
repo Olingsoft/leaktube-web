@@ -77,15 +77,15 @@ export default function AddContentPage() {
 
         try {
             const dataToSend = new FormData();
-            dataToSend.append('title', formData.title);
+            dataToSend.append('title', formData.title.trim());
             dataToSend.append('category', formData.category);
-            dataToSend.append('description', formData.description);
-            dataToSend.append('videoUrl', formData.videoUrl);
+            dataToSend.append('description', formData.description.trim());
+            dataToSend.append('videoUrl', formData.videoUrl.trim());
 
             if (thumbnailFile) {
                 dataToSend.append('thumbnail', thumbnailFile);
             } else if (formData.thumbnailUrl) {
-                dataToSend.append('thumbnailUrl', formData.thumbnailUrl);
+                dataToSend.append('thumbnailUrl', formData.thumbnailUrl.trim());
             }
 
             const response = await fetch(`${API_BASE_URL}/api/videos`, {

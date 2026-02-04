@@ -1,8 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 import Script from "next/script";
 import { X } from "lucide-react";
+=======
+import { X } from "lucide-react";
+import Script from "next/script";
+>>>>>>> SEO-brch
 
 export default function InVideoAd() {
     const [isVisible, setIsVisible] = useState(false);
@@ -10,13 +15,18 @@ export default function InVideoAd() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsVisible(true);
+<<<<<<< HEAD
         }, 3000);
+=======
+        }, 3000); // Show after 3 seconds
+>>>>>>> SEO-brch
         return () => clearTimeout(timer);
     }, []);
 
     if (!isVisible) return null;
 
     return (
+<<<<<<< HEAD
         <div style={{ position: 'absolute', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
             <div style={{ position: 'relative', pointerEvents: 'auto', maxWidth: '100%' }}>
                 <button
@@ -37,21 +47,48 @@ export default function InVideoAd() {
 
                     <Script
                         id="juicyads-invideo-script-1"
+=======
+        <div className="absolute inset-x-0 bottom-4 mx-auto w-[90%] md:w-[600px] z-[20] animate-in fade-in slide-in-from-bottom-5 duration-500">
+            <div className="relative p-2 rounded-2xl bg-black/80 backdrop-blur-xl border border-white/10 shadow-2xl overflow-hidden">
+                <button
+                    onClick={() => setIsVisible(false)}
+                    className="absolute top-2 right-2 p-1 rounded-lg bg-white/10 hover:bg-white/20 transition group z-[30]"
+                >
+                    <X className="w-3 h-3 text-white/40 group-hover:text-white" />
+                </button>
+
+                <div className="flex items-center justify-center min-h-[100px]">
+                    <ins id="1110439" data-width="468" data-height="60"></ins>
+                    <Script
+                        id="juicyads-in-video-1"
+>>>>>>> SEO-brch
                         type="text/javascript"
                         data-cfasync="false"
                         async
                         src="https://poweredby.jads.co/js/jads.js"
                     />
                     <Script
+<<<<<<< HEAD
                         id="juicyads-invideo-script-2"
+=======
+                        id="juicyads-in-video-2"
+>>>>>>> SEO-brch
                         type="text/javascript"
                         data-cfasync="false"
                         async
                         dangerouslySetInnerHTML={{
+<<<<<<< HEAD
                             __html: "(window.adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1110438});"
                         }}
                     />
                 </div>
+=======
+                            __html: "(window.adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1110439});"
+                        }}
+                    />
+                </div>
+                <div className="absolute top-1 left-2 text-[8px] font-black uppercase text-white/20 tracking-widest">Sponsored</div>
+>>>>>>> SEO-brch
             </div>
         </div>
     );

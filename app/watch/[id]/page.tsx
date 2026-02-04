@@ -21,9 +21,23 @@ interface Video {
  */
 const getEmbedUrl = (url: string) => {
     if (!url) return "";
+
+    // Handle Mega.nz
     if (url.includes('mega.nz')) {
-        return url.replace('mega.nz/file/', 'mega.nz/embed/');
+        // Handle "file" format: https://mega.nz/file/ID#KEY
+        if (url.includes('/file/')) {
+            return url.replace('/file/', '/embed/');
+        }
+        // Handle hash format: https://mega.nz/#!ID!KEY
+        if (url.includes('#!')) {
+            return url.replace('#!', 'embed/#!');
+        }
+        // Fallback for already correct embed links or unknown formats - try to force embed if not present
+        if (!url.includes('/embed/')) {
+            return url.replace('mega.nz/', 'mega.nz/embed/');
+        }
     }
+
     return url;
 };
 
@@ -144,7 +158,10 @@ export default async function WatchPage({ params }: { params: Promise<{ id: stri
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
             <div className="flex min-h-screen relative">
+<<<<<<< HEAD
                 {/* <SkyscraperAd side="left" /> */}
+=======
+>>>>>>> SEO-brch
                 <div className="flex-1 xl:mr-[200px] p-4 md:p-6 pt-0 md:pt-6 pb-20 overflow-x-hidden min-w-0 transition-all duration-300">
                     <WatchClient
                         video={processedVideo}

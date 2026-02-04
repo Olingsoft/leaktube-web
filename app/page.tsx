@@ -1,6 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import HomeClient from "./HomeClient";
+import SkyscraperAd from "./components/SkyscraperAd";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 
 /**
@@ -81,6 +82,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
   const categories = ["All", ...rawCategories];
 
   return (
+<<<<<<< HEAD
     <div className="min-h-screen">
       <HomeClient
         initialVideos={videos}
@@ -89,6 +91,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
         categoryParam={categoryParam}
         initialSearch={searchParam}
       />
+=======
+    <div className="min-h-screen flex relative">
+      <SkyscraperAd side="left" />
+      <div className="flex-1 w-full min-w-0 md:ml-[180px] xl:ml-[200px] xl:mr-[200px] transition-all duration-300">
+        <HomeClient
+          initialVideos={videos}
+          trends={trends}
+          categories={categories}
+          categoryParam={categoryParam}
+        />
+      </div>
+      <SkyscraperAd side="right" />
+>>>>>>> SEO-brch
     </div>
   );
 }

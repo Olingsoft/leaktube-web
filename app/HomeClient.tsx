@@ -16,8 +16,13 @@ import {
 } from "lucide-react";
 import { slugify } from "@/utils/seo";
 import { getThumbnailUrl, getRelativeTime, calculateViews } from "@/utils/format";
+<<<<<<< HEAD
 import HomeAdBanner from "./components/HomeAdBanner";
 import VideoGridAd from "./components/VideoGridAd";
+=======
+import VideoGridAd from "./components/VideoGridAd";
+import HomeAdBanner from "./components/HomeAdBanner";
+>>>>>>> SEO-brch
 import TopBannerAd from "./components/TopBannerAd";
 
 interface HomeClientProps {
@@ -86,10 +91,15 @@ export default function HomeClient({
     );
 
     return (
+<<<<<<< HEAD
         <div className="max-w-[1800px] mx-auto px-4 md:px-8 pt-1">
             {/* Top Leaderboard Ad */}
             <TopBannerAd />
 
+=======
+        <div className="max-w-[1700px] mx-auto px-4 md:px-8 pt-1">
+            <TopBannerAd />
+>>>>>>> SEO-brch
             {/* Mini Header: Trending + Category + Search */}
             {isAgeVerified && (
                 <div className="mb-8 relative z-[9999]">
@@ -250,6 +260,10 @@ export default function HomeClient({
                 <HomeAdBanner />
             </div>
 
+            <div className="mb-8">
+                <HomeAdBanner />
+            </div>
+
             {/* Videos Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {filteredVideos.map((video, index) => (
@@ -289,11 +303,16 @@ export default function HomeClient({
                                     </span>
                                     <span className="flex items-center gap-1">
                                         <Clock className="w-3 h-3" />
+<<<<<<< HEAD
                                         {getRelativeTime(video.createdAt)} 💦
+=======
+                                        {getRelativeTime(video.createdAt)}
+>>>>>>> SEO-brch
                                     </span>
                                 </div>
                             </div>
                         </Link>
+<<<<<<< HEAD
 
                         {/* Insert Ad after every 4 videos */}
                         {(index + 1) % 4 === 0 && (
@@ -301,6 +320,9 @@ export default function HomeClient({
                                 <VideoGridAd />
                             </div>
                         )}
+=======
+                        {(index + 1) % 8 === 0 && <VideoGridAd />}
+>>>>>>> SEO-brch
                     </React.Fragment>
                 ))}
             </div>
