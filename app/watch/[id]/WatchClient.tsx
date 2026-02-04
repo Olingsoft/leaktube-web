@@ -40,7 +40,7 @@ export default function WatchClient({
     thumbnailUrl,
 }: WatchClientProps) {
     return (
-        <div className="max-w-[1700px] mx-auto flex flex-col xl:flex-row gap-8">
+        <div className="max-w-[2000px] mx-auto flex flex-col xl:flex-row gap-8">
             {/* Main Video Section */}
             <div className="flex-1 space-y-6 px-3">
                 {/* Back Button */}
@@ -54,25 +54,20 @@ export default function WatchClient({
                     </Link>
                 </div>
 
-                {/* Video Player Section with Premium Border */}
-                <div className="relative group/player transition-all duration-700">
-                    <div className="absolute -inset-[1px] bg-gradient-to-tr from-[#1B3C53] via-white/20 to-[#D02752]/50 rounded-[2rem] md:rounded-[3.1rem] blur-sm opacity-50 group-hover/player:opacity-100 transition-opacity duration-700" />
-                    <div className="relative p-[1px] bg-gradient-to-tr from-white/10 via-white/5 to-white/10 rounded-[2rem] md:rounded-[3.1rem] shadow-2xl overflow-hidden backdrop-blur-3xl">
-                        <div className="relative aspect-[4/3] md:aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a] shadow-inner">
-                            <iframe
-                                width="100%"
-                                height="110%"
-                                frameBorder="0"
-                                src={videoEmbedUrl}
-                                allowFullScreen
-                                allow="autoplay;"
-                                title={video.title}
-                                className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
-                            ></iframe>
-                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                            <InVideoAd />
-                        </div>
-                    </div>
+                {/* Video Player Section */}
+                <div className="relative aspect-[4/3] md:aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a]">
+                    <iframe
+                        width="100%"
+                        height="110%"
+                        frameBorder="0"
+                        src={videoEmbedUrl}
+                        allowFullScreen
+                        allow="autoplay;"
+                        title={video.title}
+                        className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
+                    ></iframe>
+                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                    <InVideoAd />
                 </div>
 
                 {/* Video Info */}
