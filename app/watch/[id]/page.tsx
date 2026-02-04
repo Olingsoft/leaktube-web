@@ -159,7 +159,7 @@ export default async function WatchPage({ params }: { params: Promise<{ id: stri
             />
             <div className="flex min-h-screen relative">
 
-                <div className="flex-1 xl:mr-[200px] p-4 md:p-6 pt-0 md:pt-6 pb-20 overflow-x-hidden min-w-0 transition-all duration-300">
+                <div className="flex-1 xl:mr-[200px] px-0 md:px-6 py-4 md:py-6 pb-20 overflow-x-hidden min-w-0 transition-all duration-300">
                     <WatchClient
                         video={processedVideo}
                         relatedVideos={processedRelated}
