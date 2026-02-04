@@ -89,6 +89,9 @@ export default function RootLayout({
                 "@type": "WebSite",
                 "name": "Unite Kenyans",
                 "url": "https://unitekenyans.co.ke",
+                "sameAs": [
+                  "https://x.com/uniteKenyans"
+                ],
                 "potentialAction": {
                   "@type": "SearchAction",
                   "target": {
