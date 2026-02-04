@@ -66,88 +66,90 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Script
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-M1DKMDJFYV"
-      />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
+      <head>
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-M1DKMDJFYV"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-          gtag('config', 'G-M1DKMDJFYV');
-        `}
-      </Script>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "name": "Unite Kenyans",
-              "url": "https://unitekenyans.co.ke",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                  "@type": "EntryPoint",
-                  "urlTemplate": "https://unitekenyans.co.ke/?q={search_term_string}"
-                },
-                "query-input": "required name=search_term_string"
-              }
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "ItemList",
-              "itemListElement": [
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 1,
-                  "name": "Home",
-                  "url": "https://unitekenyans.co.ke"
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 2,
-                  "name": "Blogs",
-                  "url": "https://unitekenyans.co.ke/blogs"
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 3,
-                  "name": "About Us",
-                  "url": "https://unitekenyans.co.ke/about"
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 4,
-                  "name": "Contact Us",
-                  "url": "https://unitekenyans.co.ke/contact"
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 5,
-                  "name": "FAQ",
-                  "url": "https://unitekenyans.co.ke/faq"
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 6,
-                  "name": "Terms of Service",
-                  "url": "https://unitekenyans.co.ke/terms"
-                },
-                {
-                  "@type": "SiteNavigationElement",
-                  "position": 7,
-                  "name": "Privacy Policy",
-                  "url": "https://unitekenyans.co.ke/privacy"
+            gtag('config', 'G-M1DKMDJFYV');
+          `}
+        </Script>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "Unite Kenyans",
+                "url": "https://unitekenyans.co.ke",
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://unitekenyans.co.ke/?q={search_term_string}"
+                  },
+                  "query-input": "required name=search_term_string"
                 }
-              ]
-            }
-          ])
-        }}
-      />
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                "itemListElement": [
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 1,
+                    "name": "Home",
+                    "url": "https://unitekenyans.co.ke"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 2,
+                    "name": "Blogs",
+                    "url": "https://unitekenyans.co.ke/blogs"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 3,
+                    "name": "About Us",
+                    "url": "https://unitekenyans.co.ke/about"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 4,
+                    "name": "Contact Us",
+                    "url": "https://unitekenyans.co.ke/contact"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 5,
+                    "name": "FAQ",
+                    "url": "https://unitekenyans.co.ke/faq"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 6,
+                    "name": "Terms of Service",
+                    "url": "https://unitekenyans.co.ke/terms"
+                  },
+                  {
+                    "@type": "SiteNavigationElement",
+                    "position": 7,
+                    "name": "Privacy Policy",
+                    "url": "https://unitekenyans.co.ke/privacy"
+                  }
+                ]
+              }
+            ])
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
