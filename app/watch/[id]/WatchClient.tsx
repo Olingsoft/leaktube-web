@@ -12,6 +12,8 @@ import {
     ArrowDownToLine
 } from "lucide-react";
 import { calculateViews, calculateLikes } from "@/utils/format";
+import InVideoAd from "@/app/components/InVideoAd";
+import HomeAdBanner from "@/app/components/HomeAdBanner";
 
 interface Video {
     _id: string;
@@ -68,6 +70,7 @@ export default function WatchClient({
                                 className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
                             ></iframe>
                             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
+                            <InVideoAd />
                         </div>
                     </div>
                 </div>
@@ -149,12 +152,8 @@ export default function WatchClient({
 
             {/* Sidebar - Related & Ads */}
             <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0">
-                <div className="p-8 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group">
-                    <div className="absolute top-4 left-4 text-[8px] font-black uppercase text-white/20 tracking-[0.2em]">Ad Placement</div>
-                    <p className="text-white/60 text-xs font-bold leading-tight mb-4 mt-2">Join the conversation on our official community channels.</p>
-                    <button className="w-full py-2.5 bg-gradient-to-r from-[#D02752] to-[#D02752] rounded-xl text-[10px] font-black uppercase text-white shadow-xl hover:shadow-[0_0_20px_rgba(208,39,82,0.4)] transition-all">
-                        Join Now
-                    </button>
+                <div className="p-4 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group flex justify-center">
+                    <HomeAdBanner />
                 </div>
 
                 <div className="space-y-6">
