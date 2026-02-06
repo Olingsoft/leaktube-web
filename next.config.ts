@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'leaktubeservice.onrender.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'unite-kenya-backend.onrender.com', // Added just in case
+      },
     ],
   },
 };

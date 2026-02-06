@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import NextImage from "next/image";
 import { useRouter } from "next/navigation";
 import {
     Play,
@@ -262,11 +263,14 @@ export default function HomeClient({
                         >
                             <div className="relative aspect-video rounded-3xl overflow-hidden bg-[#151515] border border-white/5">
                                 {video.thumbnailUrl ? (
-                                    <img
-                                        src={getThumbnailUrl(video.thumbnailUrl)}
+                                    <NextImage
+                                        src={getThumbnailUrl(video.thumbnailUrl) || ""}
                                         alt={video.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition"
-                                        loading="lazy"
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                        placeholder="blur"
+                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
                                     />
                                 ) : (
                                     <div className="flex h-full items-center justify-center text-white/10">

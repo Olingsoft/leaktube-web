@@ -251,12 +251,20 @@ export default function AddContentPage() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Thumbnail Image</label>
+                                <div className="flex items-center justify-between ml-2">
+                                    <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">Thumbnail Image</label>
+                                    {(formData.videoUrl.includes('mega.nz') || formData.videoUrl.includes('mega.io')) && !thumbnailFile && !formData.thumbnailUrl && (
+                                        <div className="flex items-center space-x-2 text-[#e15aed] animate-pulse">
+                                            <Zap className="w-3 h-3" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Auto-generating from Mega.io</span>
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                                     <div className="space-y-4 relative group">
-                                        <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#1B3C53]/30 transition-all cursor-pointer group">
+                                        <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#D02752]/30 transition-all cursor-pointer group">
                                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#1B3C53] transition-colors" />
+                                                <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#e15aed] transition-colors" />
                                                 <p className="text-sm text-white/40 font-bold uppercase tracking-widest">
                                                     {thumbnailFile ? thumbnailFile.name : "Select Image File"}
                                                 </p>
@@ -267,7 +275,7 @@ export default function AddContentPage() {
 
                                         <div className="relative group/input">
                                             <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-                                                <ImageIcon className="w-4 h-4 text-white/20 group-focus-within/input:text-[#1B3C53]" />
+                                                <ImageIcon className="w-4 h-4 text-white/20 group-focus-within/input:text-[#e15aed]" />
                                             </div>
                                             <input
                                                 name="thumbnailUrl"
@@ -275,7 +283,7 @@ export default function AddContentPage() {
                                                 onChange={handleInputChange}
                                                 type="url"
                                                 placeholder="Or paste image URL here..."
-                                                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-14 pr-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold text-sm"
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-14 pr-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#e15aed]/50 focus:bg-white/10 transition-all font-semibold text-sm"
                                             />
                                         </div>
                                     </div>
@@ -305,9 +313,22 @@ export default function AddContentPage() {
                                             )}
                                         </div>
                                     ) : (
-                                        <div className="flex flex-col items-center justify-center aspect-video rounded-[2rem] border border-white/5 bg-white/[0.02] text-white/10">
-                                            <ImageIcon className="w-12 h-12 mb-2" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">Preview Area</span>
+                                        <div className="flex flex-col items-center justify-center aspect-video rounded-[2rem] border border-white/5 bg-white/[0.02] text-white/10 relative overflow-hidden group">
+                                            {(formData.videoUrl.includes('mega.nz') || formData.videoUrl.includes('mega.io')) && !thumbnailFile && !formData.thumbnailUrl ? (
+                                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#e15aed]/5 backdrop-blur-sm animate-in fade-in zoom-in duration-500">
+                                                    <div className="relative">
+                                                        <ImageIcon className="w-12 h-12 mb-2 text-[#e15aed]/20" />
+                                                        <Zap className="w-6 h-6 absolute -bottom-1 -right-1 text-[#e15aed] animate-bounce" />
+                                                    </div>
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#e15aed]">Mega.io AI Extraction</span>
+                                                    <span className="text-[8px] text-[#e15aed]/60 mt-1 uppercase">Frame at 05s will be used</span>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <ImageIcon className="w-12 h-12 mb-2" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest">Preview Area</span>
+                                                </>
+                                            )}
                                         </div>
                                     )}
                                 </div>
