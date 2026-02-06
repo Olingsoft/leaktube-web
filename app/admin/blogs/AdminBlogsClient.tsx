@@ -5,6 +5,7 @@ import Link from "next/link";
 import Sidebar from "../../components/Sidebar";
 import { Plus, Search, Edit2, Trash2, Loader2, Eye, X, Upload, FileText, CheckCircle2, AlertCircle, TrendingUp, Calendar, User, Tag } from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
+import { getThumbnailUrl as getCentralizedThumbnailUrl } from "@/utils/format";
 
 export default function AdminBlogsClient() {
     const [blogs, setBlogs] = useState<any[]>([]);
@@ -69,13 +70,8 @@ export default function AdminBlogsClient() {
                 status: blog.status,
                 author: blog.author || "Admin"
             });
-            // Robust image URL handling
-            const thumbUrl = blog.thumbnailUrl || "";
-            if (thumbUrl.includes('localhost:8000') && !API_BASE_URL.includes('localhost:8000')) {
-                setThumbnailPreview(thumbUrl.replace('http://localhost:8000', API_BASE_URL));
-            } else {
-                setThumbnailPreview(thumbUrl);
-            }
+            // Robust image URL handling using centralized utility
+            setThumbnailPreview(getCentralizedThumbnailUrl(blog.thumbnailUrl) || "");
         } else {
             setEditingBlog(null);
             setFormData({
@@ -133,8 +129,8 @@ export default function AdminBlogsClient() {
         const isPublished = status === 'published';
         return (
             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${isPublished
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                 }`}>
                 <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${isPublished ? 'bg-emerald-400' : 'bg-amber-400'} animate-pulse`}></span>
                 {status}
@@ -254,9 +250,7 @@ export default function AdminBlogsClient() {
                                                 <div className="w-24 h-16 rounded-2xl bg-white/5 overflow-hidden border border-white/10 flex-shrink-0 group-hover/row:scale-105 transition-transform duration-500">
                                                     {blog.thumbnailUrl ? (
                                                         <img
-                                                            src={blog.thumbnailUrl.includes('localhost:8000') && !API_BASE_URL.includes('localhost:8000')
-                                                                ? blog.thumbnailUrl.replace('http://localhost:8000', API_BASE_URL)
-                                                                : blog.thumbnailUrl}
+                                                            src={getCentralizedThumbnailUrl(blog.thumbnailUrl)}
                                                             className="w-full h-full object-cover"
                                                             alt=""
                                                             onError={(e) => {
@@ -391,8 +385,8 @@ export default function AdminBlogsClient() {
                                                             type="button"
                                                             onClick={() => setFormData({ ...formData, status: s })}
                                                             className={`flex-1 py-3 font-black text-[10px] uppercase tracking-widest rounded-xl transition-all ${formData.status === s
-                                                                    ? 'bg-[#D02752] text-white shadow-xl'
-                                                                    : 'text-white/40 hover:text-white'
+                                                                ? 'bg-[#D02752] text-white shadow-xl'
+                                                                : 'text-white/40 hover:text-white'
                                                                 }`}
                                                         >
                                                             {s}

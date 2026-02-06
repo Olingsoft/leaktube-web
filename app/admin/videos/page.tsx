@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { API_BASE_URL } from "../../../utils/api";
+import { getThumbnailUrl as getCentralizedThumbnailUrl } from "@/utils/format";
 
 const mockVideos = [
     {
@@ -97,11 +98,14 @@ export default function ManageVideos() {
         const url = video.thumbnailUrl;
         if (!url) return null;
 
-        // Handle Mega.nz for thumbnails (we use embed in iframe)
-        if (url.includes('mega.nz') || url.includes('mega.io')) {
-            return getEmbedUrl(url);
+        // 1. Resolve relative/localhost URLs using centralized utility
+        const resolvedUrl = getCentralizedThumbnailUrl(url);
+
+        // 2. Handle Mega.nz for thumbnails (we use embed in iframe)
+        if (resolvedUrl && (resolvedUrl.includes('mega.nz') || resolvedUrl.includes('mega.io'))) {
+            return getEmbedUrl(resolvedUrl);
         }
-        return url;
+        return resolvedUrl;
     };
 
     const getVideoSource = (video: any) => {

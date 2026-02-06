@@ -4,6 +4,7 @@ import SkyscraperAd from "../../components/SkyscraperAd";
 import WatchClient from "./WatchClient";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 import { extractIdFromSlug } from "@/utils/seo";
+import { getThumbnailUrl as getCentralizedThumbnailUrl } from "@/utils/format";
 
 interface Video {
     _id: string;
@@ -42,11 +43,7 @@ const getEmbedUrl = (url: string) => {
 };
 
 const getThumbnailUrl = (url: string) => {
-    if (!url) return undefined;
-    if (url.includes('localhost:8000')) {
-        return url.replace('http://localhost:8000', API_BASE_URL);
-    }
-    return url;
+    return getCentralizedThumbnailUrl(url);
 };
 
 /**

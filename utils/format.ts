@@ -1,10 +1,23 @@
-import { API_BASE_URL } from "./api";
+import { API_BASE_URL, PRODUCTION_API_BASE_URL } from "./api";
 
 export const getThumbnailUrl = (url: string) => {
     if (!url) return undefined;
-    if (url.includes("localhost:8000")) {
-        return url.replace("http://localhost:8000", API_BASE_URL);
+
+    // 1. Handle remote/external URLs
+    if (url.startsWith("http") && !url.includes("localhost:8000")) {
+        return url;
     }
+
+    // 2. Handle relative paths (e.g., /uploads/...)
+    if (url.startsWith("/")) {
+        return `${API_BASE_URL}${url}`;
+    }
+
+    // 3. Handle legacy hardcoded localhost URLs - point to production as fallback
+    if (url.includes("localhost:8000")) {
+        return url.replace("http://localhost:8000", PRODUCTION_API_BASE_URL);
+    }
+
     return url;
 };
 

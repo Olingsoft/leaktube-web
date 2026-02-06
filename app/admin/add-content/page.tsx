@@ -15,6 +15,7 @@ import {
     AlertCircle
 } from "lucide-react";
 import { API_BASE_URL } from "../../../utils/api";
+import { getThumbnailUrl } from "@/utils/format";
 
 export default function AddContentPage() {
     const [selectedType, setSelectedType] = useState("video");
@@ -252,7 +253,7 @@ export default function AddContentPage() {
                             <div className="space-y-3">
                                 <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Thumbnail Image</label>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                                    <div className="relative group">
+                                    <div className="space-y-4 relative group">
                                         <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#1B3C53]/30 transition-all cursor-pointer group">
                                             <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                                 <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#1B3C53] transition-colors" />
@@ -263,18 +264,45 @@ export default function AddContentPage() {
                                             </div>
                                             <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                                         </label>
+
+                                        <div className="relative group/input">
+                                            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                                                <ImageIcon className="w-4 h-4 text-white/20 group-focus-within/input:text-[#1B3C53]" />
+                                            </div>
+                                            <input
+                                                name="thumbnailUrl"
+                                                value={formData.thumbnailUrl}
+                                                onChange={handleInputChange}
+                                                type="url"
+                                                placeholder="Or paste image URL here..."
+                                                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-14 pr-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold text-sm"
+                                            />
+                                        </div>
                                     </div>
 
-                                    {thumbnailPreview ? (
+                                    {thumbnailPreview || (formData.thumbnailUrl && getThumbnailUrl(formData.thumbnailUrl)) ? (
                                         <div className="relative aspect-video rounded-[2rem] overflow-hidden border border-white/10 bg-black group">
-                                            <img src={thumbnailPreview} alt="Preview" className="w-full h-full object-cover" />
-                                            <button
-                                                type="button"
-                                                onClick={() => { setThumbnailFile(null); setThumbnailPreview(null); }}
-                                                className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-colors"
-                                            >
-                                                <X className="w-4 h-4" />
-                                            </button>
+                                            <img
+                                                src={thumbnailPreview || getThumbnailUrl(formData.thumbnailUrl)}
+                                                alt="Preview"
+                                                className="w-full h-full object-cover"
+                                            />
+                                            {(thumbnailPreview || formData.thumbnailUrl) && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (thumbnailPreview) {
+                                                            setThumbnailFile(null);
+                                                            setThumbnailPreview(null);
+                                                        } else {
+                                                            setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
+                                                        }
+                                                    }}
+                                                    className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-colors"
+                                                >
+                                                    <X className="w-4 h-4" />
+                                                </button>
+                                            )}
                                         </div>
                                     ) : (
                                         <div className="flex flex-col items-center justify-center aspect-video rounded-[2rem] border border-white/5 bg-white/[0.02] text-white/10">
