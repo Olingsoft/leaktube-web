@@ -82,9 +82,10 @@ export default function HomeClient({
         }
     };
 
-    const filteredVideos = initialVideos.filter((v) =>
-        searchQuery ? v.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true
-    );
+    const filteredVideos = initialVideos.filter((v) => {
+        const matchesSearch = searchQuery ? v.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true;
+        return matchesSearch;
+    });
 
     return (
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 pt-1">
@@ -267,6 +268,7 @@ export default function HomeClient({
                                         src={getThumbnailUrl(video.thumbnailUrl) || ""}
                                         alt={video.title}
                                         fill
+                                        unoptimized
                                         className="object-cover group-hover:scale-110 transition"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                                         placeholder="blur"

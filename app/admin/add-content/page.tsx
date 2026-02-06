@@ -21,10 +21,9 @@ export default function AddContentPage() {
     const [selectedType, setSelectedType] = useState("video");
     const [formData, setFormData] = useState({
         title: "",
-        category: "",
+        category: [] as string[],
         description: "",
-        videoUrl: "",
-        thumbnailUrl: ""
+        videoUrl: ""
     });
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
@@ -40,12 +39,11 @@ export default function AddContentPage() {
     const fetchCategories = async () => {
         try {
             const response = await fetch(`${API_BASE_URL}/api/categories`);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const data = await response.json();
-            if (data.success) {
+            console.log("Categories data fetched:", data);
+            if (data.success && Array.isArray(data.data)) {
                 setCategories(data.data);
-                if (data.data.length > 0) {
-                    setFormData(prev => ({ ...prev, category: data.data[0].name }));
-                }
             }
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -63,15 +61,6 @@ export default function AddContentPage() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setThumbnailFile(file);
-            const previewUrl = URL.createObjectURL(file);
-            setThumbnailPreview(previewUrl);
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -79,19 +68,20 @@ export default function AddContentPage() {
         try {
             const dataToSend = new FormData();
             dataToSend.append('title', formData.title.trim());
-            dataToSend.append('category', formData.category);
+            // Append multiple categories
+            formData.category.forEach(cat => {
+                dataToSend.append('category', cat);
+            });
             dataToSend.append('description', formData.description.trim());
             dataToSend.append('videoUrl', formData.videoUrl.trim());
 
             if (thumbnailFile) {
                 dataToSend.append('thumbnail', thumbnailFile);
-            } else if (formData.thumbnailUrl) {
-                dataToSend.append('thumbnailUrl', formData.thumbnailUrl.trim());
             }
 
             const response = await fetch(`${API_BASE_URL}/api/videos`, {
                 method: 'POST',
-                body: dataToSend, // Fetch handles Boundary correctly with FormData
+                body: dataToSend,
             });
 
             const data = await response.json();
@@ -104,10 +94,9 @@ export default function AddContentPage() {
                 });
                 setFormData({
                     title: "",
-                    category: categories.length > 0 ? categories[0].name : "",
+                    category: [],
                     description: "",
-                    videoUrl: "",
-                    thumbnailUrl: ""
+                    videoUrl: ""
                 });
                 setThumbnailFile(null);
                 setThumbnailPreview(null);
@@ -174,10 +163,11 @@ export default function AddContentPage() {
             <div className="p-1 rounded-[2.5rem] bg-gradient-to-b from-white/10 to-transparent">
                 <div className="p-12 rounded-[2.4rem] bg-[#0f0f0f] border border-white/5 backdrop-blur-3xl relative overflow-hidden">
                     <form onSubmit={handleSubmit} className="relative z-10 space-y-10">
+                        {/* Row 1: Title and URL */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 <label className="flex items-center space-x-2 text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">
-                                    <Shield className="w-3 h-3" />
+                                    <Shield className="w-4 h-4" />
                                     <span>Content Title</span>
                                 </label>
                                 <input
@@ -187,176 +177,170 @@ export default function AddContentPage() {
                                     required
                                     type="text"
                                     placeholder="Enter a catchy title..."
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold text-lg"
+                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#e15aed]/50 focus:bg-white/10 transition-all font-semibold text-lg"
                                 />
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-4">
                                 <label className="flex items-center space-x-2 text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">
-                                    <Globe className="w-3 h-3" />
-                                    <span>Category</span>
+                                    <LinkIcon className="w-4 h-4" />
+                                    <span>Video URL</span>
                                 </label>
-                                <select
-                                    name="category"
-                                    value={formData.category}
-                                    onChange={handleInputChange}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold appearance-none text-lg cursor-pointer disabled:opacity-50"
-                                    disabled={isLoadingCategories}
-                                >
-                                    {isLoadingCategories ? (
-                                        <option className="bg-[#0f0f0f]">Loading...</option>
-                                    ) : categories.length === 0 ? (
-                                        <option className="bg-[#0f0f0f]">No categories found</option>
-                                    ) : (
-                                        categories.map((cat) => (
-                                            <option key={cat._id} value={cat.name} className="bg-[#0f0f0f]">
-                                                {cat.name}
-                                            </option>
-                                        ))
-                                    )}
-                                </select>
+                                <div className="space-y-3">
+                                    <input
+                                        name="videoUrl"
+                                        value={formData.videoUrl}
+                                        onChange={handleInputChange}
+                                        required
+                                        type="url"
+                                        placeholder="Enter video link..."
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#e15aed]/50 focus:bg-white/10 transition-all font-semibold text-lg"
+                                    />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="space-y-3">
-                            <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">Video Description</label>
+                        {/* Row: Thumbnail Upload */}
+                        <div className="space-y-4">
+                            <label className="flex items-center space-x-2 text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                                <ImageIcon className="w-4 h-4" />
+                                <span>Thumbnail (Upload from Computer)</span>
+                            </label>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                                <div className="relative group">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                setThumbnailFile(file);
+                                                setThumbnailPreview(URL.createObjectURL(file));
+                                            }
+                                        }}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                                    />
+                                    <div className="w-full bg-white/5 border-2 border-dashed border-white/10 rounded-3xl p-10 flex flex-col items-center justify-center space-y-4 group-hover:border-[#e15aed]/50 group-hover:bg-white/10 transition-all">
+                                        <div className="p-4 rounded-2xl bg-[#e15aed]/10 text-[#e15aed]">
+                                            <Upload className="w-8 h-8" />
+                                        </div>
+                                        <div className="text-center">
+                                            <p className="text-white font-bold uppercase tracking-widest text-xs">
+                                                {thumbnailFile ? thumbnailFile.name : "Select Thumbnail Image"}
+                                            </p>
+                                            <p className="text-white/20 text-[10px] font-black uppercase tracking-widest mt-1">
+                                                JPG, PNG or WEBP up to 5MB
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {thumbnailPreview && (
+                                    <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 bg-white/5">
+                                        <img
+                                            src={thumbnailPreview}
+                                            alt="Preview"
+                                            className="w-full h-full object-contain"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setThumbnailFile(null);
+                                                setThumbnailPreview(null);
+                                            }}
+                                            className="absolute top-4 right-4 p-2 rounded-xl bg-black/50 text-white hover:bg-red-500 transition-colors backdrop-blur-md"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Row 2: Categories */}
+                        <div className="space-y-5">
+                            <label className="flex items-center space-x-2 text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                                <Globe className="w-4 h-4" />
+                                <span>Target Categories (Multi-Select)</span>
+                            </label>
+                            <div className="flex flex-wrap gap-3 p-6 bg-white/5 border border-white/10 rounded-[2rem] min-h-[140px] items-center">
+                                {isLoadingCategories ? (
+                                    <div className="flex items-center space-x-3 text-white/20 animate-pulse px-4 w-full justify-center">
+                                        <div className="w-2 h-2 rounded-full bg-current" />
+                                        <span className="text-xs font-black uppercase tracking-widest">Loading categories from server...</span>
+                                    </div>
+                                ) : categories.length === 0 ? (
+                                    <div className="flex items-center justify-center w-full text-white/20 text-xs font-bold italic">
+                                        No categories available. Please check the backend.
+                                    </div>
+                                ) : (
+                                    categories.map((cat) => {
+                                        const isSelected = formData.category.includes(cat.name);
+                                        return (
+                                            <button
+                                                key={cat._id}
+                                                type="button"
+                                                onClick={() => {
+                                                    const newCategories = isSelected
+                                                        ? formData.category.filter(c => c !== cat.name)
+                                                        : [...formData.category, cat.name];
+                                                    setFormData(prev => ({ ...prev, category: newCategories }));
+                                                }}
+                                                className={`px-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all duration-300 border ${isSelected
+                                                    ? "bg-[#e15aed] border-[#e15aed] text-white shadow-[0_10px_30px_rgba(225,90,237,0.3)] scale-105"
+                                                    : "bg-white/5 border-white/10 text-white/30 hover:border-white/20 hover:text-white"
+                                                    }`}
+                                            >
+                                                {cat.name}
+                                            </button>
+                                        );
+                                    })
+                                )}
+                            </div>
+                            {formData.category.length === 0 && !isLoadingCategories && (
+                                <p className="text-[10px] text-[#e15aed]/60 font-black uppercase tracking-[0.2em] ml-4">
+                                    * Selection required to continue
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Row 3: Description */}
+                        <div className="space-y-4">
+                            <label className="flex items-center space-x-2 text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">
+                                <FileText className="w-4 h-4" />
+                                <span>Short Description</span>
+                            </label>
                             <textarea
                                 name="description"
                                 value={formData.description}
                                 onChange={handleInputChange}
                                 required
                                 rows={4}
-                                placeholder="Tell us more about this video..."
-                                className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#1B3C53]/50 focus:bg-white/10 transition-all font-semibold resize-none text-lg"
+                                placeholder="What's this content about?"
+                                className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#e15aed]/50 focus:bg-white/10 transition-all font-semibold resize-none text-lg"
                             />
                         </div>
 
-                        <div className="space-y-8">
-                            <div className="space-y-3">
-                                <label className="text-xs font-black text-[#1B3C53] uppercase tracking-[0.2em] ml-2 font-black">Direct Video URL</label>
-                                <div className="relative group">
-                                    <div className="absolute inset-0 bg-[#1B3C53]/10 rounded-[2rem] blur-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-                                    <div className="relative flex items-center bg-white/5 border border-white/10 rounded-[2rem] px-8 py-6 focus-within:border-[#1B3C53]/50 focus-within:bg-white/10 transition-all">
-                                        <LinkIcon className="w-6 h-6 text-[#1B3C53] mr-6" />
-                                        <input
-                                            name="videoUrl"
-                                            value={formData.videoUrl}
-                                            onChange={handleInputChange}
-                                            required
-                                            type="url"
-                                            placeholder="https://pixeldrain.com/u/xxxxxx or https://youtube.com/..."
-                                            className="w-full bg-transparent border-none focus:ring-0 text-white placeholder:text-white/20 font-bold text-lg"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between ml-2">
-                                    <label className="text-xs font-black text-white/40 uppercase tracking-[0.2em]">Thumbnail Image</label>
-                                    {(formData.videoUrl.includes('mega.nz') || formData.videoUrl.includes('mega.io')) && !thumbnailFile && !formData.thumbnailUrl && (
-                                        <div className="flex items-center space-x-2 text-[#e15aed] animate-pulse">
-                                            <Zap className="w-3 h-3" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest">Auto-generating from Mega.io</span>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                                    <div className="space-y-4 relative group">
-                                        <label className="flex flex-col items-center justify-center w-full h-48 bg-white/5 border-2 border-dashed border-white/10 rounded-[2.5rem] hover:bg-white/10 hover:border-[#D02752]/30 transition-all cursor-pointer group">
-                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                <Upload className="w-10 h-10 text-white/20 mb-4 group-hover:text-[#e15aed] transition-colors" />
-                                                <p className="text-sm text-white/40 font-bold uppercase tracking-widest">
-                                                    {thumbnailFile ? thumbnailFile.name : "Select Image File"}
-                                                </p>
-                                                <p className="text-[10px] text-white/20 mt-2">JPG, PNG, WebP (Max 5MB)</p>
-                                            </div>
-                                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                                        </label>
-
-                                        <div className="relative group/input">
-                                            <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
-                                                <ImageIcon className="w-4 h-4 text-white/20 group-focus-within/input:text-[#e15aed]" />
-                                            </div>
-                                            <input
-                                                name="thumbnailUrl"
-                                                value={formData.thumbnailUrl}
-                                                onChange={handleInputChange}
-                                                type="url"
-                                                placeholder="Or paste image URL here..."
-                                                className="w-full bg-white/5 border border-white/10 rounded-2xl pl-14 pr-6 py-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#e15aed]/50 focus:bg-white/10 transition-all font-semibold text-sm"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {thumbnailPreview || (formData.thumbnailUrl && getThumbnailUrl(formData.thumbnailUrl)) ? (
-                                        <div className="relative aspect-video rounded-[2rem] overflow-hidden border border-white/10 bg-black group">
-                                            <img
-                                                src={thumbnailPreview || getThumbnailUrl(formData.thumbnailUrl)}
-                                                alt="Preview"
-                                                className="w-full h-full object-cover"
-                                            />
-                                            {(thumbnailPreview || formData.thumbnailUrl) && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        if (thumbnailPreview) {
-                                                            setThumbnailFile(null);
-                                                            setThumbnailPreview(null);
-                                                        } else {
-                                                            setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
-                                                        }
-                                                    }}
-                                                    className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full text-white hover:bg-red-500 transition-colors"
-                                                >
-                                                    <X className="w-4 h-4" />
-                                                </button>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <div className="flex flex-col items-center justify-center aspect-video rounded-[2rem] border border-white/5 bg-white/[0.02] text-white/10 relative overflow-hidden group">
-                                            {(formData.videoUrl.includes('mega.nz') || formData.videoUrl.includes('mega.io')) && !thumbnailFile && !formData.thumbnailUrl ? (
-                                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#e15aed]/5 backdrop-blur-sm animate-in fade-in zoom-in duration-500">
-                                                    <div className="relative">
-                                                        <ImageIcon className="w-12 h-12 mb-2 text-[#e15aed]/20" />
-                                                        <Zap className="w-6 h-6 absolute -bottom-1 -right-1 text-[#e15aed] animate-bounce" />
-                                                    </div>
-                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#e15aed]">Mega.io AI Extraction</span>
-                                                    <span className="text-[8px] text-[#e15aed]/60 mt-1 uppercase">Frame at 05s will be used</span>
-                                                </div>
-                                            ) : (
-                                                <>
-                                                    <ImageIcon className="w-12 h-12 mb-2" />
-                                                    <span className="text-[10px] font-black uppercase tracking-widest">Preview Area</span>
-                                                </>
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-                            <div className="flex items-center space-x-4">
-                                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center bg-white/5">
-                                    <CheckCircle className={`w-5 h-5 ${formData.title && formData.videoUrl ? "text-green-500" : "text-white/20"}`} />
+                        {/* Footer actions */}
+                        <div className="pt-10 flex flex-col sm:flex-row items-center justify-between gap-8 border-t border-white/5">
+                            <div className="flex items-center space-x-5">
+                                <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center transition-all duration-500 ${formData.title && formData.videoUrl && formData.category.length > 0 ? "bg-green-500/10 border-green-500/20 text-green-500 scale-110" : "bg-white/5 border-white/10 text-white/20"}`}>
+                                    <CheckCircle className="w-7 h-7" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Validation</p>
-                                    <p className="text-sm font-bold text-white/60">
-                                        {formData.title && formData.videoUrl ? "Ready to Publish" : "Please fill required fields"}
+                                    <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Form Status</p>
+                                    <p className={`text-sm font-bold ${formData.title && formData.videoUrl && formData.category.length > 0 ? "text-white" : "text-white/40"}`}>
+                                        {formData.title && formData.videoUrl && formData.category.length > 0 ? "Ready to Deploy" : "Missing Requirements"}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-4 w-full sm:w-auto">
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting || !formData.title || !formData.videoUrl}
-                                    className="flex-1 sm:flex-none px-20 py-6 rounded-2xl bg-white text-black font-black uppercase tracking-[0.2em] hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(255,255,255,0.15)] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {isSubmitting ? "Publishing..." : "Publish Video"}
-                                </button>
-                            </div>
+                            <button
+                                type="submit"
+                                disabled={isSubmitting || !formData.title || !formData.videoUrl || formData.category.length === 0}
+                                className="w-full sm:w-auto px-20 py-6 rounded-2xl bg-white text-black font-black uppercase tracking-[0.2em] hover:bg-[#e15aed] hover:text-white hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(225,90,237,0.3)] active:scale-95 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:grayscale"
+                            >
+                                {isSubmitting ? "Uploading..." : "Publish Content"}
+                            </button>
                         </div>
                     </form>
                 </div>
