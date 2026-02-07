@@ -25,14 +25,14 @@ export async function GET(request: NextRequest) {
         }
 
         // Get the file content as a stream/buffer
-        const data = await file.downloadBuffer();
+        const data = await file.downloadBuffer({});
 
         // Determine content type (default to image/jpeg if not found)
         const contentType = file.name?.toLowerCase().endsWith('.png') ? 'image/png'
             : file.name?.toLowerCase().endsWith('.webp') ? 'image/webp'
                 : 'image/jpeg';
 
-        return new NextResponse(data, {
+        return new NextResponse(new Uint8Array(data), {
             headers: {
                 "Content-Type": contentType,
                 "Cache-Control": "public, max-age=86400, s-maxage=86400, stale-while-revalidate=43200",

@@ -97,15 +97,7 @@ export default function ManageVideos() {
     const getThumbnailUrl = (video: any) => {
         const url = video.thumbnailUrl;
         if (!url) return null;
-
-        // 1. Resolve relative/localhost URLs using centralized utility
-        const resolvedUrl = getCentralizedThumbnailUrl(url);
-
-        // 2. Handle Mega.nz for thumbnails (we use embed in iframe)
-        if (resolvedUrl && (resolvedUrl.includes('mega.nz') || resolvedUrl.includes('mega.io'))) {
-            return getEmbedUrl(resolvedUrl);
-        }
-        return resolvedUrl;
+        return getCentralizedThumbnailUrl(url);
     };
 
     const getVideoSource = (video: any) => {
@@ -256,7 +248,7 @@ export default function ManageVideos() {
                                                 <div className="flex items-center space-x-6">
                                                     <div className="relative w-32 h-20 rounded-2xl overflow-hidden shadow-2xl flex-shrink-0 group-hover:scale-105 transition-all duration-500 bg-[#0f0f0f] border border-white/5">
                                                         {thumbUrl ? (
-                                                            thumbUrl.includes('mega.nz') || thumbUrl.includes('mega.io') ? (
+                                                            (thumbUrl.includes('mega.nz') || thumbUrl.includes('mega.io')) && !thumbUrl.includes('/api/mega-proxy') ? (
                                                                 <iframe
                                                                     src={thumbUrl}
                                                                     className="absolute inset-0 w-full h-full border-none pointer-events-none"
