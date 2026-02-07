@@ -5,6 +5,8 @@ import HeaderWrapper from "./components/HeaderWrapper";
 import MainContentWrapper from "./components/MainContentWrapper";
 import Footer from "./components/Footer";
 import AgeVerificationModal from "./components/AgeVerificationModal";
+import MagSrvAd from "./components/MagSrvAd";
+import PemSrvAd from "./components/PemSrvAd";
 import Script from "next/script";
 
 const geistSans = Geist({
@@ -33,7 +35,8 @@ export const metadata: Metadata = {
     "Online privacy Kenya",
     "Digital awareness Kenya",
     "Leaked video rumors Kenya",
-    "Kenya leaked videos"
+    "Kenya leaked videos",
+    "kenya video"
   ],
   openGraph: {
     title: "Unite Kenyans | Kenya Viral & Trending Stories",
@@ -163,6 +166,8 @@ export default function RootLayout({
           {children}
         </MainContentWrapper>
         <Footer />
+        <MagSrvAd />
+        <PemSrvAd />
       </body>
     </html>
   );

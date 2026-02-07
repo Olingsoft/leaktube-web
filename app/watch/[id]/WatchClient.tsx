@@ -15,6 +15,7 @@ import { calculateViews, calculateLikes, getThumbnailUrl } from "@/utils/format"
 import InVideoAd from "@/app/components/InVideoAd";
 import HomeAdBanner from "@/app/components/HomeAdBanner";
 import JuicyAdsInterstitial from "@/app/components/JuicyAdsInterstitial";
+import VastPlayer from "@/app/components/VastPlayer";
 
 interface Video {
     _id: string;
@@ -40,6 +41,8 @@ export default function WatchClient({
     videoEmbedUrl,
     thumbnailUrl,
 }: WatchClientProps) {
+    const [showPreroll, setShowPreroll] = React.useState(true);
+
     return (
         <div className="max-w-[2000px] mx-auto flex flex-col xl:flex-row gap-8">
             {/* Main Video Section */}
@@ -57,6 +60,12 @@ export default function WatchClient({
 
                 {/* Video Player Section */}
                 <div className="relative aspect-video rounded-none md:rounded-[3rem] overflow-hidden bg-[#0a0a0a]">
+                    {showPreroll && (
+                        <VastPlayer
+                            vastUrl="https://s.magsrv.com/v1/vast.php?idzone=5847394"
+                            onEnded={() => setShowPreroll(false)}
+                        />
+                    )}
                     <iframe
                         width="100%"
                         height="110%"
@@ -68,7 +77,6 @@ export default function WatchClient({
                         className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
                     ></iframe>
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                    {/* <InVideoAd /> */}
                 </div>
 
                 {/* Video Info */}
