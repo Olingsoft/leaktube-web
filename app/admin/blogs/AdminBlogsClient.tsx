@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Sidebar from "../../components/Sidebar";
-import { Plus, Search, Edit2, Trash2, Loader2, Eye, X, Upload, FileText, CheckCircle2, AlertCircle, TrendingUp, Calendar, User, Tag } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, Loader2, Eye, X, Upload, FileText, CheckCircle2, AlertCircle, TrendingUp, Calendar, User, Tag, Link as LinkIcon } from "lucide-react";
 import { getApiUrl, API_BASE_URL } from "@/utils/api";
 import { getThumbnailUrl as getCentralizedThumbnailUrl } from "@/utils/format";
 
@@ -20,10 +20,9 @@ export default function AdminBlogsClient() {
         category: "",
         content: "",
         status: "published",
-        author: "Admin"
+        author: "Admin",
+        thumbnailUrl: ""
     });
-    const [thumbnail, setThumbnail] = useState<File | null>(null);
-    const [thumbnailPreview, setThumbnailPreview] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fetchBlogs = async () => {
@@ -68,10 +67,9 @@ export default function AdminBlogsClient() {
                 category: blog.category,
                 content: blog.content,
                 status: blog.status,
-                author: blog.author || "Admin"
+                author: blog.author || "Admin",
+                thumbnailUrl: blog.thumbnailUrl || ""
             });
-            // Robust image URL handling using centralized utility
-            setThumbnailPreview(getCentralizedThumbnailUrl(blog.thumbnailUrl) || "");
         } else {
             setEditingBlog(null);
             setFormData({
@@ -79,10 +77,9 @@ export default function AdminBlogsClient() {
                 category: "",
                 content: "",
                 status: "published",
-                author: "Admin"
+                author: "Admin",
+                thumbnailUrl: ""
             });
-            setThumbnailPreview("");
-            setThumbnail(null);
         }
         setIsModalOpen(true);
     };
@@ -102,16 +99,15 @@ export default function AdminBlogsClient() {
         setIsSubmitting(true);
 
         try {
-            const data = new FormData();
-            Object.entries(formData).forEach(([key, value]) => data.append(key, value));
-            if (thumbnail) data.append('thumbnail', thumbnail);
-
             const url = editingBlog ? getApiUrl(`/api/blogs/${editingBlog._id}`) : getApiUrl('/api/blogs');
             const method = editingBlog ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
                 method,
-                body: data
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
             });
 
             if (response.ok) {
@@ -418,33 +414,32 @@ export default function AdminBlogsClient() {
                                             </div>
                                         </div>
 
-                                        {/* Thumbnail Upload */}
+                                        {/* Thumbnail URL UI */}
                                         <div className="space-y-4">
-                                            <label className="block text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Cover Image</label>
+                                            <label className="block text-[11px] font-black uppercase tracking-[0.2em] text-white/40">Cover Image URL</label>
+                                            <input
+                                                type="url"
+                                                placeholder="Paste Mega.io link here..."
+                                                value={formData.thumbnailUrl}
+                                                onChange={(e) => setFormData({ ...formData, thumbnailUrl: e.target.value })}
+                                                className="w-full bg-white/[0.05] border border-white/10 rounded-2xl px-6 py-4 text-white focus:bg-white/[0.08] outline-none transition-all font-bold"
+                                            />
                                             <div className="relative group aspect-[4/3] rounded-[2.5rem] overflow-hidden border-2 border-dashed border-white/10 hover:border-[#D02752]/50 transition-all bg-white/[0.02]">
-                                                <input
-                                                    type="file"
-                                                    className="absolute inset-0 opacity-0 cursor-pointer z-10"
-                                                    accept="image/*"
-                                                    onChange={(e) => {
-                                                        if (e.target.files?.[0]) {
-                                                            setThumbnail(e.target.files[0]);
-                                                            setThumbnailPreview(URL.createObjectURL(e.target.files[0]));
-                                                        }
-                                                    }}
-                                                />
-                                                {thumbnailPreview ? (
+                                                {formData.thumbnailUrl ? (
                                                     <div className="relative h-full">
-                                                        <img src={thumbnailPreview} className="w-full h-full object-cover" alt="" />
-                                                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            <Upload className="w-8 h-8 text-white" />
-                                                        </div>
+                                                        <img
+                                                            src={getCentralizedThumbnailUrl(formData.thumbnailUrl)}
+                                                            className="w-full h-full object-cover"
+                                                            alt=""
+                                                            onError={(e) => {
+                                                                (e.target as any).src = "https://placehold.co/600x400/151515/white?text=Invalid+Image+Link";
+                                                            }}
+                                                        />
                                                         <button
                                                             type="button"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                setThumbnail(null);
-                                                                setThumbnailPreview("");
+                                                                setFormData({ ...formData, thumbnailUrl: "" });
                                                             }}
                                                             className="absolute top-4 right-4 z-20 w-10 h-10 bg-black/80 hover:bg-red-500 rounded-full flex items-center justify-center transition-colors"
                                                         >
@@ -454,11 +449,11 @@ export default function AdminBlogsClient() {
                                                 ) : (
                                                     <div className="h-full flex flex-col items-center justify-center p-8 text-center space-y-4">
                                                         <div className="w-16 h-16 rounded-3xl bg-[#D02752]/10 flex items-center justify-center text-[#D02752]">
-                                                            <Upload className="w-8 h-8" />
+                                                            <LinkIcon className="w-8 h-8" />
                                                         </div>
                                                         <div className="space-y-1">
-                                                            <p className="font-black text-[10px] uppercase tracking-widest text-white">Select Cover</p>
-                                                            <p className="text-[10px] text-white/30 font-medium">PNG, JPG up to 10MB</p>
+                                                            <p className="font-black text-[10px] uppercase tracking-widest text-white">Enter Preview URL</p>
+                                                            <p className="text-[10px] text-white/30 font-medium">Mega.io, Imgur, etc.</p>
                                                         </div>
                                                     </div>
                                                 )}

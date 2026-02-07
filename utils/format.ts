@@ -3,6 +3,11 @@ import { API_BASE_URL, PRODUCTION_API_BASE_URL } from "./api";
 export const getThumbnailUrl = (url: string) => {
     if (!url) return undefined;
 
+    // 0. Handle MEGA proxy for CORS/Direct link issues
+    if (url.toLowerCase().includes("mega.nz") || url.toLowerCase().includes("mega.io")) {
+        return `/api/mega-proxy?url=${encodeURIComponent(url)}`;
+    }
+
     // 1. Handle remote/external URLs
     if (url.startsWith("http") && !url.includes("localhost:8000")) {
         return url;

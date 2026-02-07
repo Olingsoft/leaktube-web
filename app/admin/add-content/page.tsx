@@ -23,10 +23,9 @@ export default function AddContentPage() {
         title: "",
         category: [] as string[],
         description: "",
-        videoUrl: ""
+        videoUrl: "",
+        thumbnailUrl: ""
     });
-    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
     const [categories, setCategories] = useState<any[]>([]);
     const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,22 +65,20 @@ export default function AddContentPage() {
         setIsSubmitting(true);
 
         try {
-            const dataToSend = new FormData();
-            dataToSend.append('title', formData.title.trim());
-            // Append multiple categories
-            formData.category.forEach(cat => {
-                dataToSend.append('category', cat);
-            });
-            dataToSend.append('description', formData.description.trim());
-            dataToSend.append('videoUrl', formData.videoUrl.trim());
-
-            if (thumbnailFile) {
-                dataToSend.append('thumbnail', thumbnailFile);
-            }
+            const body = {
+                title: formData.title.trim(),
+                category: formData.category,
+                description: formData.description.trim(),
+                videoUrl: formData.videoUrl.trim(),
+                thumbnailUrl: formData.thumbnailUrl.trim()
+            };
 
             const response = await fetch(`${API_BASE_URL}/api/videos`, {
                 method: 'POST',
-                body: dataToSend,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body),
             });
 
             const data = await response.json();
@@ -96,10 +93,9 @@ export default function AddContentPage() {
                     title: "",
                     category: [],
                     description: "",
-                    videoUrl: ""
+                    videoUrl: "",
+                    thumbnailUrl: ""
                 });
-                setThumbnailFile(null);
-                setThumbnailPreview(null);
             } else {
                 setModal({
                     show: true,
@@ -199,53 +195,42 @@ export default function AddContentPage() {
                             </div>
                         </div>
 
-                        {/* Row: Thumbnail Upload */}
+                        {/* Row: Thumbnail URL */}
                         <div className="space-y-4">
                             <label className="flex items-center space-x-2 text-xs font-black text-white/40 uppercase tracking-[0.2em] ml-2">
                                 <ImageIcon className="w-4 h-4" />
-                                <span>Thumbnail (Upload from Computer)</span>
+                                <span>Thumbnail (Mega.io or Image Link)</span>
                             </label>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-                                <div className="relative group">
+                                <div className="space-y-3">
                                     <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file) {
-                                                setThumbnailFile(file);
-                                                setThumbnailPreview(URL.createObjectURL(file));
-                                            }
-                                        }}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                                        name="thumbnailUrl"
+                                        value={formData.thumbnailUrl}
+                                        onChange={handleInputChange}
+                                        required
+                                        type="url"
+                                        placeholder="Paste image link here..."
+                                        className="w-full bg-white/5 border border-white/10 rounded-2xl px-8 py-5 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-[#e15aed]/50 focus:bg-white/10 transition-all font-semibold text-lg"
                                     />
-                                    <div className="w-full bg-white/5 border-2 border-dashed border-white/10 rounded-3xl p-10 flex flex-col items-center justify-center space-y-4 group-hover:border-[#e15aed]/50 group-hover:bg-white/10 transition-all">
-                                        <div className="p-4 rounded-2xl bg-[#e15aed]/10 text-[#e15aed]">
-                                            <Upload className="w-8 h-8" />
-                                        </div>
-                                        <div className="text-center">
-                                            <p className="text-white font-bold uppercase tracking-widest text-xs">
-                                                {thumbnailFile ? thumbnailFile.name : "Select Thumbnail Image"}
-                                            </p>
-                                            <p className="text-white/20 text-[10px] font-black uppercase tracking-widest mt-1">
-                                                JPG, PNG or WEBP up to 5MB
-                                            </p>
-                                        </div>
-                                    </div>
+                                    <p className="text-[10px] text-white/20 font-black uppercase tracking-widest ml-4">
+                                        Tip: Upload to Mega.io and paste the direct link here
+                                    </p>
                                 </div>
 
-                                {thumbnailPreview && (
+                                {formData.thumbnailUrl && (
                                     <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 bg-white/5">
                                         <img
-                                            src={thumbnailPreview}
+                                            src={getThumbnailUrl(formData.thumbnailUrl)}
                                             alt="Preview"
                                             className="w-full h-full object-contain"
+                                            onError={(e) => {
+                                                (e.target as any).src = "https://placehold.co/600x400/151515/white?text=Invalid+Image+Link";
+                                            }}
                                         />
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                setThumbnailFile(null);
-                                                setThumbnailPreview(null);
+                                                setFormData(prev => ({ ...prev, thumbnailUrl: "" }));
                                             }}
                                             className="absolute top-4 right-4 p-2 rounded-xl bg-black/50 text-white hover:bg-red-500 transition-colors backdrop-blur-md"
                                         >
@@ -323,23 +308,23 @@ export default function AddContentPage() {
                         {/* Footer actions */}
                         <div className="pt-10 flex flex-col sm:flex-row items-center justify-between gap-8 border-t border-white/5">
                             <div className="flex items-center space-x-5">
-                                <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center transition-all duration-500 ${formData.title && formData.videoUrl && formData.category.length > 0 ? "bg-green-500/10 border-green-500/20 text-green-500 scale-110" : "bg-white/5 border-white/10 text-white/20"}`}>
+                                <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center transition-all duration-500 ${formData.title && formData.videoUrl && formData.thumbnailUrl && formData.category.length > 0 ? "bg-green-500/10 border-green-500/20 text-green-500 scale-110" : "bg-white/5 border-white/10 text-white/20"}`}>
                                     <CheckCircle className="w-7 h-7" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Form Status</p>
-                                    <p className={`text-sm font-bold ${formData.title && formData.videoUrl && formData.category.length > 0 ? "text-white" : "text-white/40"}`}>
-                                        {formData.title && formData.videoUrl && formData.category.length > 0 ? "Ready to Deploy" : "Missing Requirements"}
+                                    <p className={`text-sm font-bold ${formData.title && formData.videoUrl && formData.thumbnailUrl && formData.category.length > 0 ? "text-white" : "text-white/40"}`}>
+                                        {formData.title && formData.videoUrl && formData.thumbnailUrl && formData.category.length > 0 ? "Ready to Deploy" : "Missing Requirements"}
                                     </p>
                                 </div>
                             </div>
 
                             <button
                                 type="submit"
-                                disabled={isSubmitting || !formData.title || !formData.videoUrl || formData.category.length === 0}
+                                disabled={isSubmitting || !formData.title || !formData.videoUrl || !formData.thumbnailUrl || formData.category.length === 0}
                                 className="w-full sm:w-auto px-20 py-6 rounded-2xl bg-white text-black font-black uppercase tracking-[0.2em] hover:bg-[#e15aed] hover:text-white hover:scale-[1.05] hover:shadow-[0_20px_40px_rgba(225,90,237,0.3)] active:scale-95 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed disabled:grayscale"
                             >
-                                {isSubmitting ? "Uploading..." : "Publish Content"}
+                                {isSubmitting ? "Publishing..." : "Publish Content"}
                             </button>
                         </div>
                     </form>
