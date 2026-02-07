@@ -26,8 +26,8 @@ export default function InVideoAd() {
                     <X className="w-3 h-3 text-white/40 group-hover:text-white" />
                 </button>
 
-                <div className="flex items-center justify-center min-h-[100px]">
-                    <ins id="1110439" data-width="468" data-height="60"></ins>
+                <div className="flex items-center justify-center min-h-[286px] w-[308px] mx-auto">
+                    <ins id="1110647" data-width="308" data-height="286"></ins>
                     <Script
                         id="juicyads-in-video-1"
                         type="text/javascript"
@@ -41,7 +41,7 @@ export default function InVideoAd() {
                         data-cfasync="false"
                         async
                         dangerouslySetInnerHTML={{
-                            __html: "(window.adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1110439});"
+                            __html: "(window.adsbyjuicy = window.adsbyjuicy || []).push({'adzone':1110647});"
                         }}
                     />
                 </div>
