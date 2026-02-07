@@ -11,7 +11,7 @@ import {
     Share2,
     ArrowDownToLine
 } from "lucide-react";
-import { calculateViews, calculateLikes } from "@/utils/format";
+import { calculateViews, calculateLikes, getThumbnailUrl } from "@/utils/format";
 import InVideoAd from "@/app/components/InVideoAd";
 import HomeAdBanner from "@/app/components/HomeAdBanner";
 
@@ -107,9 +107,10 @@ export default function WatchClient({
                                 <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0">
                                     <div className="relative w-full h-full">
                                         <Image
-                                            src={v.thumbnailUrl || "/placeholder.jpg"}
+                                            src={getThumbnailUrl(v.thumbnailUrl) || "/placeholder.jpg"}
                                             alt={v.title}
                                             fill
+                                            unoptimized
                                             className="object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
                                     </div>
@@ -152,14 +153,15 @@ export default function WatchClient({
                 </div>
 
                 <div className="space-y-6">
-                    <h4 className="text-sm font-black uppercase text-white/40 tracking-widest pl-2">Up Next</h4>
+                    <h4 className="text-sm font-black uppercase text-white/40 tracking-widest pl-2">Related Videos</h4>
                     {relatedVideos.map((v) => (
                         <Link key={v._id} href={`/watch/${v._id}`} className="flex gap-4 group">
                             <div className="relative w-40 aspect-video rounded-2xl overflow-hidden flex-shrink-0">
                                 <Image
-                                    src={v.thumbnailUrl || "/placeholder.jpg"}
+                                    src={getThumbnailUrl(v.thumbnailUrl) || "/placeholder.jpg"}
                                     alt={v.title}
                                     fill
+                                    unoptimized
                                     className="object-cover group-hover:scale-110 transition-transform duration-500"
                                 />
                                 <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
