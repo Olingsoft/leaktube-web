@@ -14,6 +14,7 @@ import {
 import { calculateViews, calculateLikes, getThumbnailUrl } from "@/utils/format";
 import InVideoAd from "@/app/components/InVideoAd";
 import HomeAdBanner from "@/app/components/HomeAdBanner";
+import JuicyAdsInterstitial from "@/app/components/JuicyAdsInterstitial";
 
 interface Video {
     _id: string;
@@ -150,6 +151,7 @@ export default function WatchClient({
             <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0">
                 <div className="p-4 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group flex justify-center">
                     <HomeAdBanner />
+                    <JuicyAdsInterstitial />
                 </div>
 
                 <div className="space-y-6">
