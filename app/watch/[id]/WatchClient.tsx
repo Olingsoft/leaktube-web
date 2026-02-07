@@ -68,7 +68,7 @@ export default function WatchClient({
                         className="absolute -top-[13%] left-0 w-full h-[110%] z-10"
                     ></iframe>
                     <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                    <InVideoAd />
+                    {/* <InVideoAd /> */}
                 </div>
 
                 {/* Video Info */}
