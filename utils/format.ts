@@ -39,13 +39,9 @@ export const getRelativeTime = (dateString: string) => {
 };
 
 export const calculateViews = (id: string, base = 0) => {
-    if (!id) return "0";
-    const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-    return (base + ((seed % 43000) + 7000)).toLocaleString();
+    return (base || 0).toLocaleString();
 };
 
 export const calculateLikes = (id: string, base = 0) => {
-    if (!id) return "0";
-    const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
-    return (base + ((seed % 8000) + 850)).toLocaleString();
+    return (base || 0).toLocaleString();
 };
