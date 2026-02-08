@@ -11,7 +11,7 @@ interface Video {
     title: string;
     description: string;
     videoUrl: string;
-    category: string;
+    category: string[];
     thumbnailUrl: string;
     views: number;
     createdAt: string;
@@ -61,16 +61,21 @@ async function getVideoData(id: string) {
     }
 }
 
-async function getRelatedVideos(category: string, currentId: string) {
+async function getRelatedVideos(categories: string[], currentId: string) {
+    if (!categories || categories.length === 0) return [];
+
+    // Use the first category for related videos
+    const mainCategory = categories[0];
+
     try {
-        const res = await fetch(getApiUrl(`/api/videos?category=${encodeURIComponent(category)}`), { next: { revalidate: 3600 } });
+        const res = await fetch(getApiUrl(`/api/videos?category=${encodeURIComponent(mainCategory)}&excludeId=${currentId}`), { next: { revalidate: 3600 } });
         const data = await res.json();
         if (data.success) {
-            return data.data.filter((v: Video) => v._id !== currentId).slice(0, 10);
+            return data.data.slice(0, 10);
         }
         return [];
     } catch (e) {
-        console.error(e);
+        console.error("Error fetching related videos:", e);
         return [];
     }
 }

@@ -22,7 +22,7 @@ interface Video {
     title: string;
     description: string;
     videoUrl: string;
-    category: string;
+    category: string[];
     thumbnailUrl: string;
     views: number;
     createdAt: string;
