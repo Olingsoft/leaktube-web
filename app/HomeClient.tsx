@@ -45,6 +45,22 @@ export default function HomeClient({
     const mobileCategoryRef = useRef<HTMLDivElement>(null);
     const [isAgeVerified, setIsAgeVerified] = useState(false);
 
+    const [videos, setVideos] = useState(initialVideos);
+
+    // Shuffle videos on mount
+    useEffect(() => {
+        const shuffleArray = (array: any[]) => {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        };
+
+        setVideos(shuffleArray(initialVideos));
+    }, [initialVideos]);
+
     useEffect(() => {
         const verified = localStorage.getItem("age_verified");
         if (verified === "true") {
@@ -86,7 +102,7 @@ export default function HomeClient({
         }
     };
 
-    const filteredVideos = initialVideos.filter((v) => {
+    const filteredVideos = videos.filter((v) => {
         const matchesSearch = searchQuery ? v.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true;
         return matchesSearch;
     });

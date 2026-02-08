@@ -14,6 +14,7 @@ interface Video {
     category: string[];
     thumbnailUrl: string;
     views: number;
+    likes: number;
     createdAt: string;
 }
 

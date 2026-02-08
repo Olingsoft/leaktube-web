@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -18,6 +18,8 @@ import InVideoAd from "@/app/components/InVideoAd";
 import HomeAdBanner from "@/app/components/HomeAdBanner";
 import JuicyAdsInterstitial from "@/app/components/JuicyAdsInterstitial";
 import VastPlayer from "@/app/components/VastPlayer";
+import { getOrCreateGuestId } from "@/utils/guest";
+import { API_BASE_URL } from "@/utils/api";
 
 interface Video {
     _id: string;
@@ -27,6 +29,7 @@ interface Video {
     category: string[];
     thumbnailUrl: string;
     views: number;
+    likes: number;
     createdAt: string;
 }
 
@@ -44,6 +47,72 @@ export default function WatchClient({
     thumbnailUrl,
 }: WatchClientProps) {
     const [showPreroll, setShowPreroll] = React.useState(true);
+    const [localViews, setLocalViews] = useState(video.views);
+    const [localLikes, setLocalLikes] = useState(video.likes);
+    const [isLiked, setIsLiked] = useState(false);
+    const [isLikeLoading, setIsLikeLoading] = useState(false);
+
+    useEffect(() => {
+        const guestId = getOrCreateGuestId();
+        if (!guestId) return;
+
+        // Record View
+        const recordView = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/videos/${video._id}/view`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ guestId })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    setLocalViews(data.views);
+                }
+            } catch (error) {
+                console.error("Error recording view:", error);
+            }
+        };
+
+        // Check Like Status
+        const checkLikeStatus = async () => {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/videos/${video._id}/like-status?guestId=${guestId}`);
+                const data = await res.json();
+                if (data.success) {
+                    setIsLiked(data.liked);
+                }
+            } catch (error) {
+                console.error("Error checking like status:", error);
+            }
+        };
+
+        recordView();
+        checkLikeStatus();
+    }, [video._id]);
+
+    const handleLike = async () => {
+        if (isLikeLoading) return;
+        const guestId = getOrCreateGuestId();
+        if (!guestId) return;
+
+        setIsLikeLoading(true);
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/videos/${video._id}/like`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ guestId })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setIsLiked(data.liked);
+                setLocalLikes(data.likes);
+            }
+        } catch (error) {
+            console.error("Error toggling like:", error);
+        } finally {
+            setIsLikeLoading(false);
+        }
+    };
 
     return (
         <div className="max-w-[2000px] mx-auto flex flex-col xl:flex-row gap-8">
@@ -91,12 +160,16 @@ export default function WatchClient({
                         <div className="flex items-center space-x-2 bg-white/5 border border-white/10 rounded-2xl p-1 overflow-x-auto scrollbar-none">
                             <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all">
                                 <Eye className="w-4 h-4 text-white/70" />
-                                <span className="text-sm font-bold">{calculateViews(video._id, video.views || 0)}</span>
+                                <span className="text-sm font-bold">{calculateViews(video._id, localViews || 0)}</span>
                             </button>
                             <div className="w-px h-6 bg-white/10" />
-                            <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
-                                <ThumbsUp className="w-4 h-4 group-hover:text-[#D02752]" />
-                                <span className="text-sm font-bold">{calculateLikes(video._id, video.views || 0)}</span>
+                            <button
+                                onClick={handleLike}
+                                disabled={isLikeLoading}
+                                className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all group ${isLiked ? 'text-[#D02752] bg-[#D02752]/10' : 'hover:bg-white/5'}`}
+                            >
+                                <ThumbsUp className={`w-4 h-4 ${isLiked ? 'fill-current' : 'group-hover:text-[#D02752]'}`} />
+                                <span className="text-sm font-bold">{calculateLikes(video._id, localLikes || 0)}</span>
                             </button>
                             <div className="w-px h-6 bg-white/10" />
                             <button className="flex items-center space-x-2 px-4 py-2 hover:bg-white/5 rounded-xl transition-all group">
@@ -159,7 +232,7 @@ export default function WatchClient({
                     {/* Description Box */}
                     <div className="p-4 md:p-6 bg-white/5 border border-white/10 rounded-3xl space-y-3">
                         <div className="flex items-center space-x-3 text-[10px] md:text-sm font-bold">
-                            <span className="text-white">{calculateViews(video._id, video.views || 0)} views</span>
+                            <span className="text-white">{calculateViews(video._id, localViews || 0)} views</span>
                             <span className="text-white/40 truncate">Streamed on {new Date(video.createdAt).toLocaleDateString()}</span>
                         </div>
                         <p className="text-white/60 text-[11px] md:text-sm leading-relaxed max-w-4xl">
