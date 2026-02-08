@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { slugify } from "@/utils/seo";
 import { getThumbnailUrl, getRelativeTime, calculateViews } from "@/utils/format";
+import { getOrCreateGuestId } from "@/utils/guest";
 import VideoGridAd from "./components/VideoGridAd";
 import HomeAdBanner from "./components/HomeAdBanner";
 import TopBannerAd from "./components/TopBannerAd";
@@ -49,6 +50,9 @@ export default function HomeClient({
         if (verified === "true") {
             setIsAgeVerified(true);
         }
+
+        // Ensure guest ID exists
+        getOrCreateGuestId();
 
         const handleVerified = () => setIsAgeVerified(true);
         window.addEventListener("ageVerified", handleVerified);

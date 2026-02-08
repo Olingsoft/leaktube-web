@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { AlertTriangle, LogOut, CheckCircle2 } from "lucide-react";
+import { getOrCreateGuestId } from "@/utils/guest";
 
 export default function AgeVerificationModal() {
     const [isVisible, setIsVisible] = useState(false);
@@ -13,6 +14,8 @@ export default function AgeVerificationModal() {
         if (!isVerified) {
             setIsVisible(true);
             document.body.style.overflow = 'hidden';
+            // Generate guest ID if not present
+            getOrCreateGuestId();
         }
     }, []);
 
@@ -39,12 +42,12 @@ export default function AgeVerificationModal() {
                 <div className="relative bg-white/[0.03] border border-white/10 rounded-[2.5rem] p-8 md:p-12 shadow-2xl overflow-hidden text-center space-y-8">
                     {/* Header Icon */}
                     <div className="flex justify-center flex-col items-center space-y-6">
-                      
+
                         <div className="w-16 h-16 rounded-full bg-[#D02752]/10 border border-[#D02752]/20 flex items-center justify-center">
                             {/* <AlertTriangle className="w-8 h-8 text-[#D02752]" /> */}
                         </div>
 
-                          <div className="relative">
+                        <div className="relative">
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#D02752]/20 to-[#1B3C53]/20 rounded-lg blur-xl opacity-50" />
                             <Image
                                 src="/logo.png"
