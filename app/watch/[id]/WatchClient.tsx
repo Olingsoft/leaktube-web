@@ -170,7 +170,7 @@ export default function WatchClient({
             </div>
 
             {/* Sidebar - Related & Ads */}
-            <div className="w-full xl:w-[400px] space-y-6 px-4 md:px-0">
+            <div className="w-full xl:w-[400px] space-y-6  md:px-0">
                 <div className="p-4 bg-gradient-to-br from-[#1B3C53]/10 to-transparent border border-white/5 rounded-[2.5rem] relative overflow-hidden group flex justify-center">
                     <HomeAdBanner />
                     <JuicyAdsInterstitial />
