@@ -9,7 +9,8 @@ import {
     ThumbsUp,
     MessageCircle,
     Share2,
-    ArrowDownToLine
+    ArrowDownToLine,
+    Image as ImageIcon
 } from "lucide-react";
 import { calculateViews, calculateLikes, getThumbnailUrl } from "@/utils/format";
 import InVideoAd from "@/app/components/InVideoAd";
@@ -113,16 +114,23 @@ export default function WatchClient({
                         <h4 className="text-sm font-black uppercase text-white/40 tracking-widest px-1">Related Videos</h4>
                         {relatedVideos.map((v) => (
                             <Link key={v._id} href={`/watch/${v._id}`} className="flex gap-4 group">
-                                <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0">
-                                    <div className="relative w-full h-full">
+                                <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0 bg-[#151515] border border-white/5">
+                                    {v.thumbnailUrl ? (
                                         <Image
-                                            src={getThumbnailUrl(v.thumbnailUrl) || "/placeholder.jpg"}
+                                            src={getThumbnailUrl(v.thumbnailUrl) || ""}
                                             alt={v.title}
                                             fill
                                             unoptimized
                                             className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                            placeholder="blur"
+                                            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
                                         />
-                                    </div>
+                                    ) : (
+                                        <div className="flex h-full items-center justify-center text-white/10">
+                                            <ImageIcon className="w-4 h-4" />
+                                        </div>
+                                    )}
                                     <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
                                         05:00
                                     </div>
@@ -166,14 +174,23 @@ export default function WatchClient({
                     <h4 className="text-sm font-black uppercase text-white/40 tracking-widest pl-2">Related Videos</h4>
                     {relatedVideos.map((v) => (
                         <Link key={v._id} href={`/watch/${v._id}`} className="flex gap-4 group">
-                            <div className="relative w-40 aspect-video rounded-2xl overflow-hidden flex-shrink-0">
-                                <Image
-                                    src={getThumbnailUrl(v.thumbnailUrl) || "/placeholder.jpg"}
-                                    alt={v.title}
-                                    fill
-                                    unoptimized
-                                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                />
+                            <div className="relative w-40 aspect-video rounded-2xl overflow-hidden flex-shrink-0 bg-[#151515] border border-white/5">
+                                {v.thumbnailUrl ? (
+                                    <Image
+                                        src={getThumbnailUrl(v.thumbnailUrl) || ""}
+                                        alt={v.title}
+                                        fill
+                                        unoptimized
+                                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                                        placeholder="blur"
+                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+                                    />
+                                ) : (
+                                    <div className="flex h-full items-center justify-center text-white/10">
+                                        <ImageIcon className="w-6 h-6" />
+                                    </div>
+                                )}
                                 <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
                                     05:00
                                 </div>
