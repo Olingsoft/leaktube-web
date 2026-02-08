@@ -10,7 +10,8 @@ import {
     MessageCircle,
     Share2,
     ArrowDownToLine,
-    Image as ImageIcon
+    Image as ImageIcon,
+    Play
 } from "lucide-react";
 import { calculateViews, calculateLikes, getThumbnailUrl } from "@/utils/format";
 import InVideoAd from "@/app/components/InVideoAd";
@@ -117,7 +118,7 @@ export default function WatchClient({
                                 <div className="relative w-32 aspect-video rounded-xl overflow-hidden flex-shrink-0 bg-[#151515] border border-white/5">
                                     {v.thumbnailUrl ? (
                                         <Image
-                                            src={getThumbnailUrl(v.thumbnailUrl) || ""}
+                                            src={v.thumbnailUrl}
                                             alt={v.title}
                                             fill
                                             unoptimized
@@ -131,6 +132,11 @@ export default function WatchClient({
                                             <ImageIcon className="w-4 h-4" />
                                         </div>
                                     )}
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                                        <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                            <Play className="w-3 h-3 text-white fill-white" />
+                                        </div>
+                                    </div>
                                     <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
                                         05:00
                                     </div>
@@ -177,7 +183,7 @@ export default function WatchClient({
                             <div className="relative w-40 aspect-video rounded-2xl overflow-hidden flex-shrink-0 bg-[#151515] border border-white/5">
                                 {v.thumbnailUrl ? (
                                     <Image
-                                        src={getThumbnailUrl(v.thumbnailUrl) || ""}
+                                        src={v.thumbnailUrl}
                                         alt={v.title}
                                         fill
                                         unoptimized
@@ -191,6 +197,11 @@ export default function WatchClient({
                                         <ImageIcon className="w-6 h-6" />
                                     </div>
                                 )}
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+                                    <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                                        <Play className="w-4 h-4 text-white fill-white" />
+                                    </div>
+                                </div>
                                 <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded-lg text-[8px] font-black text-white/80">
                                     05:00
                                 </div>
