@@ -47,18 +47,12 @@ export default function HomeClient({
 
     const [videos, setVideos] = useState(initialVideos);
 
-    // Shuffle videos on mount
+    // Sort videos by date (latest first) on mount
     useEffect(() => {
-        const shuffleArray = (array: any[]) => {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
-        };
-
-        setVideos(shuffleArray(initialVideos));
+        const sorted = [...initialVideos].sort((a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setVideos(sorted);
     }, [initialVideos]);
 
     useEffect(() => {
