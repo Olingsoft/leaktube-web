@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     "russian guy in kenya videos twitter trendnig",
     "russian guy in kenya full videos",
     "russian guy in kenya trendning",
-    "kenya video" 
+    "kenya video"
   ],
   openGraph: {
     title: "Unite Kenyans | Kenya Viral & Trending Stories",
@@ -66,6 +66,7 @@ export const metadata: Metadata = {
   other: {
     "juicyads-site-verification": "57753ffadf9597cc22ba70b03558b031",
     "6a97888e-site-verification": "fc346fa70fdf32c5fe7d1b3c54876b4b",
+    "clckd": "f7684647426dc88a8de9e08276f6397a",
   },
 };
 
