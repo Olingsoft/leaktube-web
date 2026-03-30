@@ -45,7 +45,7 @@ export default function HomeClient({
     const matchTabs = ["All", "Live matches", "Upcoming matches", "recents"];
     const desktopCategoryRef = useRef<HTMLDivElement>(null);
     const mobileCategoryRef = useRef<HTMLDivElement>(null);
-    const [isAgeVerified, setIsAgeVerified] = useState(false);
+    const [isAgeVerified, setIsAgeVerified] = useState(true);
 
     const [videos, setVideos] = useState(initialVideos);
 

@@ -9,14 +9,9 @@ export default function AgeVerificationModal() {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        // Check if user has already verified their age
-        const isVerified = localStorage.getItem("age_verified");
-        if (!isVerified) {
-            setIsVisible(true);
-            document.body.style.overflow = 'hidden';
-            // Generate guest ID if not present
-            getOrCreateGuestId();
-        }
+        // Age verification disabled for now
+        // Generate guest ID if not present
+        getOrCreateGuestId();
     }, []);
 
     const handleEnter = () => {

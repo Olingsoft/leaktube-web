@@ -7,7 +7,7 @@ import Header from "./Header";
 export default function HeaderWrapper() {
     const pathname = usePathname();
     const isAdminPath = pathname?.startsWith("/admin");
-    const [isAgeVerified, setIsAgeVerified] = useState(false); // Change to false by default
+    const [isAgeVerified, setIsAgeVerified] = useState(true); // Change to true by default to disable age verification for now
 
     useEffect(() => {
         // Check initial state
