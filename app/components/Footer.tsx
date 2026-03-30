@@ -24,9 +24,9 @@ export default function Footer() {
                                 className="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300"
                             />
                         </Link>
-                        <p className="text-white/50 text-sm leading-relaxed max-w-xs">
+                        {/* <p className="text-white/50 text-sm leading-relaxed max-w-xs">
                             Watch people uniteng kenyans on social media | 🔞 leaked videos | Stay updated with the latest trends and stories across the nation.
-                        </p>
+                        </p> */}
                         <div className="flex items-center gap-4">
                             <a href="https://x.com/uniteKenyans" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#e15aed] hover:border-[#e15aed]/30 hover:bg-[#e15aed]/5 transition-all group">
                                 <Twitter className="w-5 h-5 group-hover:scale-110 transition-transform" />
