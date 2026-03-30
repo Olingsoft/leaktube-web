@@ -41,6 +41,8 @@ export default function HomeClient({
     const [searchQuery, setSearchQuery] = useState(initialSearch);
     const [isMobileCatOpen, setIsMobileCatOpen] = useState(false);
     const [showSearch, setShowSearch] = useState(!!initialSearch);
+    const [activeMatchTab, setActiveMatchTab] = useState("All");
+    const matchTabs = ["All", "Live matches", "Upcoming matches", "recents"];
     const desktopCategoryRef = useRef<HTMLDivElement>(null);
     const mobileCategoryRef = useRef<HTMLDivElement>(null);
     const [isAgeVerified, setIsAgeVerified] = useState(false);
@@ -98,7 +100,15 @@ export default function HomeClient({
 
     const filteredVideos = videos.filter((v) => {
         const matchesSearch = searchQuery ? v.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true;
-        return matchesSearch;
+
+        let matchesTab = true;
+        if (activeMatchTab === "Live matches") {
+            matchesTab = v.category?.toLowerCase().includes("live");
+        } else if (activeMatchTab === "Upcoming matches") {
+            matchesTab = v.category?.toLowerCase().includes("upcoming");
+        }
+
+        return matchesSearch && matchesTab;
     });
 
     return (
@@ -109,24 +119,19 @@ export default function HomeClient({
                 <div className="mb-8 relative z-[9999]">
                     {/* Desktop Layout */}
                     <div className="hidden md:flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                        <div className="flex items-center gap-3 flex-1 min-w-0">
-                            <div className="flex items-center gap-2 text-[#e15aed] shrink-0">
-                                <div className="p-2 rounded-xl bg-[#e15aed]/10">
-                                    <TrendingUp className="w-4 h-4" />
-                                </div>
-                                <span className="text-xs font-black tracking-widest uppercase whitespace-nowrap">Trending</span>
-                            </div>
-                            <div className="flex flex-wrap gap-2 min-w-0">
-                                {trends.slice(0, 4).map((t) => (
-                                    <button
-                                        key={t._id}
-                                        onClick={() => handleTrendClick(t)}
-                                        className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
-                                    >
-                                        {t.phrase}
-                                    </button>
-                                ))}
-                            </div>
+                        <div className="flex items-center gap-2 flex-1 min-w-0 overflow-x-auto scrollbar-hide py-1">
+                            {matchTabs.map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveMatchTab(tab)}
+                                    className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeMatchTab === tab
+                                        ? "bg-[#e15aed] border-[#e15aed] text-white shadow-[0_10px_20px_rgba(225,90,237,0.2)]"
+                                        : "bg-white/5 border-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+                                        }`}
+                                >
+                                    {tab}
+                                </button>
+                            ))}
                         </div>
 
                         <div className="w-px h-10 bg-white/10"></div>
@@ -236,21 +241,18 @@ export default function HomeClient({
                             )}
                         </div>
 
-                        <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
-                            <div className="flex items-center gap-2 text-[#e15aed] mb-3">
-                                <div className="p-2 rounded-xl bg-[#e15aed]/10">
-                                    <TrendingUp className="w-4 h-4" />
-                                </div>
-                                <span className="text-xs font-black tracking-widest uppercase">Trending Now</span>
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                {trends.map((t) => (
+                        <div className="p-2.5 rounded-2xl bg-white/5 border border-white/10">
+                            <div className="flex gap-2 overflow-x-auto scrollbar-hide py-1">
+                                {matchTabs.map((tab) => (
                                     <button
-                                        key={t._id}
-                                        onClick={() => handleTrendClick(t)}
-                                        className="px-3 py-1.5 rounded-xl text-[11px] font-bold bg-white/5 border border-white/10 text-white/60 hover:text-white hover:border-[#D02752] hover:bg-[#e15aed]/10 transition-all"
+                                        key={tab}
+                                        onClick={() => setActiveMatchTab(tab)}
+                                        className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${activeMatchTab === tab
+                                            ? "bg-[#e15aed] border-[#e15aed] text-white shadow-lg"
+                                            : "bg-white/5 border-white/5 text-white/40"
+                                            }`}
                                     >
-                                        {t.phrase}
+                                        {tab}
                                     </button>
                                 ))}
                             </div>
@@ -319,6 +321,16 @@ export default function HomeClient({
                         {(index + 1) % 8 === 0 && <VideoGridAd />}
                     </React.Fragment>
                 ))}
+            </div>
+
+            {/* Bottom Content Iframe */}
+            <div className="mt-10 mb-8 w-full rounded-2xl overflow-hidden bg-white/5 border border-white/10">
+                <iframe 
+                    src="https://omg10.com/4/7634566" 
+                    title="Advertisement"
+                    className="w-full h-[300px] border-none"
+                    allowFullScreen
+                />
             </div>
         </div >
     );
