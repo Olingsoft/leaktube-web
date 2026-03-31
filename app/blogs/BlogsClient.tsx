@@ -18,24 +18,18 @@ interface Blog {
 
 interface BlogsClientProps {
     initialBlogs: Blog[];
-    categories: string[];
-    initialCategory?: string;
 }
 
 export default function BlogsClient({
-    initialBlogs,
-    categories,
-    initialCategory = "All"
+    initialBlogs
 }: BlogsClientProps) {
     const [blogs, setBlogs] = useState<Blog[]>(initialBlogs);
     const [searchQuery, setSearchQuery] = useState("");
-    const [activeCategory, setActiveCategory] = useState(initialCategory);
 
     const filteredBlogs = blogs.filter((blog) => {
         const matchesSearch = blog.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             blog.content.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesCategory = activeCategory === "All" || blog.category === activeCategory;
-        return matchesSearch && matchesCategory;
+        return matchesSearch;
     });
 
     const formatDate = (dateString: string) => {
@@ -61,23 +55,7 @@ export default function BlogsClient({
                     />
                 </div>
 
-                <div className="flex items-center space-x-2 overflow-x-auto pb-4 scrollbar-none">
-                    {categories.map((cat) => {
-                        const isActive = activeCategory === cat;
-                        return (
-                            <button
-                                key={cat}
-                                onClick={() => setActiveCategory(cat)}
-                                className={`whitespace-nowrap px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all ${isActive
-                                    ? "bg-[#D02752] text-white shadow-[0_0_20px_rgba(208,39,82,0.4)]"
-                                    : "bg-white/5 text-white/60 border border-white/5 hover:bg-white/10"
-                                    }`}
-                            >
-                                {cat}
-                            </button>
-                        );
-                    })}
-                </div>
+
             </div>
 
             {filteredBlogs.length === 0 ? (
@@ -104,11 +82,7 @@ export default function BlogsClient({
                                             <BookOpen className="w-12 h-12 text-white/20" />
                                         </div>
                                     )}
-                                    <div className="absolute top-4 left-4">
-                                        <span className="px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-[10px] font-black uppercase tracking-widest text-white border border-white/10">
-                                            {blog.category}
-                                        </span>
-                                    </div>
+
                                 </div>
 
                                 {/* Content */}

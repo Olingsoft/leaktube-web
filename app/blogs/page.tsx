@@ -14,12 +14,9 @@ export const metadata: Metadata = {
     }
 };
 
-async function getBlogs(category?: string) {
+async function getBlogs() {
     try {
-        let url = getApiUrl('/api/blogs');
-        if (category && category !== "All") {
-            url += `?category=${encodeURIComponent(category)}`;
-        }
+        const url = getApiUrl('/api/blogs');
         const res = await fetch(url, { next: { revalidate: 3600 } });
         const data = await res.json();
         return data.success ? data.data : [];
@@ -29,26 +26,10 @@ async function getBlogs(category?: string) {
     }
 }
 
-async function getCategories() {
-    try {
-        const res = await fetch(getApiUrl('/api/categories'), { next: { revalidate: 3600 } });
-        const data = await res.json();
-        if (data.success) {
-            return ["All", ...data.data.map((cat: any) => cat.name)];
-        }
-        return ["All"];
-    } catch (e) {
-        console.error(e);
-        return ["All"];
-    }
-}
 
-export default async function BlogsPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-    const { category } = await searchParams;
-    const [blogs, categories] = await Promise.all([
-        getBlogs(category),
-        getCategories()
-    ]);
+
+export default async function BlogsPage() {
+    const blogs = await getBlogs();
 
     return (
         <div className="flex min-h-screen">
@@ -66,8 +47,6 @@ export default async function BlogsPage({ searchParams }: { searchParams: Promis
 
                 <BlogsClient
                     initialBlogs={blogs}
-                    categories={categories}
-                    initialCategory={category}
                 />
             </div>
         </div>

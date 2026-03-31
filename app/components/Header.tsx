@@ -38,13 +38,13 @@ export default function Header() {
                     <Link href="/" className="flex items-center group flex-shrink-0 relative z-50">
                         <div className="relative">
                             <div className="absolute ml-6 inset-0 bg-gradient-to-tr from-[#e15aed]/20 to-[#1B3C53]/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <Image
+                            {/* <Image
                                 src="/logo.png"
                                 alt="Unite Kenyans"
                                 width={200}
                                 height={48}
                                 className="h-10 md:h-12 w-auto object-contain relative z-10 hover:scale-105 transition-transform duration-300"
-                            />
+                            /> */}
                         </div>
                     </Link>
 
