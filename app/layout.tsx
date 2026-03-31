@@ -164,9 +164,9 @@ export default function RootLayout({
           {children}
         </MainContentWrapper>
         <Footer />
-        <MagSrvAd />
-        <PemSrvAd />
-        <PopUnderAd />
+        {/* <MagSrvAd /> */}
+        {/* <PemSrvAd /> */}
+        {/* <PopUnderAd /> */}
       </body>
     </html>
   );
