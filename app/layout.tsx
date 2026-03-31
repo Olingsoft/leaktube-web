@@ -4,7 +4,7 @@ import "./globals.css";
 import HeaderWrapper from "./components/HeaderWrapper";
 import MainContentWrapper from "./components/MainContentWrapper";
 import Footer from "./components/Footer";
-import AgeVerificationModal from "./components/AgeVerificationModal";
+// import AgeVerificationModal from "./components/AgeVerificationModal";
 import MagSrvAd from "./components/MagSrvAd";
 import PemSrvAd from "./components/PemSrvAd";
 import PopUnderAd from "./components/PopUnderAd";
@@ -158,7 +158,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AgeVerificationModal />
+        {/* <AgeVerificationModal /> */}
         <HeaderWrapper />
         <MainContentWrapper>
           {children}
