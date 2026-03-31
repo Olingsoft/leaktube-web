@@ -8,14 +8,14 @@ import { getApiUrl, API_BASE_URL } from "@/utils/api";
  * Static Metadata for SEO
  */
 export const metadata: Metadata = {
-  title: "Unite Kenyans | Home of Viral & Trending Content in Kenya",
-  description: "Browse the latest trending and viral videos across Kenya. Stay updated with what's happening in the community, from entertainment to social awareness.",
+  title: "Live Football Streams | Home of Live Matches & Highlights",
+  description: "Browse the latest live football streams, match highlights, and upcoming games. Stay updated with what's happening in the world of soccer.",
   openGraph: {
-    title: "Unite Kenyans | Trending Content",
-    description: "Kenya's hub for viral trends and digital awareness.",
+    title: "Live Football Streams | Watch Live Matches",
+    description: "Your hub for live football streaming and sports highlights.",
     type: "website",
     url: "https://unitekenyans.co.ke", // Update with real domain
-    siteName: "Unite Kenyans",
+    siteName: "Live Football Streams",
   }
 };
 
@@ -83,7 +83,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
 
   return (
     <div className="min-h-screen flex relative">
-      <SkyscraperAd side="left" />
+      {/* <SkyscraperAd side="left" /> */}
       <div className="flex-1 w-full min-w-0 md:ml-[180px] xl:ml-[200px] xl:mr-[200px] transition-all duration-300">
         <HomeClient
           initialVideos={videos}
@@ -92,7 +92,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ c
           categoryParam={categoryParam}
         />
       </div>
-      <SkyscraperAd side="right" />
+      {/* <SkyscraperAd side="right" /> */}
     </div>
   );
 }

@@ -19,7 +19,7 @@ export default function DMCAPage() {
                         <div className="flex items-center gap-6 p-6 bg-[#e15aed]/10 border border-[#e15aed]/20 rounded-3xl">
                             <Shield className="w-12 h-12 text-[#e15aed] shrink-0" />
                             <p className="text-white font-bold leading-relaxed">
-                                Unite Kenyans respects the intellectual property rights of others and expects its users to do the same.
+                                Live Football Streams respects the intellectual property rights of others and expects its users to do the same.
                             </p>
                         </div>
 
@@ -42,7 +42,7 @@ export default function DMCAPage() {
 
                         <div className="pt-8 border-t border-white/5">
                             <p className="text-white/40 text-sm italic">
-                                Send DMCA requests to: <span className="text-[#e15aed] font-bold">dmca@unitekenyans.co.ke</span>
+                                Send DMCA requests to: <span className="text-[#e15aed] font-bold">dmca@livefootballstreams.com</span>
                             </p>
                         </div>
                     </div>

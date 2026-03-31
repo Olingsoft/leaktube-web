@@ -18,7 +18,7 @@ export default function Footer() {
                         <Link href="/" className="group inline-block">
                             <Image
                                 src="/logo.png"
-                                alt="Unite Kenyans"
+                                alt="Live Football Streams"
                                 width={150}
                                 height={40}
                                 className="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300"
@@ -87,7 +87,7 @@ export default function Footer() {
                         <div className="space-y-4">
                             <div className="flex items-start gap-3">
                                 <Mail className="w-5 h-5 text-[#e15aed] shrink-0" />
-                                <span className="text-white/60 text-sm font-bold">support@unitekenyans.co.ke</span>
+                                <span className="text-white/60 text-sm font-bold">support@livefootballstreams.com</span>
                             </div>
                             <div className="flex items-start gap-3">
                                 <MapPin className="w-5 h-5 text-[#e15aed] shrink-0" />
@@ -100,7 +100,7 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-white/20 text-[10px] font-black uppercase tracking-widest">
-                        &copy; {new Date().getFullYear()} Unite Kenyans. All Rights Reserved.
+                        &copy; {new Date().getFullYear()} Live Football Streams. All Rights Reserved.
                     </p>
                     <div className="flex items-center gap-8">
                         <Link href="/terms" className="text-white/20 hover:text-white/40 transition-colors text-[10px] font-black uppercase tracking-widest">Terms of Service</Link>

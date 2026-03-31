@@ -16,7 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const videos = videosRes.success ? videosRes.data : [];
     const blogs = blogsRes.success ? blogsRes.data : [];
-
+    
     // 2. Map videos to sitemap format
     const videoEntries = videos.map((video: any) => ({
         url: `${baseUrl}/watch/${slugify(video.title)}-${video._id}`,

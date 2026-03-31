@@ -24,7 +24,7 @@ export default function ContactPage() {
                                 </div>
                                 <div>
                                     <p className="text-white/30 text-xs font-black uppercase tracking-widest">Email Us</p>
-                                    <p className="text-white font-bold">contact@unitekenyans.co.ke</p>
+                                    <p className="text-white font-bold">contact@livefootballstreams.com</p>
                                 </div>
                             </div>
 

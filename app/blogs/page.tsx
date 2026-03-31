@@ -5,11 +5,11 @@ import Sidebar from "../components/Sidebar";
 import { getApiUrl } from "@/utils/api";
 
 export const metadata: Metadata = {
-    title: "Latest Stories & Insights | Unite Kenyans",
-    description: "Explore deep dives into viral trends, digital safety guides, and community discussions on the Unite Kenyans blog.",
+    title: "Latest Football News & Insights | Live Football Streams",
+    description: "Explore deep dives into football news, match reviews, and sports discussions on the Live Football Streams blog.",
     openGraph: {
-        title: "Unite Kenyans Blog | Trending Stories & Insights",
-        description: "Stay informed with the latest viral trends and digital awareness stories in Kenya.",
+        title: "Live Football Streams Blog | Sports News & Insights",
+        description: "Stay informed with the latest football news, match insights, and tournament updates.",
         type: "website",
     }
 };
@@ -38,10 +38,10 @@ export default async function BlogsPage() {
                 {/* Header Section */}
                 <div className="mb-10 text-center md:text-left">
                     <h1 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight">
-                        Latest <span className="text-[#D02752]">Stories</span> & Insights
+                        Latest Football <span className="text-[#D02752]">News</span> & Insights
                     </h1>
                     <p className="text-white/60 text-sm md:text-lg max-w-2xl font-medium">
-                        Explore deep dives into viral trends, digital safety guides, and community discussions.
+                        Explore deep dives into match reviews, transfer rumors, and sports discussions.
                     </p>
                 </div>
 

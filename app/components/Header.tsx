@@ -40,7 +40,7 @@ export default function Header() {
                             <div className="absolute ml-6 inset-0 bg-gradient-to-tr from-[#e15aed]/20 to-[#1B3C53]/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             {/* <Image
                                 src="/logo.png"
-                                alt="Unite Kenyans"
+                                alt="Live Football Streams"
                                 width={200}
                                 height={48}
                                 className="h-10 md:h-12 w-auto object-contain relative z-10 hover:scale-105 transition-transform duration-300"
@@ -56,12 +56,12 @@ export default function Header() {
                         >
                             <span className="flex items-center"><Home className="w-4 h-4 mr-1.5" /> Videos</span>
                         </Link>
-                        <Link
+                        {/* <Link
                             href="/blogs"
                             className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname.startsWith('/blogs') ? 'text-[#e15aed]' : 'text-white/60 hover:text-[#e15aed]'}`}
                         >
                             <span className="flex items-center"><BookOpen className="w-4 h-4 mr-1.5" /> Blogs</span>
-                        </Link>
+                        </Link> */}
                         <Link
                             href="/about"
                             className={`text-[11px] font-black uppercase tracking-widest transition-colors ${pathname === '/about' ? 'text-[#e15aed]' : 'text-white/40 hover:text-[#e15aed]'}`}
@@ -161,13 +161,13 @@ export default function Header() {
                         <Home className="w-5 h-5 mr-4" />
                         <span className="font-bold">Home</span>
                     </Link>
-                    <Link
+                    {/* <Link
                         href="/blogs"
                         className={`flex items-center p-4 rounded-2xl transition-all ${pathname.startsWith('/blogs') ? 'bg-[#1B3C53] text-white shadow-lg' : 'text-white/60 hover:bg-white/5 hover:text-[#e15aed]'}`}
                     >
                         <BookOpen className="w-5 h-5 mr-4" />
                         <span className="font-bold">Blogs</span>
-                    </Link>
+                    </Link> */}
 
                 </div>
 

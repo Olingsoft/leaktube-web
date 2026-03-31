@@ -218,7 +218,7 @@ export default function WatchClient({
                                     <h5 className="text-white font-bold text-xs line-clamp-2 group-hover:text-[#D02752] transition-colors mb-1">
                                         {v.title}
                                     </h5>
-                                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider truncate">Unite Kenyans</p>
+                                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider truncate">Live Football Streams</p>
                                     <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold mt-0.5">
                                         <span>{calculateViews(v._id, v.views)}</span>
                                         <span className="w-0.5 h-0.5 bg-white/10 rounded-full" />
@@ -283,7 +283,7 @@ export default function WatchClient({
                                 <h5 className="text-white font-bold text-xs line-clamp-2 group-hover:text-[#D02752] transition-colors">
                                     {v.title}
                                 </h5>
-                                <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">Unite Kenyans</p>
+                                <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider">Live Football Streams</p>
                                 <div className="flex items-center space-x-1.5 text-[10px] text-white/20 font-bold">
                                     <span>{calculateViews(v._id, v.views)}</span>
                                     <span className="w-1 h-1 bg-white/10 rounded-full" />

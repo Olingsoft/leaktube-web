@@ -18,28 +18,28 @@ export default function TermsPage() {
                         <div className="space-y-4">
                             <h2 className="text-xl font-black uppercase tracking-widest text-[#e15aed]">01. Acceptance</h2>
                             <p className="text-white/60 leading-relaxed">
-                                By accessing Unite Kenyans, you agree to bound by these terms. If you do not agree, please refrain from using our platform.
+                                By accessing Live Football Streams, you agree to be bound by these terms. If you do not agree, please refrain from using our platform.
                             </p>
                         </div>
 
                         <div className="space-y-4">
                             <h2 className="text-xl font-black uppercase tracking-widest text-[#e15aed]">02. Use License</h2>
                             <p className="text-white/60 leading-relaxed">
-                                Permission is granted to temporarily download one copy of the materials (information or software) on Unite Kenyans website for personal, non-commercial transitory viewing only.
+                                Permission is granted to temporarily view the materials (information or links) on the Live Football Streams website for personal, non-commercial transitory viewing only.
                             </p>
                         </div>
 
                         <div className="space-y-4">
                             <h2 className="text-xl font-black uppercase tracking-widest text-[#e15aed]">03. Disclaimer</h2>
                             <p className="text-white/60 leading-relaxed">
-                                The materials on Unite Kenyans are provided on an 'as is' basis. Unite Kenyans makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability.
+                                The materials on Live Football Streams are provided on an 'as is' basis. Live Football Streams makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability.
                             </p>
                         </div>
 
                         <div className="space-y-4">
                             <h2 className="text-xl font-black uppercase tracking-widest text-[#e15aed]">04. Limitations</h2>
                             <p className="text-white/60 leading-relaxed">
-                                In no event shall Unite Kenyans or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit) arising out of the use or inability to use the materials on Unite Kenyans website.
+                                In no event shall Live Football Streams or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit) arising out of the use or inability to use the materials on the Live Football Streams website.
                             </p>
                         </div>
                     </div>

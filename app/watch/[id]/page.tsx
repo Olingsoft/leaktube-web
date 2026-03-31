@@ -87,12 +87,12 @@ async function getRelatedVideos(categories: string[], currentId: string) {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
     const video = await getVideoData(id);
-    if (!video) return { title: "Video Not Found - Unite Kenyans" };
+    if (!video) return { title: "Video Not Found - Live Football Streams" };
 
     const thumbnail = getThumbnailUrl(video.thumbnailUrl);
 
     return {
-        title: `${video.title} | Unite Kenyans`,
+        title: `${video.title} | Live Football Streams`,
         description: video.description,
         openGraph: {
             title: video.title,
@@ -100,7 +100,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
             type: "video.other",
             url: `https://unitekenyans.co.ke/watch/${id}`,
             images: thumbnail ? [{ url: thumbnail }] : [],
-            siteName: "Unite Kenyans",
+            siteName: "Live Football Streams",
         },
         twitter: {
             card: "summary_large_image",

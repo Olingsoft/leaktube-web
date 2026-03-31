@@ -23,7 +23,7 @@ export default function AboutPage() {
                                 Who We Are
                             </h2>
                             <p className="text-white/60 leading-relaxed text-lg italic">
-                                Unite Kenyans (Kuunganisha Wakenya) is more than just a platform; it's a digital bridge for the Kenyan community. We focus on bringing transparency to trending topics, viral stories, and social issues that matter to our nation.
+                                Live Football Streams is your ultimate digital destination for football fans. We focus on bringing high-quality live football streaming, match highlights, and sports news straight to your screens.
                             </p>
                         </div>
 
@@ -33,7 +33,7 @@ export default function AboutPage() {
                                 Our Mission
                             </h2>
                             <p className="text-white/60 leading-relaxed text-lg">
-                                Our mission is to foster digital awareness and provide a secure space for Kenyans to stay informed about viral trends while respecting digital safety and community standards. We believe in information that connects, not exploits.
+                                Our mission is to provide a reliable, easy-to-use platform for fans to watch live soccer matches online. We believe in providing free access to sports entertainment and helping fans stay connected with the games they love.
                             </p>
                         </div>
 
@@ -43,15 +43,13 @@ export default function AboutPage() {
                                 Community First
                             </h2>
                             <p className="text-white/60 leading-relaxed text-lg">
-                                We are committed to building a community where truth is prioritized and digital rights are respected. Every piece of content is curated to ensure it adds value to the Kenyan digital landscape.
+                                We are committed to building a sports community where fans can catch up on the latest matches and football updates without hassle. Join us in celebrating the beautiful game.
                             </p>
                         </div>
                     </div>
                 </section>
 
-                <footer className="text-center text-white/30 text-sm font-bold tracking-widest uppercase">
-                    &copy; {new Date().getFullYear()} Unite Kenyans &bull; Kuunganisha Wakenya
-                </footer>
+                    &copy; {new Date().getFullYear()} Live Football Streams
             </div>
         </div>
     );

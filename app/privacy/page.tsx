@@ -18,7 +18,7 @@ export default function PrivacyPage() {
                         <div className="space-y-4">
                             <h2 className="text-xl font-black uppercase tracking-widest text-[#e15aed]">Privacy Matters</h2>
                             <p className="text-white/60 leading-relaxed">
-                                Your privacy is important to us. It is Unite Kenyans policy to respect your privacy regarding any information we may collect from you across our website.
+                                Your privacy is important to us. It is Live Football Streams policy to respect your privacy regarding any information we may collect from you across our website.
                             </p>
                         </div>
 

@@ -46,7 +46,7 @@ export default function AgeVerificationModal() {
                             <div className="absolute inset-0 bg-gradient-to-tr from-[#D02752]/20 to-[#1B3C53]/20 rounded-lg blur-xl opacity-50" />
                             <Image
                                 src="/logo.png"
-                                alt="Unite Kenyans"
+                                alt="Live Football Streams"
                                 width={180}
                                 height={44}
                                 className="h-10 md:h-12 w-auto object-contain relative z-10"
@@ -57,10 +57,10 @@ export default function AgeVerificationModal() {
 
                     <div className="space-y-4">
                         <p className="text-white/80 text-lg md:text-xl font-bold leading-tight">
-                            This website contains highly sensitive and adult content.
+                            Welcome to Live Football Streams.
                         </p>
                         <p className="text-white/40 text-sm md:text-base leading-relaxed">
-                            By clicking "Enter", you confirm that you are over 18 years old and agree to our terms of service and privacy policy.
+                            By clicking "Enter", you agree to our terms of service and privacy policy to watch the best football matches online.
                         </p>
                     </div>
 
@@ -70,7 +70,7 @@ export default function AgeVerificationModal() {
                             className="group flex items-center justify-center gap-3 bg-white text-black py-5 rounded-2xl font-black uppercase text-sm tracking-widest hover:bg-[#D02752] hover:text-white transition-all duration-500 shadow-xl"
                         >
                             <CheckCircle2 className="w-5 h-5" />
-                            I am 18+ Enter
+                            Enter Site
                         </button>
 
                         <button
@@ -78,13 +78,13 @@ export default function AgeVerificationModal() {
                             className="group flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white py-5 rounded-2xl font-black uppercase text-sm tracking-widest hover:bg-white/10 transition-all duration-500"
                         >
                             <LogOut className="w-5 h-5 text-white/40 group-hover:text-white" />
-                            I am Under 18
+                            Leave Site
                         </button>
                     </div>
 
                     <div className="pt-4">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
-                            Unite Kenyans &copy; {new Date().getFullYear()}
+                            Live Football Streams &copy; {new Date().getFullYear()}
                         </p>
                     </div>
                 </div>

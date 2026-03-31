@@ -33,12 +33,12 @@ async function getBlogData(id: string) {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
     const blog = await getBlogData(id);
-    if (!blog) return { title: "Blog Not Found - Unite Kenyans" };
+    if (!blog) return { title: "Blog Not Found - Live Football Streams" };
 
     const thumbnail = formatThumbnailUrl(blog.thumbnailUrl);
 
     return {
-        title: `${blog.title} | Unite Kenyans`,
+        title: `${blog.title} | Live Football Streams`,
         description: blog.content.replace(/<[^>]*>/g, '').substring(0, 160),
         openGraph: {
             title: blog.title,
@@ -72,7 +72,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
         },
         "publisher": {
             "@type": "Organization",
-            "name": "Unite Kenyans",
+            "name": "Live Football Streams",
             "logo": {
                 "@type": "ImageObject",
                 "url": "https://unitekenyans.co.ke/logo.png" // Update with real logo
@@ -163,15 +163,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                     {/* Footer */}
                     <footer className="mt-16 pt-8 border-t border-white/5">
                         <div className="bg-white/5 rounded-3xl p-8 border border-white/5">
-                            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-4">Stay Safe Online</h4>
+                            <h4 className="text-white font-black uppercase tracking-widest text-sm mb-4">More Football Action</h4>
                             <p className="text-white/60 mb-6 leading-relaxed">
-                                We believe in digital awareness and information sharing. Always be cautious with your digital footprint and data privacy.
+                                Don't miss out on the latest match updates, news, and live streams. Catch all the action right here!
                             </p>
                             <Link
                                 href="/"
                                 className="inline-flex px-8 py-3 bg-white text-black font-black uppercase tracking-widest text-xs rounded-xl hover:scale-105 transition-transform"
                             >
-                                Explore Trending Videos
+                                Explore Live Streams
                             </Link>
                         </div>
                     </footer>

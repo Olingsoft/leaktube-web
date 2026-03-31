@@ -6,24 +6,24 @@ import { HelpCircle, ChevronDown } from "lucide-react";
 export default function FAQPage() {
     const faqs = [
         {
-            q: "What is Unite Kenyans?",
-            a: "Unite Kenyans is a portal for trending and viral content in Kenya, focusing on digital awareness and community discussions."
+            q: "What is Live Football Streams?",
+            a: "Live Football Streams is a platform dedicated to providing live soccer streaming, match highlights, and sports news."
         },
         {
-            q: "Is the content verified?",
-            a: "We curate content from various sources. While we strive for accuracy, we encourage users to verify viral trends independently."
+            q: "Are the streams official?",
+            a: "We curate links to live sports events from various sources across the web. We do not host the streams ourselves."
         },
         {
-            q: "How can I submit content?",
-            a: "Currently, content is curated by our team. However, you can suggest trends via our contact page."
+            q: "How can I request a match stream?",
+            a: "If a match isn't listed, you can suggest it or let us know via our contact page."
         },
         {
-            q: "What are the community rules?",
-            a: "We advocate for respectful discussion, digital safety, and zero tolerance for harassment or exploitation."
+            q: "Is it free to watch?",
+            a: "Yes, our goal is to provide accessible sports content for fans worldwide."
         },
         {
-            q: "How do I report a video?",
-            a: "You can use the report button on the watch page or email us directly for DMCA/Privacy concerns."
+            q: "How do I report a broken link?",
+            a: "You can use the contact us page or email us directly if a stream is not working or for DMCA concerns."
         }
     ];
 

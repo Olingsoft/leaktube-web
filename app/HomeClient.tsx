@@ -113,7 +113,7 @@ export default function HomeClient({
 
     return (
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 pt-1">
-            <TopBannerAd />
+            {/* <TopBannerAd /> */}
             {/* Mini Header: Trending + Category + Search */}
             {isAgeVerified && (
                 <div className="mb-8 relative z-[9999]">
@@ -263,7 +263,7 @@ export default function HomeClient({
 
             {/* Mobile Only Ad Banner */}
             <div className="md:hidden mb-6">
-                <HomeAdBanner />
+                {/* <HomeAdBanner /> */}
             </div>
 
             {/* <div className="mb-8">
