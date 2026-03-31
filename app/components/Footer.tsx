@@ -16,13 +16,13 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="space-y-6">
                         <Link href="/" className="group inline-block">
-                            <Image
+                            {/* <Image
                                 src="/logo.png"
                                 alt="Live Football Streams"
                                 width={150}
                                 height={40}
                                 className="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300"
-                            />
+                            /> */}
                         </Link>
                         {/* <p className="text-white/50 text-sm leading-relaxed max-w-xs">
                             Watch people uniteng kenyans on social media | 🔞 leaked videos | Stay updated with the latest trends and stories across the nation.
