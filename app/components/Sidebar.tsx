@@ -22,7 +22,6 @@ interface SidebarItem {
 
 const staticMenu: SidebarItem[] = [
     { name: "All Videos", href: "/" },
-    { name: "Blogs", href: "/blogs" },
 ];
 
 export default function Sidebar() {

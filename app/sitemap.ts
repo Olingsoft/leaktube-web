@@ -8,14 +8,10 @@ import { slugify } from '@/utils/seo';
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://unitekenyans.co.ke';
 
-    // 1. Fetch Dynamic Content in parallel
-    const [videosRes, blogsRes] = await Promise.all([
-        fetch(getApiUrl('/api/videos'), { next: { revalidate: 3600 } }).then(res => res.json()).catch(() => ({ success: false })),
-        fetch(getApiUrl('/api/blogs'), { next: { revalidate: 3600 } }).then(res => res.json()).catch(() => ({ success: false }))
-    ]);
+    // 1. Fetch Dynamic Content
+    const videosRes = await fetch(getApiUrl('/api/videos'), { next: { revalidate: 3600 } }).then(res => res.json()).catch(() => ({ success: false }));
 
     const videos = videosRes.success ? videosRes.data : [];
-    const blogs = blogsRes.success ? blogsRes.data : [];
     
     // 2. Map videos to sitemap format
     const videoEntries = videos.map((video: any) => ({
@@ -25,13 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
     }));
 
-    // 3. Map blogs to sitemap format
-    const blogEntries = blogs.map((blog: any) => ({
-        url: `${baseUrl}/blogs/${slugify(blog.title)}-${blog._id}`,
-        lastModified: new Date(blog.updatedAt || blog.createdAt),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }));
+
 
     // 4. Static pages
     const staticPages: MetadataRoute.Sitemap = [
@@ -41,12 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             changeFrequency: 'daily' as const,
             priority: 1.0,
         },
-        {
-            url: `${baseUrl}/blogs`,
-            lastModified: new Date(),
-            changeFrequency: 'daily' as const,
-            priority: 0.9,
-        },
+
         {
             url: `${baseUrl}/about`,
             lastModified: new Date(),
@@ -85,5 +70,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
     ];
 
-    return [...staticPages, ...videoEntries, ...blogEntries];
+    return [...staticPages, ...videoEntries];
 }

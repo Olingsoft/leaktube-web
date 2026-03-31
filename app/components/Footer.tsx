@@ -50,12 +50,7 @@ export default function Footer() {
                                     Videos
                                 </Link>
                             </li>
-                            <li>
-                                <Link href="/blogs" className="text-white/60 hover:text-[#e15aed] transition-colors text-sm font-bold flex items-center group">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-[#e15aed] mr-3 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                                    Blogs
-                                </Link>
-                            </li>
+
                             <li>
                                 <Link href="/faq" className="text-white/60 hover:text-[#e15aed] transition-colors text-sm font-bold flex items-center group">
                                     <div className="w-1.5 h-1.5 rounded-full bg-[#e15aed] mr-3 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
