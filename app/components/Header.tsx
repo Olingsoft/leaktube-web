@@ -36,15 +36,17 @@ export default function Header() {
                 <div className="max-w-[1800px] mx-auto flex items-center justify-between gap-8">
                     {/* Logo Section */}
                     <Link href="/" className="flex items-center group flex-shrink-0 relative z-50">
-                        <div className="relative">
-                            <div className="absolute ml-6 inset-0 bg-gradient-to-tr from-[#e15aed]/20 to-[#1B3C53]/20 rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            {/* <Image
-                                src="/logo.png"
-                                alt="Live Football Streams"
-                                width={200}
-                                height={48}
-                                className="h-10 md:h-12 w-auto object-contain relative z-10 hover:scale-105 transition-transform duration-300"
-                            /> */}
+                        <div className="relative flex items-center gap-2">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#D02752]/20 to-transparent rounded-lg blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            {/* Live Indicator Dot */}
+                            <span className="relative flex h-3 w-3 -mt-0.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D02752] opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#D02752]"></span>
+                            </span>
+                            {/* Text Logo */}
+                            <h1 className="text-xl md:text-2xl font-black tracking-tight text-white relative z-10 group-hover:scale-[1.02] transition-transform duration-300">
+                                LIVE<span className="text-[#D02752]">FOOTBALL</span> <span className="text-white/40 hidden sm:inline text-lg">STREAMS</span>
+                            </h1>
                         </div>
                     </Link>
 
