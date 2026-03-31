@@ -3,7 +3,7 @@ import { getApiUrl } from '@/utils/api';
 import { slugify } from '@/utils/seo';
 
 /**
- * Dynamic Sitemap implementation for Unite Kenyans
+ * Dynamic Sitemap implementation for Live Football Streams
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://unitekenyans.co.ke';

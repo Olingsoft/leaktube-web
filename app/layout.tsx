@@ -21,44 +21,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Unite Kenyans (Kuunganisha Wakenya) | Kenya Viral & Trending Videos",
+  title: "Live Football Streams | Watch Matches & Highlights",
   description:
-    "Unite Kenyans (Kuunganisha Wakenya) brings together trending and viral content in Kenya. Follow discussions around viral videos, online trends, social media stories, and digital awareness across Kenya.",
+    "Watch live football streams, match highlights, and upcoming matches online for free. The ultimate destination for live soccer streaming and sports entertainment.",
   keywords: [
-    "Unite Kenyans",
-    "Kuunganisha Wakenya",
-    "Kenya viral videos",
-    "Trending videos in Kenya",
-    "Kenya social media trends",
-    "Telegram trends Kenya",
-    "Twitter Kenya trending",
-    "Viral content Kenya",
-    "Online privacy Kenya",
-    "Digital awareness Kenya",
-    "Leaked video rumors Kenya",
-    "Kenya leaked videos",
-    "russian guy in kenya videos",
-    "russian guy in kenya videos X",
-    "russian guy in kenya videos links",
-    "russian guy in kenya videos twitter trendnig",
-    "russian guy in kenya full videos",
-    "russian guy in kenya trendning",
-    "kenya video"
+    "Live Football Streams",
+    "Soccer Streaming",
+    "Watch Live Matches",
+    "Football Highlights",
+    "Premier League Streams",
+    "Champions League Streams",
+    "Live Sports",
+    "Upcoming Matches",
+    "Free Football Streams"
   ],
   openGraph: {
-    title: "Unite Kenyans | Kenya Viral & Trending Stories",
+    title: "Live Football Streams | Watch Live Matches",
     description:
-      "Discover Leaks content trending in Kenya — viral videos, social media discussions, and online awareness. Unite Kenyans connects Kenyans through information, not exploitation.",
+      "Catch all the live football action online. Watch live matches, recent highlights, and stay updated on upcoming games. Your home for top-quality football streams.",
     url: "https://www.unitekenyans.co.ke/",
-    siteName: "Unite Kenyans",
+    siteName: "Live Football Streams",
     locale: "en_KE",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Unite Kenyans | Kuunganisha Wakenya",
+    title: "Live Football Streams | Watch Matches",
     description:
-      "Kenya’s hub for viral trends, social media discussions, and digital awareness.",
+      "Your ultimate hub for live football streaming, sports action, and match highlights.",
   },
   robots: {
     follow: true,
@@ -99,7 +89,7 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                "name": "Unite Kenyans",
+                "name": "Live Football Streams",
                 "url": "https://unitekenyans.co.ke",
                 "sameAs": [
                   "https://x.com/uniteKenyans"
