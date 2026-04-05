@@ -57,6 +57,7 @@ export const metadata: Metadata = {
     "juicyads-site-verification": "57753ffadf9597cc22ba70b03558b031",
     "6a97888e-site-verification": "fc346fa70fdf32c5fe7d1b3c54876b4b",
     "clckd": "f7684647426dc88a8de9e08276f6397a",
+    "monetag": "38a4f0f4a5daaa4da95913e4e737eebe",
   },
 };
 
