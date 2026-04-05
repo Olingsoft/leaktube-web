@@ -114,6 +114,7 @@ export default function HomeClient({
     return (
         <div className="max-w-[1700px] mx-auto px-4 md:px-8 pt-1">
             {/* <TopBannerAd /> */}
+           
             {/* Mini Header: Trending + Category + Search */}
             {isAgeVerified && (
                 <div className="mb-8 relative z-[9999]">
@@ -323,13 +324,14 @@ export default function HomeClient({
                 ))}
             </div>
 
-            {/* Bottom Content Iframe */}
-            <div className="mt-10 mb-8 w-full rounded-2xl overflow-hidden bg-white/5 border border-white/10">
-                <iframe 
-                    src="https://omg10.com/4/7634566" 
-                    title="Advertisement"
-                    className="w-full h-[300px] border-none"
-                    allowFullScreen
+            <div className="w-full mb-6 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                <iframe
+                    // src="https://omg10.com/4/7634566"
+                    src="https://omg10.com/4/7605686"
+                    title="Embedded content"
+                    className="w-full min-h-[280px] sm:min-h-[360px] md:min-h-[420px] border-0 block"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
                 />
             </div>
         </div >
