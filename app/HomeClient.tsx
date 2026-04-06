@@ -325,14 +325,7 @@ export default function HomeClient({
             </div>
 
             <div className="w-full mb-6 rounded-2xl overflow-hidden border border-white/10 bg-white/5">
-                <iframe
-                    // src="https://omg10.com/4/7634566"
-                    src="https://omg10.com/4/7605686"
-                    title="Embedded content"
-                    className="w-full min-h-[280px] sm:min-h-[360px] md:min-h-[420px] border-0 block"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                />
+              
             </div>
         </div >
     );

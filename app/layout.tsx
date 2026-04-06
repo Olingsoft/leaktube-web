@@ -167,7 +167,7 @@ export default function RootLayout({
         <Footer />
         {/* <MagSrvAd /> */}
         {/* <PemSrvAd /> */}
-        {/* <PopUnderAd /> */}
+        <PopUnderAd />
       </body>
     </html>
   );
